@@ -1,0 +1,40 @@
+html,
+body {
+	margin: 0;
+	padding: 0;
+	background-color: #FF6600;
+}
+
+.main {
+	display: fixed;
+	position: relative;
+	padding-top: 104px;
+	background-color: grey;
+}
+
+.main div {
+	position: absolute;
+}
+
+#logo {
+	left: 36px;
+	top: 20px;
+}
+
+#main-menu {
+	left: 130px;
+	top: 42px;
+}
+
+#main-menu a {
+	margin: 10%;
+}
+
+#main-menu span {
+	background-color: white;
+	margin-left: 245px;
+}
+
+#vxod {
+	display: none;
+}
