@@ -1,0 +1,6 @@
+DROP TABLE IF EXISTS lections;
+CREATE TABLE lections(
+	lection_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	lection_name VARCHAR(40) NOT NULL,
+	INDEX(lection_name(5))
+) ENGINE innoDB;
