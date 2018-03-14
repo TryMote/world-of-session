@@ -23,9 +23,12 @@ DROP TABLE IF EXISTS `lections`;
 CREATE TABLE `lections` (
   `lection_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `lection_name` varchar(40) NOT NULL,
+  `topic_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`lection_id`),
   UNIQUE KEY `lection_name` (`lection_name`),
-  KEY `lection_name_2` (`lection_name`(5))
+  KEY `lection_name_2` (`lection_name`(5)),
+  KEY `topic_id` (`topic_id`),
+  CONSTRAINT `lections_ibfk_1` FOREIGN KEY (`topic_id`) REFERENCES `topics` (`topic_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -37,4 +40,4 @@ CREATE TABLE `lections` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-14 21:35:47
+-- Dump completed on 2018-03-14 22:42:38

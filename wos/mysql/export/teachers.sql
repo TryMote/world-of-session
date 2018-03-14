@@ -23,8 +23,11 @@ DROP TABLE IF EXISTS `teachers`;
 CREATE TABLE `teachers` (
   `teacher_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `teacher_name` varchar(30) NOT NULL,
+  `subject_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`teacher_id`),
-  KEY `teacher_name` (`teacher_name`(5))
+  KEY `teacher_name` (`teacher_name`(5)),
+  KEY `subject_id` (`subject_id`),
+  CONSTRAINT `teachers_ibfk_1` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`subject_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -36,4 +39,4 @@ CREATE TABLE `teachers` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-14 21:35:47
+-- Dump completed on 2018-03-14 22:42:38

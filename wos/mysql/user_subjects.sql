@@ -1,7 +1,0 @@
-DROP TABLE IF EXISTS user_subjects;
-CREATE TABLE user_subjects(
-	progress INT(3) UNSIGNED NOT NULL DEFAULT 0,
-	start_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	INDEX(progress),
-	INDEX(start_date(5))
-) ENGINE innoDB;

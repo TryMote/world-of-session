@@ -1,6 +1,0 @@
-DROP TABLE IF EXISTS subjects;
-CREATE TABLE subjects(
-	subject_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	subject_name VARCHAR(40) NOT NULL,
-	INDEX(subject_name(5))
-) ENGINE innoDB;

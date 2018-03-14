@@ -1,6 +1,0 @@
-DROP TABLE IF EXISTS teachers;
-CREATE TABLE teachers(
-	teacher_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	teacher_name VARCHAR(30) NOT NULL,
-	INDEX(teacher_name(5))
-) ENGINE innoDB;

@@ -25,9 +25,12 @@ DROP TABLE IF EXISTS `lections`;
 CREATE TABLE `lections` (
   `lection_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `lection_name` varchar(40) NOT NULL,
+  `topic_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`lection_id`),
   UNIQUE KEY `lection_name` (`lection_name`),
-  KEY `lection_name_2` (`lection_name`(5))
+  KEY `lection_name_2` (`lection_name`(5)),
+  KEY `topic_id` (`topic_id`),
+  CONSTRAINT `lections_ibfk_1` FOREIGN KEY (`topic_id`) REFERENCES `topics` (`topic_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -127,8 +130,11 @@ DROP TABLE IF EXISTS `teachers`;
 CREATE TABLE `teachers` (
   `teacher_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `teacher_name` varchar(30) NOT NULL,
+  `subject_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`teacher_id`),
-  KEY `teacher_name` (`teacher_name`(5))
+  KEY `teacher_name` (`teacher_name`(5)),
+  KEY `subject_id` (`subject_id`),
+  CONSTRAINT `teachers_ibfk_1` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`subject_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -151,9 +157,12 @@ DROP TABLE IF EXISTS `topics`;
 CREATE TABLE `topics` (
   `topic_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `topic_name` varchar(40) NOT NULL,
+  `subject_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`topic_id`),
   UNIQUE KEY `topic_name` (`topic_name`),
-  KEY `topic_name_2` (`topic_name`(5))
+  KEY `topic_name_2` (`topic_name`(5)),
+  KEY `subject_id` (`subject_id`),
+  CONSTRAINT `topics_ibfk_1` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`subject_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -205,14 +214,20 @@ DROP TABLE IF EXISTS `user_second_data`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_second_data` (
+  `user_id` int(10) unsigned NOT NULL,
   `photo` varchar(50) DEFAULT NULL,
   `user_xp` int(5) unsigned NOT NULL,
+  `status_id` int(10) unsigned NOT NULL,
   `vk` varchar(50) DEFAULT NULL,
   `creation_date` datetime DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY `vk` (`vk`),
   KEY `user_xp` (`user_xp`),
   KEY `vk_2` (`vk`(10)),
-  KEY `creation_date` (`creation_date`)
+  KEY `creation_date` (`creation_date`),
+  KEY `user_id` (`user_id`),
+  KEY `status_id` (`status_id`),
+  CONSTRAINT `user_second_data_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user_primary_data` (`user_id`),
+  CONSTRAINT `user_second_data_ibfk_2` FOREIGN KEY (`status_id`) REFERENCES `statuses` (`status_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -233,10 +248,16 @@ DROP TABLE IF EXISTS `user_subjects`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_subjects` (
+  `user_id` int(10) unsigned NOT NULL,
+  `lection_id` int(10) unsigned NOT NULL,
   `progress` int(3) unsigned NOT NULL DEFAULT '0',
   `start_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   KEY `progress` (`progress`),
-  KEY `start_date` (`start_date`)
+  KEY `start_date` (`start_date`),
+  KEY `user_id` (`user_id`),
+  KEY `lection_id` (`lection_id`),
+  CONSTRAINT `user_subjects_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user_primary_data` (`user_id`),
+  CONSTRAINT `user_subjects_ibfk_2` FOREIGN KEY (`lection_id`) REFERENCES `lections` (`lection_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -258,4 +279,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-14 21:36:06
+-- Dump completed on 2018-03-14 22:40:42
