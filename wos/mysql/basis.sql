@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: wos
 -- ------------------------------------------------------
--- Server version	10.1.30-MariaDB
+-- Server version 10.1.30-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -51,10 +51,14 @@ DROP TABLE IF EXISTS `sign_in`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sign_in` (
+  user_id INT UNSIGNED NOT NULL,
+  email VARCHAR(50) NOT NULL,
   `nickname` varchar(30) DEFAULT NULL,
   `password` varchar(25) DEFAULT NULL,
   UNIQUE KEY `nickname` (`nickname`),
-  KEY `nickname_2` (`nickname`(5))
+  KEY `nickname_2` (`nickname`(5)),
+  FOREIGN KEY(user_id) REFERENCES user_primary_data(user_id),
+  FOREIGN KEY(email) REFERENCES user_primary_data(email)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
