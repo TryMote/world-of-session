@@ -8,7 +8,7 @@
 <body>
 	<header>
 		<div class="main">
-			
+
 			<div id="logo">
 				<a href="index.php">World of session</a>
 			</div>

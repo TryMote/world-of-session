@@ -1,4 +1,4 @@
--- MySQL dump 10.16  Distrib 10.1.30-MariaDB, for Win32 (AMD64)
+-- MySQL dump 10.16  Distrib 10.1.30-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: wos
 -- ------------------------------------------------------
@@ -40,4 +40,4 @@ CREATE TABLE `lections` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-14 23:00:52
+-- Dump completed on 2018-03-15 20:42:09
