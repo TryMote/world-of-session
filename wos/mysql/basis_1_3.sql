@@ -52,8 +52,8 @@ DROP TABLE IF EXISTS `sign_in`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sign_in` (
-  `user_id` int(10) unsigned NOT NULL,
-  `email` varchar(50) NOT NULL,
+  `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `email` varchar(50) DEFAULT NULL,
   `nickname` varchar(30) DEFAULT NULL,
   `password` varchar(25) DEFAULT NULL,
   UNIQUE KEY `nickname` (`nickname`),
@@ -223,13 +223,13 @@ DROP TABLE IF EXISTS `user_second_data`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_second_data` (
-  `user_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `photo` varchar(50) DEFAULT NULL,
   `user_xp` int(5) unsigned NOT NULL DEFAULT 0,
   `status_id` int(10) unsigned NOT NULL DEFAULT 1,
   `vk` varchar(50) DEFAULT NULL,
   `creation_date` datetime DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE KEY `vk` (`vk`),
+  KEY `vk` (`vk`),
   KEY `user_xp` (`user_xp`),
   KEY `vk_2` (`vk`(10)),
   KEY `creation_date` (`creation_date`),

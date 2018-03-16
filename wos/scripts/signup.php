@@ -9,8 +9,11 @@
 	$result = $conn->query($query);
 	if(!$result) die ($conn->error);
 	
-	$user_id = "SELECT user_id FROM $upd WHERE email='$email'";
-	$query = "INSERT INTO $usd(user_id) $user_id";
+	$query = "INSERT INTO $usd(photo) VALUES('link on photo')";
+	$result = $conn->query($query);
+	if(!$result) die($conn->error);  	
+
+	$query = "INSERT INTO $s_i(email, nickname, password) VALUES('$email', '$login', '$pas')";
 	$result = $conn->query($query);
 	if(!$result) die ($conn->error);
 ?>
