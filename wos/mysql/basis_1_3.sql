@@ -196,13 +196,11 @@ CREATE TABLE `user_primary_data` (
   `first_name` varchar(20) NOT NULL,
   `last_name` varchar(30) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `gender` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`),
   KEY `first_name` (`first_name`(5)),
   KEY `last_name` (`last_name`(5)),
-  KEY `email_2` (`email`(10)),
-  KEY `gender` (`gender`)
+  KEY `email_2` (`email`(10))
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -227,8 +225,10 @@ CREATE TABLE `user_second_data` (
   `photo` varchar(50) DEFAULT NULL,
   `user_xp` int(5) unsigned NOT NULL DEFAULT 0,
   `status_id` int(10) unsigned NOT NULL DEFAULT 1,
+  `gender` tinyint(4) DEFAULT '0',
   `creation_date` datetime DEFAULT CURRENT_TIMESTAMP,
   KEY `user_xp` (`user_xp`),
+  KEY `gender` (`gender`),
   KEY `creation_date` (`creation_date`),
   KEY `user_id` (`user_id`),
   KEY `status_id` (`status_id`),
