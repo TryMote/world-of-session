@@ -8,7 +8,7 @@
 	$wr_photo_dir_error = "формат выбранного файла не поддерживается.";
 	$wr_vk_error = "не верно введена ссылка ВКонтакте.";
 
-	function error_page($error_log) {
+	function error_page($error_log) {		
 		echo "
 <html>
 <head>
@@ -20,6 +20,7 @@
 		<h1>Ошибка: $error_log</h1>
 	</div>
 </body>
-</html>";	
+</html>";
+		die();
 	}
 ?>

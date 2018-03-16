@@ -8,7 +8,7 @@
 	$query = "INSERT INTO $upd(first_name, last_name, email) VALUES(
 				'$first_name', '$last_name', '$email')";
 	$result = $conn->query($query);
-	if(!$result) die ($conn->error);
+	if(!$result) error_page($ex_email_error);
 	
 	$query = "INSERT INTO $usd(photo) VALUES('link on photo')";
 	$result = $conn->query($query);

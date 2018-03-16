@@ -1,6 +1,7 @@
 <?php
 	require_once 'salt.php';
 	include_once 'error_page_func.php';
+
 	$first_name = mb_strtolower(trim(preg_replace('~[^A-Za-z]+~','',$_POST['first_name'])));
 	$first_name = ucfirst($first_name);
 	$last_name = mb_strtolower(trim(preg_replace('~[^A-Za-z]+~','',$_POST['last_name'])));
