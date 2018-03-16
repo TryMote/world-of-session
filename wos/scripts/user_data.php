@@ -1,5 +1,6 @@
 <?php
 	require_once 'salt.php';
+	include_once 'error_page_func.php';
 	$first_name = mb_strtolower(trim(preg_replace('~[^A-Za-z]+~','',$_POST['first_name'])));
 	$first_name = ucfirst($first_name);
 	$last_name = mb_strtolower(trim(preg_replace('~[^A-Za-z]+~','',$_POST['last_name'])));
@@ -9,6 +10,6 @@
 	if(strlen($_POST['pas']) > 6) {
 		$pas = crypt($_POST['pas'], $salt);
 	} else {
-		echo "To low pass";
+		error_page($toshot_pass_error);
 	}
 ?>
