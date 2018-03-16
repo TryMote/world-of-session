@@ -7,16 +7,14 @@
 </head>
 <body>
 	<header>
-		<div class="main">
-			
+		<div class="main">	
 			<div id="logo">
 				<a href="index.php">World of session</a>
 			</div>
-<div id="vxod">
-
+			<div id="vxod">
+				<a href="register.php">Регистрация</a><br>
 				<form action="scripts/signup.php" method="post" enctype="multipart/form-data">
-					<a href="register.php">Регистрация</a><br>
-					<legend>Создания профиля</legend></form><br/>
+					<legend>Создания профиля</legend><br/>
 					<input type="text" name="first_name" placeholder="Введите имя" required><br/>
 					<input type="text" name="last_name" placeholder="Введите фамилию" required><br/>
 					<input type="text" name="login" placeholder="Придумайте логин"><br/>
@@ -25,7 +23,6 @@
 					<input type="submit" name='submit' value="Зарегистрироваться">
 				</form>
 			</div>
-
 		</div>
 	</header>
 	<footer>
