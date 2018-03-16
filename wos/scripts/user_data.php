@@ -28,5 +28,11 @@
 
 	$gender = $_POST['gender'];
 	
-
+	$image_name = "default.png"; 
+	if($_FILES) {
+		if(!preg_match('~\.jpg|\.png|\.jpeg|\.gif', $_FILES['image']['type'])) {
+			$image_name = "../users_img/".substr($email, 0, 2)."_".strtolower($first_name)."_".strtolower($last_name)."wos";	
+			move_uploaded_file($_FILES['image']['tmp_name'], $image_name);
+		}
+	}
 ?>

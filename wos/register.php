@@ -26,8 +26,8 @@
 					<input type="radio" name="gender" value="male">
 					<p>Женщина:</p>
 					<input type="radio" name="gender" value="female"><br/>
-					<label for="photo">Выбери фото профиля:</label>
-					<input type="file" name="photo"><br/>
+					<label for="image">Выбери фото профиля:</label>
+					<input type="file" name="image"><br/>
 					<input type="submit" name='submit' value="Зарегистрироваться">
 				</form>
 			</div>
