@@ -26,13 +26,19 @@
 		error_page($wr_r_pass_error);
 	}
 
-	$gender = $_POST['gender'];
-	
-	$image_name = "default.png"; 
-	if($_FILES) {
-		if(!preg_match('~\.jpg|\.png|\.jpeg|\.gif', $_FILES['image']['type'])) {
-			$image_name = "../users_img/".substr($email, 0, 2)."_".strtolower($first_name)."_".strtolower($last_name)."wos";	
-			move_uploaded_file($_FILES['image']['tmp_name'], $image_name);
-		}
+	if(array_key_exists('gender',$_POST)) {
+		$gender = $_POST['gender'];
 	}
+
+	$image_name = "default.png"; 
+/*	if(!empty($_FILES)) {
+		$image_name = substr($email, 0, 2)."_".strtolower($first_name)."_".strtolower($last_name)."_wos";	
+		if(preg_match('~(image)/(jpeg)|(png)|(gif)~', $_FILES['image']['type'])) {
+			preg_match('~\.[a-z]+$~', $_FILES['image']['name'], $extension);
+			$directory = "~/.git/world-of-session/wos/scripts";
+			move_uploaded_file($_FILES['image']['tmp_name'], "$directory");
+			die();
+			$image_name$extension[0];
+		}
+	}*/
 ?>
