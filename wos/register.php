@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" href="assets/style.css">
+	<link rel="stylesheet" href="assets/css/style.css">
 	<title>World of session</title>
 </head>
 <body>
