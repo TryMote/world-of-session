@@ -6,5 +6,10 @@
 	$last_name = ucfirst($last_name);
 	$login = trim($_POST['login']);
 	$email = trim($_POST['email']);
-	$pas = crypt($_POST['pas'], $salt);
+	if(strlen($_POST['pas']) > 6) {
+		$pas = crypt($_POST['pas'], $salt);
+		echo $pas;
+	} else {
+		echo "To low pass";
+	}
 ?>
