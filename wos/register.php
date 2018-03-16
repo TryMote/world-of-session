@@ -10,11 +10,11 @@
 		<div class="main">
 			
 			<div id="logo">
-				<a href="index.html">World of session</a>
+				<a href="index.php">World of session</a>
 			</div>
 <div id="vxod">
 
-				<form action="signin.php" method="post" enctype="multipart/form-data">
+				<form action="signup.php" method="post" enctype="multipart/form-data">
 					<a href="register.html">Регистрация</a><br>
 					<legend>Создания профиля</legend></form><br/>
 					<input type="text" name="first_name" placeholder="Введите имя" required><br/>
