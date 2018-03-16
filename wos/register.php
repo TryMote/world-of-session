@@ -14,14 +14,14 @@
 			</div>
 <div id="vxod">
 
-				<form action="signin.html" method="post">
+				<form action="signin.php" method="post" enctype="multipart/form-data">
 					<a href="register.html">Регистрация</a><br>
 					<legend>Создания профиля</legend></form><br/>
-					<input type="text" name="name" placeholder="Введите имя"><br/>
-					<input type="text" name="username" placeholder="Введите фамилию" ><br/>
+					<input type="text" name="first_name" placeholder="Введите имя" required><br/>
+					<input type="text" name="last_name" placeholder="Введите фамилию" required><br/>
 					<input type="text" name="login" placeholder="Придумайте логин"><br/>
-					<input type="email" name="email" placeholder="Введите свою почту"><br/>
-				<input type="password" name="pas" placeholder="Придумайте пароль"><br/>
+					<input type="email" name="email" placeholder="Введите свою почту"required><br/>
+				<input type="password" name="pas" placeholder="Придумайте пароль" required><br/>
 				<input type="submit" value="Зарегистрироваться">
 				</form>
 			</div>
