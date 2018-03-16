@@ -14,7 +14,7 @@
 	$result = $conn->query($query);
 	if(!$result) die($conn->error);  	
 
-	$query = "INSERT INTO $s_i(email, nickname, password) VALUES('$email', '$login', '$pas')";
+	$query = "INSERT INTO $s_i(email, nickname, password) VALUES('$email', '$login', '$pass')";
 	$result = $conn->query($query);
 	if(!$result) error_page($ex_email_error);
 

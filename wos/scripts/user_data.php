@@ -9,8 +9,11 @@
 	$login = trim($_POST['login']);
 	$email = trim($_POST['email']);
 	if(strlen($_POST['pass']) > 6) {
-		$pas = crypt($_POST['pass'], $salt);
+		$pass = crypt($_POST['pass'], $salt);
 	} else {
 		error_page($toshot_pass_error);
 	}
+	if($_POST['pass'] != $_POST['r_pass']) {
+		error_page($not_sim_pass_error);
+	} 
 ?>
