@@ -21,8 +21,8 @@
 					<input type="text" name="last_name" placeholder="Введите фамилию" required><br/>
 					<input type="text" name="login" placeholder="Придумайте логин"><br/>
 					<input type="email" name="email" placeholder="Введите свою почту"required><br/>
-				<input type="password" name="pas" placeholder="Придумайте пароль" required><br/>
-				<input type="submit" value="Зарегистрироваться">
+					<input type="password" name="pas" placeholder="Придумайте пароль" required><br/>
+					<input type="submit" name='submit' value="Зарегистрироваться">
 				</form>
 			</div>
 
