@@ -1,28 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>Cake</title>
-	<meta charset='utf-8'>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="assets/style.css">
+	<title>World of session</title>
 </head>
 <body>
-	<h1>Input all you need, now!</h1>
-	<form action='connect.php' method='POST' enctype='myltipart/form-data'>
-	<fieldset>
-		<label for='first_name'>Input first name:</label><br>
-		<input type='text' name='first_name'required><br>
-		<label for='last_name'>Input last name:</label><br>
-		<input type='text' name='last_name' required><br>
-		<label for='email'>You email please:</label><br>
-		<input type='email' name='email' required><br>
-		<label for='gender'>What is you gender?</label><br>
-		<p>Male</p>
-		<input type='radio' name='gender' value='Male'>
-		<p>Female</p>
-		<input type='radio' name='gender' value='Female'>
-	</fieldset>
-	<fieldset>
-		<input type='submit' name='submit' value='OK'>
-	</fieldset>
-	</form>
+	<header>
+		<div class="main">
+			
+			<div id="logo">
+				<a href="index.html">World of session</a>
+			</div>
+
+			<div id="main-menu">
+				<a href="lections.html">Лекции</a>
+				<a href="practic.html">Практика</a>
+				<a href="contact.html">Контакты</a>
+				<span>Вход</span>
+			</div>
+
+			<div id="vxod">
+				<form action="signin.html" method="post">
+					<input type="text" name="login" placeholder="Введите логин"><br/>
+					<input type="pas" name="password" placeholder="Введите пароль"><br/>
+					<a href="register.html">Регистрация</a><br>
+					<a href="forgotpass.html">Забыли пароль?</a><br>
+					<input type="submit" value="Войти">
+				</form>
+			</div>
+
+		</div>
+	</header>
+	<footer>
+		<div id="copy">
+			Copyright 2018 &copy;
+		</div>
+	</footer>
 </body>
-</html>
+</html>	
