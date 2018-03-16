@@ -1,3 +1,4 @@
+
 -- MySQL dump 10.16  Distrib 10.1.30-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: wos
@@ -83,7 +84,7 @@ DROP TABLE IF EXISTS `statuses`;
 CREATE TABLE `statuses` (
   `status_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `status_name` varchar(40) NOT NULL,
-  `status_xp` int(5) NOT NULL,
+  `status_xp` int(5) unsigned NOT NULL,
   PRIMARY KEY (`status_id`),
   UNIQUE KEY `status_name` (`status_name`),
   UNIQUE KEY `status_xp` (`status_xp`),
@@ -98,6 +99,7 @@ CREATE TABLE `statuses` (
 
 LOCK TABLES `statuses` WRITE;
 /*!40000 ALTER TABLE `statuses` DISABLE KEYS */;
+INSERT INTO statuses(status_name, status_xp) VALUES("Exam Master", 0); 
 /*!40000 ALTER TABLE `statuses` ENABLE KEYS */;
 UNLOCK TABLES;
 
