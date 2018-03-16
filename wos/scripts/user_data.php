@@ -17,7 +17,7 @@
 		error_page($wr_email_error);	
 	}
 
-	if(strlen($_POST['pass']) > 6) {
+	if(strlen($_POST['pass']) >= 6) {
 		$pass = crypt($_POST['pass'], $salt);
 	} else {
 		error_page($toshot_pass_error);
@@ -25,4 +25,8 @@
 	if($_POST['pass'] != $_POST['r_pass']) {
 		error_page($wr_r_pass_error);
 	}
+
+	$gender = $_POST['gender'];
+	
+
 ?>

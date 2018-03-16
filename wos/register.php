@@ -26,7 +26,6 @@
 					<input type="radio" name="gender" value="male">
 					<p>Женщина:</p>
 					<input type="radio" name="gender" value="female"><br/>
-					<input type="text" name="vk" placeholder="Твоя ссылка ВКонтакте"><br/>
 					<label for="photo">Выбери фото профиля:</label>
 					<input type="file" name="photo"><br/>
 					<input type="submit" name='submit' value="Зарегистрироваться">
