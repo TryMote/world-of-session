@@ -14,8 +14,8 @@
 			</div>
 <div id="vxod">
 
-				<form action="signup.php" method="post" enctype="multipart/form-data">
-					<a href="register.html">Регистрация</a><br>
+				<form action="scripts/signup.php" method="post" enctype="multipart/form-data">
+					<a href="register.php">Регистрация</a><br>
 					<legend>Создания профиля</legend></form><br/>
 					<input type="text" name="first_name" placeholder="Введите имя" required><br/>
 					<input type="text" name="last_name" placeholder="Введите фамилию" required><br/>
