@@ -22,7 +22,8 @@
 	$i_pass = fix_string($conn, $_POST['pass']);
 	$conn->close();
 	if(hash_equals($pass, crypt($i_pass, $pass))) {
-		header("Location http://localhost/wos/profile.php");
+		echo "You are in!";
+//		header("Location http://localhost/wos/profile.php");
 	} else {
 		error_page('wrong_password');
 	}
