@@ -21,12 +21,12 @@
 	$query = "SELECT user_id FROM $s_i WHERE nickname='$login' OR email='$email'";
 	$result = $conn->query($query);
 	$id = mysqli_fetch_row($result);
-	if($id[0]) error_page('sue_lande');
+	if($id[0]) error_page('sue_lore');
 
 	$pass = fix_string($conn, $_POST['pass']);
 	$r_pass = fix_string($conn, $_POST['pass']);
 	if(strlen($pass) >= 6 && strlen($pass) <= 30 && $pass == $r_pass ) {
-		$pass = crypt($pass, $salt);
+		$pass = crypt($pass, 'ls');
 	} else {
 		error_page('suw_p');
 	}
