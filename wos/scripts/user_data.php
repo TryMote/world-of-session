@@ -1,33 +1,39 @@
 <?php
 	require_once 'salt.php';
+	require_once 'db_data.php';
 	include_once 'error_page_func.php';
-	$first_name = mb_strtolower(trim(preg_replace('~[^A-Za-z]+~','',$_POST['first_name'])));
+	
+	$conn = new mysqli($hn, $un, $pw, $db);
+	if($conn->connect_error) die($conn->connect_error);
+	
+	$first_name = fix_string($conn, $_POST['first_name']);
+	$first_name = mb_strtolower(trim(preg_replace('~[^A-Za-z]+~','',$first_name)));
 	$first_name = ucfirst($first_name);
 
-	$last_name = mb_strtolower(trim(preg_replace('~[^A-Za-z]+~','',$_POST['last_name'])));
+	$last_name = fix_string($conn, $_POST['last_name']);
+	$last_name = mb_strtolower(trim(preg_replace('~[^A-Za-z]+~','',$last_name)));
 	$last_name = ucfirst($last_name);
 
-	$login = trim($_POST['login']);
-	if(!preg_match('~[a-zA-Z0-9_-]+~', $login)) {
-		error_page($wr_login_error);
+	$login = trim(fix_string($conn, $_POST['login']));
+	if(!preg_match('~[a-zA-Z0-9_-]+~', $login) && strlen($login) <= 30) {	
+		error_page('10914');
 	}
 
-	$email = trim($_POST['email']);
+	$email = trim(fix_string($conn, $_POST['email']));
 	if(!preg_match('~.+@.+\..+~i', $email)) {
-		error_page($wr_email_error);	
+		error_page('35417');	
 	}
-
-	if(strlen($_POST['pass']) >= 6) {
-		$pass = crypt($_POST['pass'], $salt);
+	
+	$pass = fix_string($conn, $_POST['pass']);
+	$r_pass = fix_string($conn, $_POST['pass']);
+	if(strlen($pass) >= 6 && strlen($pass) <= 30 && $pass == $r_pass ) {
+		$pass = crypt($pass, $salt);
 	} else {
-		error_page($toshot_pass_error);
-	}
-	if($_POST['pass'] != $_POST['r_pass']) {
-		error_page($wr_r_pass_error);
+		error_page('9477');
 	}
 
 	if(array_key_exists('gender',$_POST)) {
-		$gender = $_POST['gender'];
+		$gender = fix_string($conn, $_POST['gender']);
 	}
 
 	$image_name = "default.png"; 
