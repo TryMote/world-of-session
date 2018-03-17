@@ -7,6 +7,7 @@
 		<a href="practice.php">Практика</a>
 		<a href="contact.php">Контакты</a>
 		<span>Вход</span>
+
 	</div>
 	<div id="vxod">
 		<form action="scripts/signin.php" method="post">

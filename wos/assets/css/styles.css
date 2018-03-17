@@ -36,6 +36,5 @@ body {
 }
 
 #vxod {
-	/*пока что пусть будет виден */
-	/*display: none;*/
+	display: none;
 }
