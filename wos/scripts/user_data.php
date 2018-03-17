@@ -1,7 +1,6 @@
 <?php
 	require_once 'salt.php';
 	require_once 'db_data.php';
-	require_once 't_names.php';
 	include_once 'error_page_func.php';
 	
 	$conn = new mysqli($hn, $un, $pw, $db);
@@ -37,7 +36,6 @@
 	}
 
 	$image_name = "default.png"; 
-	$conn->close();
 /*	if(!empty($_FILES)) {
 		$image_name = substr($email, 0, 2)."_".strtolower($first_name)."_".strtolower($last_name)."_wos";	
 		if(preg_match('~(image)/(jpeg)|(png)|(gif)~', $_FILES['image']['type'])) {
@@ -48,4 +46,5 @@
 			$image_name$extension[0];
 		}
 	}*/
+	$conn->close();
 ?>
