@@ -5,8 +5,8 @@
 		<input type="text" name="last_name" placeholder="Фамилия" required><br/>
 		<input type="text" name="login" placeholder="Логин" required><br/>
 		<input type="email" name="email" placeholder="Электронная почта"required><br/>
-		<input type="password" name="pass" placeholder="Пароль" required><br/>
-		<input type="password" name="r_pass" placeholder="Пароль еще раз" required><br/>
+		<input type="password" maxlength='30' name="pass" placeholder="Пароль" required><br/>
+		<input type="password" maxlength='30' name="r_pass" placeholder="Пароль еще раз" required><br/>
 		<label for="gender">Пол:</label>
 		<p>Мужчина:</p>
 		<input type="radio" name="gender" value="male">
