@@ -5,24 +5,20 @@
 	include_once 'error_page_func.php';
 
 	$conn = new mysqli($hn, $un, $pw, $db);
-	if($conn->error) die($conn->error);
-	
-	$check = "SELECT * FROM $s_i WHERE email=$email";
-	$result = $conn->query($check);
-	if($result) error_page($undefined_error);
+	if($conn->connect_error) error_page('ssp_c8');
 
-	$query = "INSERT INTO $upd(first_name, last_name, email) VALUES(
-				'$first_name', '$last_name', '$email')";
+	$query = "INSERT INTO $upd VALUES(NULL, '$first_name', '$last_name', '$email')";
 	$result = $conn->query($query);
-	if(!$result) error_page($ex_email_error);
+	if(!$result) error_page('ssi_upd12');
+	$insertID = $conn->insert_id;
 	
-	$query = "INSERT INTO $usd(photo) VALUES('link on photo')";
+	$query = "INSERT INTO $usd(user_id) VALUES($insertID)";
 	$result = $conn->query($query);
-	if(!$result) die($conn->error);  	
+	if(!$result) error_page('ssi_usd17');  	
 
-	$query = "INSERT INTO $s_i(email, nickname, password) VALUES('$email', '$login', '$pass')";
+	$query = "INSERT INTO $s_i(user_id, email, nickname, password) VALUES($insertID,'$email', '$login', '$pass')";
 	$result = $conn->query($query);
-	if(!$result) error_page($ex_email_error);
+	if(!$result) error_page('ssi_si21');
 	
 	$conn->close();
 	header("Location: https://localhost/wos/index.php");

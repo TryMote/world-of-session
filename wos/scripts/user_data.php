@@ -1,6 +1,7 @@
 <?php
 	require_once 'salt.php';
 	require_once 'db_data.php';
+	require_once 't_names.php';
 	include_once 'error_page_func.php';
 	
 	$conn = new mysqli($hn, $un, $pw, $db);
@@ -15,21 +16,20 @@
 	$last_name = ucfirst($last_name);
 
 	$login = trim(fix_string($conn, $_POST['login']));
-	if(!preg_match('~[a-zA-Z0-9_-]+~', $login) && strlen($login) <= 30) {	
-		error_page('10914');
-	}
-
+	if(!preg_match('~[a-zA-Z0-9_-]+~', $login) && strlen($login) <= 30) error_page('suw_l');
 	$email = trim(fix_string($conn, $_POST['email']));
-	if(!preg_match('~.+@.+\..+~i', $email)) {
-		error_page('35417');	
-	}
-	
+	if(!preg_match('~.+@.+\..+~i', $email))	error_page('suw_e');	
+	$query = "SELECT user_id FROM $s_i WHERE nickname='$login' OR email='$email'";
+	$result = $conn->query($query);
+	$id = mysqli_fetch_row($result);
+	if($id[0]) error_page('sue_lande');
+
 	$pass = fix_string($conn, $_POST['pass']);
 	$r_pass = fix_string($conn, $_POST['pass']);
 	if(strlen($pass) >= 6 && strlen($pass) <= 30 && $pass == $r_pass ) {
 		$pass = crypt($pass, $salt);
 	} else {
-		error_page('9477');
+		error_page('suw_p');
 	}
 
 	if(array_key_exists('gender',$_POST)) {
@@ -37,6 +37,7 @@
 	}
 
 	$image_name = "default.png"; 
+	$conn->close();
 /*	if(!empty($_FILES)) {
 		$image_name = substr($email, 0, 2)."_".strtolower($first_name)."_".strtolower($last_name)."_wos";	
 		if(preg_match('~(image)/(jpeg)|(png)|(gif)~', $_FILES['image']['type'])) {
