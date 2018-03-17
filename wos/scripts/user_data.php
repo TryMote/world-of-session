@@ -15,7 +15,7 @@
 	$last_name = ucfirst($last_name);
 
 	$login = trim(fix_string($conn, $_POST['login']));
-	if(preg_match('~[^a-zA-Z0-9_-]+~', $login) || strlen($login) >= 30) error_page('suw_l');
+	if(preg_match('~[^a-zA-Z0-9_-]+~', $login) || strlen($login) >= 30) error_page('srw_l');
 	$email = trim(fix_string($conn, $_POST['email']));
 	if(!preg_match('~.+@.+\..+~i', $email))	error_page('suw_e');	
 	$query = "SELECT user_id FROM $s_i WHERE nickname='$login' OR email='$email'";

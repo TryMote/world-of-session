@@ -15,6 +15,7 @@
 
 	function fix_string($conn, $str) {
 		if(get_magic_quotes_gpc()) $str = stripslashes($str);
-		return $conn->real_escape_string($str);
+		$result = $conn->real_escape_string($str);
+		return htmlentities($result);
 	}
 ?>
