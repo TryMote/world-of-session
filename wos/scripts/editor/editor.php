@@ -10,7 +10,7 @@
 	</head>
 	<body> 
 		<form action='sql_controll.php' method='POST'>
-			<label for='sub_name'>Предмет:</label>
+			<label for='sub_name'>Предмет:</label><br>
 			<select name='sub_name' size='3'>
 END;
 	$conn = new mysqli($hn, $un, $pw, $db);
@@ -28,7 +28,7 @@ END;
 	
 		echo $row['subject_name'];
 	echo <<<END
-		</select>
+		</select><br>
 		<input type='submit' name='choose_subject' value='Выбрать предмет'>
 		</form>
 	</body>
