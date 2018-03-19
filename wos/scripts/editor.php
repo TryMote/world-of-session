@@ -12,7 +12,7 @@
 ?>
 
 <!DOCTYPE html>
-<html lang='rus'>
+<html lang='en'>
 <head>
         <title>Lection Editor 1.0</title>
         <meta charset='utf8'>

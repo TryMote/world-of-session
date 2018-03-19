@@ -40,10 +40,5 @@
 	$conn->close();
 	mail($email, "Верификация вашей почты", "Привет");
 	
-
 	header("Location: http://localhost/wos/email_ver.php");
-
-	function create_user($first_name, $last_name, $login, $email, $gender, $date) {
-		
-	}
 ?>
