@@ -9,6 +9,26 @@
 		}
 		echo "</select>";
 	}
+	function generate_next_block($submit_name,$value_name, $key_name, $create_what, $name_of_what, $no_what, $conn ) {
+		if(isset($_POST[$submit_name])) {
+			$query = "SELECT * FROM ".$value_name."s WHERE $key_name='".$_POST[$key_name]."'";
+			$result = $conn->query($query);
+			if(!$result) die($conn->connect_error);
+			$row = $result->fetch_array(MYSQLI_NUM);
+			echo "<p>Если хотите создать новую $create_what, введите в поле название и нажмите 'Создать новую $create_what'</p>";
+			echo "<form action='editor.php' method='POST'>";
+			echo "<input type='text' name='".$value_name."_name' placeholder='Название $name_of_what'>";
+			echo "<input type='submit' name='create_$value_name' value='Создать новую $create_what'></form>";	
+			if(!$row[0]) {
+				echo "<p>$no_what для данного предмета еще не создано</p><br>";	
+			} else {
+				echo "<form action='editor.php' method='POST'>";
+			 	generate_select_tag('topic_id', $result);
+				echo "<input type='submit' name='".$value_name."_selected' value='Выбрать $create_what'></form>";
+			}
+			$result->close();
+		}
+	}
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +50,7 @@
 			$query = "SELECT * FROM subjects";
 			$result = $conn->query($query);
 			if(!$result) die($conn->connect_error);
-			generate_select_tag('subject_id', $result);
+			generate_select_tag('subject_id', $result);	
 			$result->close();
 			$conn->close();
 	  	 ?>
@@ -40,22 +60,11 @@
 		$conn = new mysqli($hn, $un, $pw, $db);
 		if($conn->connect_error) die($conn->connect_error);
 		$conn->query('SET NAMES "utf8"');
-		if(isset($_POST['subject_selected'])) {
-			$query = "SELECT * FROM topics WHERE subject_id='".$_POST['subject_id']."'";
-			$result = $conn->query($query);
-			if(!$result) die($conn->connect_error);
-			$result->data_seek(0);
-			$topic_row = $result->fetch_array(MYSQLI_NUM);
-			if(!$topic_row[0]) {
-				 echo "<p>Тем для данного предмета еще не создано</p>";
-				 echo "<br/><form action='editor.php'><input type='submit' name='create_topic' value='Создать тему'>";
-			} else {
-				generate_select_tag('topic_id', $result);
-			}
-			$result->close();
-			$conn->close();
-		}
+		generate_next_block('subject_selected','topic','subject_id', 'тему', 'темы', 'тем', $conn);
+		generate_next_block('topic_selected', 'lection', 'topic_id', 'лекцию', 'лекции', 'лекций', $conn);	
+		$conn->close();
 	 ?>
+	
 </body>
 </html>
 
