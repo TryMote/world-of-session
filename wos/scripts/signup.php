@@ -4,6 +4,7 @@
 	include_once 'error_page_func.php';
 
 	$conn = new mysqli($hn, $un, $pw, $db);
+	$conn->query("SET NAMES 'utf8'");
 	if($conn->connect_error) error_page('srp_c');
 
 	$query = "LOCK TABLES $upd WRITE";
