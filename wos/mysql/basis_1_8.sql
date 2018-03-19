@@ -25,10 +25,13 @@ DROP TABLE IF EXISTS `lections`;
 CREATE TABLE `lections` (
   `lection_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `lection_name` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `lection_link` varchar(40) NOT NULL,
   `topic_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`lection_id`),
   UNIQUE KEY `lection_name` (`lection_name`),
   KEY `lection_name_2` (`lection_name`(5)),
+  UNIQUE KEY `lection_link` (`lection_link`),
+  KEY `lection_link_2` (`lection_link`(5)),
   KEY `topic_id` (`topic_id`),
   CONSTRAINT `lections_ibfk_1` FOREIGN KEY (`topic_id`) REFERENCES `topics` (`topic_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -196,6 +199,7 @@ CREATE TABLE `user_primary_data` (
   `first_name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `last_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `email` varchar(50) NOT NULL,
+  `email_ver` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`),
   KEY `first_name` (`first_name`(5)),

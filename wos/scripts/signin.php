@@ -22,14 +22,24 @@
 	if(!$pass) error_page('sin_p');
 	$i_pass = fix_string($conn, $_POST['pass']);
 	if(hash_equals($pass, crypt($i_pass, $pass))) {
-		echo "<html lang='rus'><head><title>You are in</title><meta charset='utf-8'></head><body>";
-		echo "You are in!";
-		$query = "SELECT first_name FROM $upd WHERE user_id='$user_id[0]'";
+		$query = "SELECT email_ver FROM $upd WHERE user_id='$user_id[0]'";
 		$result = $conn->query($query);
+		if(!$result) die($conn->connect_error);
 		$result->data_seek(0);
-		$first_name = $result->fetch_array(MYSQLI_NUM);
-		echo $first_name[0];
-//		header("Location http://localhost/wos/profile.php");
+		$is_email_ver = $result->fetch_array(MYSQLI_NUM);
+
+		if($is_email_ver == 1) {
+			echo "You are in!<br>";
+			$query = "SELECT first_name FROM $upd WHERE user_id='$user_id[0]'";
+			$result = $conn->query($query);
+			if(!$result) die($conn->connect_error);
+			$result->data_seek(0);
+			$first_name = $result->fetch_array(MYSQLI_NUM);
+			echo $first_name[0];
+//			header("Location http://localhost/wos/profile.php");
+		} else {
+			echo "Подтвердите свою электронную почту";
+		}
 	} else {
 		error_page('wrong_password');
 	}
