@@ -21,10 +21,11 @@
 	$result = $conn->query($query);
 	if(!$result) error_page('srul_upd');
 	
-	$query = "INSERT INTO $usd(user_id, image) VALUES(?,?)";
+	$query = "INSERT INTO $usd(user_id, image, gender) VALUES(?,?,?)";
 	$result = $conn->prepare($query);
-	if(!$result) error_page('sri_usd');  	
-	$result->bind_param('is',$insertID, $image_name);
+	if(!$result) error_page('sri_usd');
+	if(!$gender) $gender = NULL;  	
+	$result->bind_param('iss',$insertID, $image_name, $gender);
 	$result->execute();
 	if(!$result->affected_rows) error_page('srn_rusd');
 
@@ -38,5 +39,11 @@
 	$result->close();	
 	$conn->close();
 	mail($email, "Верификация вашей почты", "Привет");
+	
+
 	header("Location: http://localhost/wos/email_ver.php");
+
+	function create_user($first_name, $last_name, $login, $email, $gender, $date) {
+		
+	}
 ?>

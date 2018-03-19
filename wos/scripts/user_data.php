@@ -31,21 +31,12 @@
 	} else {
 		error_page('suw_p');
 	}
-
+	
+	$gender = "";
 	if(array_key_exists('gender',$_POST)) {
 		$gender = fix_string($conn, $_POST['gender']);
 	}
 
 	$image_name = "default.png"; 
-/*	if(!empty($_FILES)) {
-		$image_name = substr($email, 0, 2)."_".strtolower($first_name)."_".strtolower($last_name)."_wos";	
-		if(preg_match('~(image)/(jpeg)|(png)|(gif)~', $_FILES['image']['type'])) {
-			preg_match('~\.[a-z]+$~', $_FILES['image']['name'], $extension);
-			$directory = "~/.git/world-of-session/wos/scripts";
-			move_uploaded_file($_FILES['image']['tmp_name'], "$directory");
-			die();
-			$image_name$extension[0];
-		}
-	}*/
 	$conn->close();
 ?>

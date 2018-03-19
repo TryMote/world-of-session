@@ -36,10 +36,11 @@
 			$result->data_seek(0);
 			$first_name = $result->fetch_array(MYSQLI_NUM);
 			echo $first_name[0];
-//			header("Location http://localhost/wos/profile.php");
 		} else {
 			echo "Подтвердите свою электронную почту";
 		}
+	$result->close();
+	$conn->close();	
 	} else {
 		error_page('wrong_password');
 	}
