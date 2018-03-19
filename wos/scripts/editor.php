@@ -12,10 +12,10 @@
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang='rus'>
 <head>
         <title>Lection Editor 1.0</title>
-        <meta charset='utf-8'>
+        <meta charset='utf8'>
         <link rel='stylesheets' href='../../assets/css/style.css'>
 </head>
 <body> 
@@ -24,6 +24,7 @@
 		<?php
 			require 'db_data.php';
 			$conn = new mysqli($hn, $un, $pw, $db); 
+			$conn->query($conn, 'SET NAMES "utf8"');
 			if($conn->connect_error) die($conn->connect_error);
 
 			$query = "SELECT * FROM subjects";
@@ -37,6 +38,7 @@
         </form>
         <?php
 		$conn = new mysqli($hn, $un, $pw, $db);
+		$conn->query($conn, 'SET NAMES "utf8"');
 		if($conn->connect_error) die($conn->connect_error);
 		if(isset($_POST['subject_selected'])) {
 			$query = "SELECT * FROM topics WHERE subject_id='".$_POST['subject_id']."'";

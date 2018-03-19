@@ -4,6 +4,7 @@
 	include_once 'error_page_func.php';
 	
 	$conn = new mysqli($hn, $un, $pw, $db);
+	$conn->query($conn, "SET NAMES 'utf8'");
 	if($conn->connect_error) die($conn->connect_error);
 	
 	$first_name = fix_string($conn, $_POST['first_name']);
