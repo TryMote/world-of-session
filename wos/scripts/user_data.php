@@ -8,12 +8,12 @@
 	if($conn->connect_error) die($conn->connect_error);
 	
 	$first_name = fix_string($conn, $_POST['first_name']);
-	$first_name = mb_strtolower(trim(preg_replace('~[^A-Za-z]+~','',$first_name)));
-	$first_name = ucfirst($first_name);
+	$first_name = mb_strtolower(trim(preg_replace('~[^A-Za-zА-ЯёЁ]+~iu', '', $first_name)));
+	$first_name = mb_convert_case($first_name, MB_CASE_TITLE, "utf-8");
 
 	$last_name = fix_string($conn, $_POST['last_name']);
-	$last_name = mb_strtolower(trim(preg_replace('~[^A-Za-z]+~','',$last_name)));
-	$last_name = ucfirst($last_name);
+	$last_name = mb_strtolower(trim(preg_replace('~[^A-Za-zА-Яа-яёЁ]+~iu','', $last_name)));
+	$last_name = mb_convert_case($last_name, MB_CASE_TITLE, "utf-8");
 
 	$login = trim(fix_string($conn, $_POST['login']));
 	if(preg_match('~[^a-zA-Z0-9_-]+~', $login)) error_page('srw_l');

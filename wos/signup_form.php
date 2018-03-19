@@ -1,5 +1,5 @@
 <div id="signup">
-	<form action="scripts/signup.php" method="post" enctype="multipart/form-data">
+	<form action="scripts/signup.php"  method="post" enctype="multipart/form-data">
 		<legend>Создания профиля</legend><br/>
 		<input type="text" name="first_name" placeholder="Имя" required><br/>
 		<input type="text" name="last_name" placeholder="Фамилия" required><br/>
