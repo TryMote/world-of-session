@@ -38,18 +38,5 @@
 	$result->close();	
 	$conn->close();
 	mail($email, "Верификация вашей почты", "Привет");
-	echo "
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset='utf-8'>
-	 <link rel='stylesheet' href='../assets/css/styles.css'>
-	<title>Верификация электронной почты</title>
-</head>
-<body>
-	<h4>Верификация e-mail</h4>
-	<p>Вам на почту отправлено письмо для подтверждения электронной почты</p><br>
-	<a href='../index.php'>На главную</a>
-</body>
-</html>";
+	header("Location: http://localhost/wos/email_ver.php");
 ?>
