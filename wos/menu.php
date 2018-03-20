@@ -1,10 +1,17 @@
 <div class="center-block-main">
         <div class="header-top ">
-			<p class="logo"> <a href="index.php">World of session </a></p>
-			<div class="vxod">
-	    		<a href="register.php">Регистрация</a><br>
-			</div>
+		<p class="logo"> <a href="index.php">World of session </a></p>
+		<div class="vxod">
+			<form action="scripts/signin.html" method="post">
+				<legend>Вход</legend>
+				<input type="text" name="login" placeholder="Введите логин" required><br/>
+				<input type="password" name="pass" placeholder="Введите пароль" required><br/>
+				<a href="register.html">Регистрация</a><br>
+				<a href="forgotpass.html">Забыли пароль?</a><br>
+				<input type="submit" value="Войти">
+			</form>
 		</div>
+	</div>
 	<div class="header-bottom">
 		<nav>
 			<ul class="menu">
