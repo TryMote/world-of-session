@@ -1,42 +1,69 @@
-html,
-body {
-	margin: 0;
-	padding: 0;
-	background-color: #FF6600;
-}
-
-.main {
-	display: fixed;
-	position: relative;
-	padding-top: 104px;
+html {
 	background-color: grey;
 }
-
-.main div {
-	position: absolute;
+.center-block-main {
+	max-width: 1170px;
+	margin: 0 auto
+}
+.logo{
+	float: left;
+	font-size:1,4em;
+}
+.logo a{
+	text-decoration: none;
+	color:black;
+}
+.vxod{
+float: right;
+}
+.vxod legend{
+	font-weight: 600;
+}
+.vxod a{
+    color:black;
+    text-decoration:none;
+}
+.vxod a:hover{
+	color: orange;
+}
+.header-top{
+overflow: hidden;
+padding: 30px,0px,30px,0px;
+border-bottom:1px solid orange; 
 }
 
-#logo {
-	left: 36px;
-	top: 20px;
+.header-bottom{
+	padding: 10px,0;
+	overflow: hidden;
 }
-
-#main-menu {
-	left: 130px;
-	top: 42px;
+ .menu{
+	float: left;
 }
-
-#main-menu a {
-	margin: 10%;
+.menu li{
+	float: left;
+	margin-right:30px; 
 }
+.menu li a{
+	text-decoration:none;
+	color: black;
 
-#main-menu span {
-	background-color: white;
-	margin-left: 245px;
 }
-
-#vxod {
-/*	display: none; */
+.menu li a:hover{
+	color: orange;
+}
+.my-slider ul li{
 	position: relative;
-	z-index: 2;
+	color:orange;
+}
+.my-slider ul li h2{
+	position: absolute;
+	top: 20px;
+	left: 30px;
+
+}
+.unslider-nav{
+	color: black;
+	max-width: 1170px;
+	margin: 0 auto;
+	top: -50px;
 }

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="assets/css/styles.css">
+	<link rel="stylesheet" href="assets/css/unslider.css">
+    <link rel="stylesheet" href="assets/css/unslider-dots.css">
+
+	<title>World of session</title>
+</head>
+<body>
+	<header>
+		<div class="center-block-main">
+		
+        <div class="header-top ">
+		<p class="logo"> <a href="index.html">World of session </a></p>
+		<div class="vxod">
+	        <form action="scripts/signin.html" method="post">
+			<legend>Вход</legend>
+			<input type="text" name="login" placeholder="Введите логин" required><br/>
+			<input type="password" name="pass" placeholder="Введите пароль" required><br/>
+			<a href="register.html">Регистрация</a><br>
+			<a href="forgotpass.html">Забыли пароль?</a><br>
+			<input type="submit" value="Войти">
+		</form>
+	</div>
+		</div>
+
+        <div class="header-bottom">
+				<nav>
+					<ul class="menu">
+						<li><a href="lections.html">Лекция</a></li>
+						<li><a href="practic.html">Практика</a></li>
+						<li><a href="contact.html">Контакты</a></li>
+					</ul>
+		</nav>
+
+</div>
+</div>
+	
+			
+</header>
+<div class="my-slider center-block-main">
+	<nav>
+	<ul>
+		<li><h2>Если не сдашься <br> то победишь</h2>
+<img src="assets/img/math.png">
+
+		</li>
+		<li><h2>Если не сдашься <br> то победишь</h2>
+<img src="assets/img/math.png">
+
+		</li>
+		<li><h2>Если не сдашься <br> то победишь</h2>
+<img src="assets/img/math.png">
+
+		</li>
+	</ul>
+	</nav>
+</div>
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="js/unslider-min.js"></script>
+<script>
+		jQuery(document).ready(function($) {
+			$('.my-slider').unslider({
+				autoplay:true,
+				arrows:false
+			});
+		});
+</script>
+
+
+	
+</body>
+
+
+
+	
+</html>	
