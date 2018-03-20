@@ -1,32 +1,18 @@
 <?php
-	function generate_select_tag($select_name, $query_result) {
-		echo "<select name='$select_name'>";
-		$rows = $query_result->num_rows;
+	function generate_select_tag($select_name,$what_to_choose ,$query, $conn) {
+		$result = $conn->query($query);
+		if(!$result) die($conn->connect_error);
+		echo "<select name='".$select_name."_id'>";
+		$rows = $result->num_rows;
 		for($i = 0; $i < $rows; $i++) {
-			$query_result->data_seek($i);
-			$row = $query_result->fetch_array(MYSQLI_NUM);
+			$result->data_seek($i);
+			$row = $result->fetch_array(MYSQLI_NUM);
 			echo "<option value='".$row[0]."'>".$row[1]."</option>";
 		}
 		echo "</select>";
-	}
-	function generate_next_block($submit_name,$value_name, $key_name, $create_what, $name_of_what, $no_what, $conn ) {
-		if(isset($_POST[$submit_name])) {
-			$query = "SELECT * FROM ".$value_name."s WHERE $key_name='".$_POST[$key_name]."'";
-			$result = $conn->query($query);
-			if(!$result) die($conn->connect_error);
-			$row = $result->fetch_array(MYSQLI_NUM);
-			echo "<p>Если хотите создать новую $create_what, введите в поле название и нажмите 'Создать новую $create_what'</p>";
-			echo "<form action='editor.php' method='POST'>";
-			echo "<input type='text' name='".$value_name."_name' placeholder='Название $name_of_what'>";
-			echo "<input type='submit' name='create_$value_name' value='Создать новую $create_what'></form>";	
-			if(!$row[0]) {
-				echo "<p>$no_what для данного предмета еще не создано</p><br>";	
-			} else {
-				echo "<form action='editor.php' method='POST'>";
-			 	generate_select_tag('topic_id', $result);
-				echo "<input type='submit' name='".$value_name."_selected' value='Выбрать $create_what'></form>";
-			}
-			$result->close();
+		echo "<input type='submit' name='".$select_name."_select' value='Выбрать ".$what_to_choose."'><br>";
+		if(isset($_POST[$select_name.'_select'])) {
+			return $_POST[$select_name.'_id'];
 		}
 	}
 ?>
@@ -46,24 +32,13 @@
 			$conn = new mysqli($hn, $un, $pw, $db); 
 			$conn->query('SET NAMES "utf8"');
 			if($conn->connect_error) die($conn->connect_error);
-
-			$query = "SELECT * FROM subjects";
-			$result = $conn->query($query);
-			if(!$result) die($conn->connect_error);
-			generate_select_tag('subject_id', $result);	
-			$result->close();
-			$conn->close();
-	  	 ?>
-                <input type='submit' name='subject_selected' value='Выбрать предмет'>
-        </form>
-        <?php
-		$conn = new mysqli($hn, $un, $pw, $db);
-		if($conn->connect_error) die($conn->connect_error);
-		$conn->query('SET NAMES "utf8"');
-		generate_next_block('subject_selected','topic','subject_id', 'тему', 'темы', 'тем', $conn);
-		generate_next_block('topic_selected', 'lection', 'topic_id', 'лекцию', 'лекции', 'лекций', $conn);	
-		$conn->close();
-	 ?>
+			
+			$last_subject = generate_select_tag("subject", "предмет",  "SELECT * FROM subjects", $conn);
+			
+			$last_topic = generate_select_tag("topic","тему", "SELECT * FROM topics WHERE subject_id='$last_subject'", $conn);
+			generate_select_tag("lection", "лекцию", "SELECT * FROM lections WHERE topic_id='$last_topic'", $conn);
+			
+		?>
 	
 </body>
 </html>
