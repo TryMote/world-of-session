@@ -2,36 +2,77 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" href="assets/style.css">
+	<link rel="stylesheet" href="assets/css/styles.css">
 	<title>World of session</title>
 </head>
 <body>
 	<header>
-		<div class="main">
+		<div class="center-block-main">
+		
+        <div class="header-top ">
+		<p class="logo"> <a href="index.html">World of session </a></p>
+		<div class="vxod">
+	    
+	    <a href="register.html">Регистрация</a><br>
+
+	</div>
+		</div>
+
+        <div class="header-bottom">
+				<nav>
+					<ul class="menu">
+						<li><a href="lections.html">Лекция</a></li>
+						<li><a href="practic.html">Практика</a></li>
+						<li><a href="contact.html">Контакты</a></li>
+					</ul>
+   
+
+
+
+
+		</nav>
+
+</div>
+</div>
+
+
+
+		<div class="center-block-main">
+	    <p class="logo"><a href="index.html">World of session</a></p>
+		<div class="signup">
+	<form action="scripts/signup.php"  method="post" enctype="multipart/form-data">
+		<legend>Создания профиля</legend><br/>
+		<input type="text" name="first_name" placeholder="Имя" required><br/>
+		<input type="text" name="last_name" placeholder="Фамилия" required><br/>
+		<input type="text" name="login" placeholder="Логин" required><br/>
+		<input type="email" name="email" placeholder="Электронная почта"required><br/>
+		<input type="password" maxlength='30' name="pass" placeholder="Пароль" required><br/>
+		<input type="password" maxlength='30' name="r_pass" placeholder="Пароль еще раз" required><br/>
+		<label for="gender">Пол:</label>
+		<p>Мужчина:</p>
+		<input type="radio" name="gender" value="male">
+		<p>Женщина:</p>
+		<input type="radio" name="gender" value="female"><br/>
+		<!--    <label for="image">Выбери фото профиля:</label>
+		<input type="file" name="image"><br/> -->
+		<input type="submit" name='submit' value="Зарегистрироваться">
+	</form>
+</div>
+
+
+		</div>
+
+      
+	
 			
-			<div id="logo">
-				<a href="index.html">World of session</a>
-			</div>
-<div id="vxod">
+</header>
 
-				<form action="signin.html" method="post">
-					<a href="register.html">Регистрация</a><br>
-					<legend>Создания профиля</legend></form><br/>
-					<input type="text" name="name" placeholder="Введите имя"><br/>
-					<input type="text" name="username" placeholder="Введите фамилию" ><br/>
-					<input type="text" name="login" placeholder="Придумайте логин"><br/>
-					<input type="email" name="email" placeholder="Введите свою почту"><br/>
-				<input type="password" name="pas" placeholder="Придумайте пароль"><br/>
-				<input type="submit" value="Зарегистрироваться">
-				</form>
-			</div>
 
-		</div>
-	</header>
-	<footer>
-		<div id="copy">
-			Copyright 2018 &copy;
-		</div>
-	</footer>
+
+	
 </body>
+
+
+
+	
 </html>	
