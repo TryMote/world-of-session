@@ -6,8 +6,8 @@
 				<legend>Вход</legend>
 				<input type="text" name="login" placeholder="Введите логин" required><br/>
 				<input type="password" name="pass" placeholder="Введите пароль" required><br/>
-				<a href="register.html">Регистрация</a><br>
-				<a href="forgotpass.html">Забыли пароль?</a><br>
+				<a href="register.php">Регистрация</a><br>
+				<a href="forgotpass.php">Забыли пароль?</a><br>
 				<input type="submit" value="Войти">
 			</form>
 		</div>
