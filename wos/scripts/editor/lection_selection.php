@@ -22,8 +22,8 @@
 				echo "<option value='".$row['lection_id']."'>".$row['lection_name']."</option>";
 			}
 			echo "</select>
-				<input type='submit' name='delete_lection' value='Удалить лекцию'>
 				<input type='submit' name='select_lection' value='Выбрать лекцию'>
+				<input type='submit' name='delete_lection' value='Удалить лекцию'>
 			</form>";
 		}
 		echo "<form action='lection_selection.php' method='POST'>

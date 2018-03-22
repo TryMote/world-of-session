@@ -18,19 +18,19 @@
 --
 -- Table structure for table `lections`
 --
-SET NAMES 'utf8';
+
 DROP TABLE IF EXISTS `lections`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `lections` (
   `lection_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `lection_name` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `lection_name` varchar(40) CHARACTER SET utf8 NOT NULL,
   `lection_link` varchar(40) NOT NULL,
   `topic_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`lection_id`),
   UNIQUE KEY `lection_name` (`lection_name`),
-  KEY `lection_name_2` (`lection_name`(5)),
   UNIQUE KEY `lection_link` (`lection_link`),
+  KEY `lection_name_2` (`lection_name`(5)),
   KEY `lection_link_2` (`lection_link`(5)),
   KEY `topic_id` (`topic_id`),
   CONSTRAINT `lections_ibfk_1` FOREIGN KEY (`topic_id`) REFERENCES `topics` (`topic_id`)
@@ -56,8 +56,8 @@ DROP TABLE IF EXISTS `sign_in`;
 CREATE TABLE `sign_in` (
   `user_id` int(10) unsigned NOT NULL,
   `email` varchar(50) DEFAULT NULL,
-  `nickname` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `password` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `nickname` varchar(30) CHARACTER SET utf8 NOT NULL,
+  `password` varchar(30) CHARACTER SET utf8 NOT NULL,
   UNIQUE KEY `nickname` (`nickname`),
   KEY `nickname_2` (`nickname`(5)),
   KEY `user_id` (`user_id`),
@@ -73,6 +73,7 @@ CREATE TABLE `sign_in` (
 
 LOCK TABLES `sign_in` WRITE;
 /*!40000 ALTER TABLE `sign_in` DISABLE KEYS */;
+INSERT INTO `sign_in` VALUES (1,'jokey13@bk.ru','m13kj','42cUvNhLow35M');
 /*!40000 ALTER TABLE `sign_in` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -85,7 +86,7 @@ DROP TABLE IF EXISTS `statuses`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `statuses` (
   `status_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `status_name` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `status_name` varchar(40) CHARACTER SET utf8 NOT NULL,
   `status_xp` int(5) unsigned NOT NULL,
   PRIMARY KEY (`status_id`),
   UNIQUE KEY `status_name` (`status_name`),
@@ -114,7 +115,7 @@ DROP TABLE IF EXISTS `subjects`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `subjects` (
   `subject_id` varchar(4) NOT NULL DEFAULT 'UND',
-  `subject_name` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `subject_name` varchar(40) CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`subject_id`),
   UNIQUE KEY `subject_id` (`subject_id`),
   UNIQUE KEY `subject_name` (`subject_name`),
@@ -141,7 +142,7 @@ DROP TABLE IF EXISTS `teachers`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `teachers` (
   `teacher_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `teacher_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `teacher_name` varchar(30) CHARACTER SET utf8 NOT NULL,
   `subject_id` varchar(4) NOT NULL,
   PRIMARY KEY (`teacher_id`),
   KEY `teacher_name` (`teacher_name`(5)),
@@ -168,7 +169,7 @@ DROP TABLE IF EXISTS `topics`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `topics` (
   `topic_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `topic_name` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `topic_name` varchar(40) CHARACTER SET utf8 NOT NULL,
   `subject_id` varchar(2) NOT NULL,
   PRIMARY KEY (`topic_id`),
   UNIQUE KEY `topic_name` (`topic_name`),
@@ -196,16 +197,16 @@ DROP TABLE IF EXISTS `user_primary_data`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_primary_data` (
   `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `first_name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `last_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `first_name` varchar(20) CHARACTER SET utf8 NOT NULL,
+  `last_name` varchar(30) CHARACTER SET utf8 NOT NULL,
   `email` varchar(50) NOT NULL,
-  `email_ver` tinyint NOT NULL DEFAULT '0',
+  `email_ver` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`),
   KEY `first_name` (`first_name`(5)),
   KEY `last_name` (`last_name`(5)),
   KEY `email_2` (`email`(10))
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -214,6 +215,7 @@ CREATE TABLE `user_primary_data` (
 
 LOCK TABLES `user_primary_data` WRITE;
 /*!40000 ALTER TABLE `user_primary_data` DISABLE KEYS */;
+INSERT INTO `user_primary_data` VALUES (1,'Эрнест','Йоффе','jokey13@bk.ru',0);
 /*!40000 ALTER TABLE `user_primary_data` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -247,6 +249,7 @@ CREATE TABLE `user_second_data` (
 
 LOCK TABLES `user_second_data` WRITE;
 /*!40000 ALTER TABLE `user_second_data` DISABLE KEYS */;
+INSERT INTO `user_second_data` VALUES (1,'default.png',0,1,NULL,'2018-03-23 02:21:05');
 /*!40000 ALTER TABLE `user_second_data` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -289,4 +292,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-19 20:11:03
+-- Dump completed on 2018-03-23  2:27:38

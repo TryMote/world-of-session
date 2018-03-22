@@ -2,7 +2,7 @@
         <div class="header-top ">
 		<p class="logo"> <a href="index.php">World of session </a></p>
 		<div class="vxod">
-			<form action="scripts/signin.html" method="post">
+			<form action="scripts/signin.php" method="post">
 				<legend>Вход</legend>
 				<input type="text" name="login" placeholder="Введите логин" required><br/>
 				<input type="password" name="pass" placeholder="Введите пароль" required><br/>

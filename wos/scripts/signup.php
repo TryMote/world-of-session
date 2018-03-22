@@ -38,7 +38,7 @@
 	
 	$result->close();	
 	$conn->close();
-	mail($email, "Верификация вашей почты", "Привет");
+	//mail($email, "Верификация вашей почты", "Привет");
 	
 	header("Location: http://localhost/wos/email_ver.php");
 ?>

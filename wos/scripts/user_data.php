@@ -1,6 +1,7 @@
 <?php
 	require_once 'salt.php';
 	require_once 'db_data.php';
+	require_once 'generator.php';
 	include_once 'error_page_func.php';
 	
 	$conn = new mysqli($hn, $un, $pw, $db);
@@ -27,7 +28,8 @@
 	$pass = fix_string($conn, $_POST['pass']);
 	$r_pass = fix_string($conn, $_POST['pass']);
 	if(strlen($pass) >= 6 && strlen($pass) <= 30 && $pass == $r_pass ) {
-		$pass = crypt($pass, 'ls');
+		$salt = generate();
+		$pass = crypt($pass, $salt);
 	} else {
 		error_page('suw_p');
 	}
