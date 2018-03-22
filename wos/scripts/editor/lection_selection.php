@@ -13,7 +13,7 @@
 		if(!$row['lection_name'] && !$row['lection_id']) {
 			echo "<p>Для данной темы еще не добавлено лекций</p><br>";
 		} else {
-			echo "<form action='editor.php' method='GET'>";
+			echo "<form action='editor.php' method='POST'>";
 			echo "<select name='lection_selection'>";
 			$row_number = $result->num_rows;
 			for($i = 0; $i < $row_number; ++$i) {
@@ -26,13 +26,13 @@
 				<input type='submit' name='select_lection' value='Выбрать лекцию'>
 			</form>";
 		}
-		echo "<form action='lection_selection.php' method='GET'>
+		echo "<form action='lection_selection.php' method='POST'>
 			<input type='text' name='chosen_topic_name' value='$selected_topic_name[0]' style='display:none'>
 			<input type='text' name='chosen_topic_id' value='$topic_selection' style='display:none'>
 			<input type='submit' name='create_lection' value='Добавить новую лекцию'>
 		</form>";
 	}
-	if(isset($_GET['create_lection'])) {
+	if(isset($_POST['create_lection'])) {
 		echo "<!DOCTYPE html>
 		<html>
 		<head>
@@ -40,31 +40,31 @@
 			<meta charset='utf8'>
 		</head>
 		<body>";
-		echo "<h3>".$_GET['chosen_topic_name']."</h3><br>
-		<form action='lection_selection.php' method='GET'>
+		echo "<h3>".$_POST['chosen_topic_name']."</h3><br>
+		<form action='lection_selection.php' method='POST'>
 			<label for='n_lection_name'>Название лекции:</label><br>
 			<input type='text' name='n_lection_name' required><br>
 			<label for='n_lection_link'>Имя файла HTML:</label><br>
 			<input type='text' name='n_lection_link' required><br>
-			<input type='text' name='selected_topic_id' value='".$_GET['chosen_topic_id']."' style='display:none'>
+			<input type='text' name='selected_topic_id' value='".$_POST['chosen_topic_id']."' style='display:none'>
 			<p style='font-size:11pt'>(для имени файла HTML использовать только латиницу и символ нижнего подчеркивания \"_\")</p><br>
 			<input type='submit' name='insert_lection' value='Добавить лекцию'><br>
 		</form>";
-		echo "<form action='lection_selection.php' method='GET'>
+		echo "<form action='lection_selection.php' method='POST'>
 			<input type='submit' name='cancel_creation' value='Отменить'>
 		</form>";
 		echo "</body></html>";
-	} elseif(isset($_GET['cancel_creation'])) {
+	} elseif(isset($_POST['cancel_creation'])) {
 		header("Location: editor.php");
-	} elseif(isset($_GET['insert_lection'])) {
+	} elseif(isset($_POST['insert_lection'])) {
 		require_once '../db_data.php';
 		$conn = new mysqli($hn, $un, $pw, $db);
 		if($conn->connect_error) die($conn->connect_error);
 		$conn->query("SET NAMES 'utf8'");
-		$lection_name = fix_string($conn, trim($_GET['n_lection_name']));
-		$lection_link = fix_string($conn, trim($_GET['n_lection_link']));
+		$lection_name = fix_string($conn, trim($_POST['n_lection_name']));
+		$lection_link = fix_string($conn, trim($_POST['n_lection_link']));
 		$lection_link = preg_replace("~[^A-Za-z_]+~", "", str_replace(" ", "", $lection_link));
-		$selected_topic_id = fix_string($conn, trim($_GET['selected_topic_id']));
+		$selected_topic_id = fix_string($conn, trim($_POST['selected_topic_id']));
 		$query = "SELECT topic_name FROM topics WHERE topic_id='$selected_topic_id'";
 		$result = $conn->query($query);
 		if(!$result) die($conn->connect_error);
