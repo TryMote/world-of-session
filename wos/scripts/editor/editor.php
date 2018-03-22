@@ -23,9 +23,15 @@
 			lection_page_work($_GET['topic_selection'], $conn);
 		}
 		if(isset($_GET['delete_subject'])) {
-			echo "<form action='editor.php' method='GET'>";
+			$result = $conn->query("SELECT subject_name FROM subjects WHERE subject_id='".$_GET['subject_selection']."'");
+			if(!$result) die($conn->connect_error);
+			$subject_name = $result->fetch_array(MYSQLI_NUM);
+			echo "<br><form action='editor.php' method='GET'>
+				<label style='color:#f00' for='force_delete_subject'>Предмет <b>'$subject_name[0]'</b> и все входящие в него лекции и темы будут безвозвратно удалены!</label><br>
+				<input type='submit' name='force_delete_subject' value='Удалить'>
+				<input type='submit' name='cancel' value='Отменить'>
+				</form>";
 		} 
-		if(isset($_GET['just_delete
 	?>
 </body>
 </html>
