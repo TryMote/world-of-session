@@ -65,3 +65,10 @@ border-bottom:1px solid orange;
 	margin: 0 auto;
 	top: -50px;
 }
+.block3-main{
+	overflow: hidden;
+}
+.block3-main article{
+	width:370px;
+	float: left;
+}

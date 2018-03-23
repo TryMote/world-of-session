@@ -1,4 +1,6 @@
-
+html{
+	background: grey
+}
 .center-block-main {
 	max-width: 1170px;
 	margin: 0 auto
@@ -49,6 +51,8 @@ border-bottom:1px solid orange;
 .menu li a:hover{
 	color: orange;
 }
+.my-slider{
+}
 .my-slider ul li{
 	position: relative;
 	color:orange;
@@ -64,4 +68,30 @@ border-bottom:1px solid orange;
 	max-width: 1170px;
 	margin: 0 auto;
 	top: -50px;
+}
+.block3-main{
+overflow: hidden;
+}
+
+.block3-main  article{
+width:31%;
+float: left;
+margin-left:2,6%;
+  
+}
+.block3-main article:first-child{
+margin-left: 0;
+}
+.block3-main article img{
+	display:block;
+	margin:0 auto 20px auto;
+}
+.block3-main article h2{
+    font-family: 'Roboto-Condensed',sans-serif;
+	font-size:20px;
+	margin-bottom: 20px;
+	text-decoration: none;
+}
+.block3-main article p{
+	font-size: 14px;
 }
