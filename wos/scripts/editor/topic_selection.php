@@ -1,38 +1,4 @@
 <?php 
-	function topic_page_work($get_subject_selection, $conn) {
-	
-		$selected_subject_id = $get_subject_selection;
-		$query = "SELECT subject_name FROM subjects WHERE subject_id='$selected_subject_id'";
-		$result = $conn->query($query);
-		if(!$result) die($conn->connect_error);
-		$selected_subject_name = $result->fetch_array(MYSQLI_NUM);
-		echo "<br><p>Выбран предмет '$selected_subject_name[0]'<p><br>";
-		
-		$query = "SELECT * FROM topics WHERE subject_id='$selected_subject_id'";
-		$result = $conn->query($query);
-		if(!$result) die($conn->connect_error);
-		$row = $result->fetch_array(MYSQLI_ASSOC);
-		if(!$row['topic_name'] && !$row['topic_id']) {
-			echo "<p>Для данного предмета еще не добавлено тем</p><br>";
-		} else {
-			echo "<form action='editor.php' method='POST'>";
-			$row_number = $result->num_rows;
-			echo "<select name='topic_selection'>";
-			for($i = 0; $i < $row_number; ++$i) {
-				$result->data_seek($i);
-				$row = $result->fetch_array(MYSQLI_ASSOC);
-				echo "<option value='".$row['topic_id']."'>".$row['topic_name']."</option>";
-			}
-			echo "</select>
-				<input type='submit' name='select_topic' value='Выбрать тему'>
-				<input type='submit' name='delete_topic' value='Удалить тему'>
-			</form>";
-		}
-		echo "<form action='topic_selection.php' method='POST'>
-			<input type='text' name='chosen_subject' value='$get_subject_selection' style='display:none'>
-			<input type='submit' name='create_topic' value='Добавить новую тему'>
-		</form>";
-	}
 	if(isset($_POST['create_topic'])) {
 		echo "<!DOCTYPE html>
 		<html>
@@ -45,7 +11,7 @@
 			<label for='n_topic_name'>Название темы</label>
 			<input type='text' name='n_topic_name' required>
 			<label for='topic_subject_id'>ID добавленного предмета новой темы</label>
-			<input type='text' name='topic_subject_id' size='3' value='".$_POST['chosen_subject']."' required>
+			<input type='text' name='topic_subject_id' size='3' value='".$_POST['chosen_subject_id']."' required>
 			<p style='font-size:9pt'>(в форме вписан ID выбранного вами предмета)</p>
 			<input type='submit' name='insert_topic' value='Добавить тему'><br>
 		</form>";
