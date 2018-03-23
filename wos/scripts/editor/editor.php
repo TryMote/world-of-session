@@ -5,7 +5,22 @@
 	<meta charset='utf8'>
 </head>
 <body>
-	<?php 
+	<?php
+		
+		function delete_material($conn, $item, $text_item_type) {
+			$del_item_id = $_POST[$item.'_selection'];
+			$query = "SELECT $item"."_name FROM $item"."s WHERE $item"."_id='$del_item_id'";
+			$result = $conn->query($query);
+			if(!$result) die($conn->connect_error);
+			$item_name = $result->fetch_array(MYSQLI_NUM);
+			$result->close();
+			echo "<br><form action='editor.php' method='POST'>
+				<label style='color:#f00' for='force_delete_$item'>$text_item_type <b> '$item_name[0]' </b> и весь входящий материал будут безвозвратно удалены!</label><br>
+				<input type='password' name='pass' placeholder='Ключ' required>
+				<input type='submit' name='force_delete_$item' value='Удалить'>
+				<input type='text' name='del_$item"."_id' value='$del_item_id' style='display:none'>
+				</form>";
+		} 
 		require_once "../db_data.php";
 		$conn = new mysqli($hn, $un, $pw, $db);
 		if($conn->connect_error) die($conn->connect_error);
@@ -23,48 +38,13 @@
 			lection_page_work($_POST['topic_selection'], $conn);
 		}
 		if(isset($_POST['delete_subject'])) {
-			$del_subject_id = $_POST['subject_selection'];
-			$result = $conn->query("SELECT subject_name FROM subjects WHERE subject_id='$del_subject_id'");
-			if(!$result) die($conn->connect_error);
-			$subject_name = $result->fetch_array(MYSQLI_NUM);
-			$result->close();
-			echo "<br><form action='editor.php' method='POST'>
-				<label style='color:#f00' for='force_delete_subject'>Предмет <b>'$subject_name[0]'</b> и все входящие в него лекции и темы будут безвозвратно удалены!</label><br>
-				<input type='password' name='pass' placeholder='Ключ' required>
-				<input type='submit' name='force_delete_subject' value='Удалить'>
-				<input type='text' name='del_subject_id' value='$del_subject_id' style='display:none'> 
-				<input type='submit' name='cancel' value='Отменить'>
-				</form>";
+			delete_material($conn, 'subject', 'Предмет');		
 		}
 		if(isset($_POST['delete_topic'])) {
-			$del_topic_id = $_POST['topic_selection'];
-			$result = $conn->query("SELECT topic_name FROM topics WHERE topic_id='$del_topic_id'");
-			if(!$result) die($conn->connect_error);
-			$topic_name = $result->fetch_array(MYSQLI_NUM);
-			$result->close();
-			echo "<br><form action='editor.php' method='POST'>
-				<label style='color:#f00' for='force_delete_topic'>Тема <b>'$topic_name[0]'</b> и все входящие в нее лекции будут безвозвратно удалены!</label><br>
-				<input type='password' name='pass' placeholder='Ключ' required>
-				<input type='submit' name='force_delete_topic' value='Удалить'>
-				<input type='text' name='del_topic_id' value='$del_topic_id' style='display:none'> 
-				<input type='submit' name='cancel' value='Отменить'>
-				</form>";
-	
+			delete_material($conn, 'topic', 'Тема');		
 		}
 		if(isset($_POST['delete_lection'])) {
-			$del_lection_id = $_POST['lection_selection'];
-			$result = $conn->query("SELECT lection_name FROM lections WHERE lection_id='$del_lection_id'");
-			if(!$result) die($conn->connect_error);
-			$lection_name = $result->fetch_array(MYSQLI_NUM);
-			$result->close();
-			echo "<br><form action='editor.php' method='POST'>
-				<label style='color:#f00' for='force_delete_lection'>Лекция <b>'$lection_name[0]'</b> будет безвозвратно удалена!</label><br>
-				<input type='password' name='pass' placeholder='Ключ' required>
-				<input type='submit' name='force_delete_lection' value='Удалить'>
-				<input type='text' name='del_lection_id' value='$del_lection_id' style='display:none'> 
-				<input type='submit' name='cancel' value='Отменить'>
-				</form>";
-	
+			delete_material($conn, 'lection', 'Лекция');	
 		}
 		if(isset($_POST['force_delete_subject'])) {
 			$is_right = check_admin($conn, fix_string($conn, trim($_POST['pass'])));
@@ -77,10 +57,10 @@
 			for($i=0; $i < $row_number; ++$i) {
 				$result->data_seek($i);
 				$row = $result->fetch_array(MYSQLI_NUM);
-				$query = "DELETE FROM lections WHERE topic_id=$row[0]";
+				$query = "DELETE FROM lections WHERE topic_id='$row[0]'";
 				$del_result = $conn->query($query);
 				if(!$del_result) die($conn->connect_error);
-				$query = "DELETE FROM topics WHERE topic_id=$row[0]";
+				$query = "DELETE FROM topics WHERE topic_id='$row[0]'";
 				$del_result = $conn->query($query);
 				if(!$del_result) die($conn->connect_error);
 			}
@@ -102,11 +82,11 @@
 			for($i=0; $i < $row_number; ++$i) {
 				$result->data_seek($i);
 				$row = $result->fetch_array(MYSQLI_NUM);
-				$query = "DELETE FROM lections WHERE topic_id=$row[0]";
+				$query = "DELETE FROM lections WHERE topic_id=$del_topic_id";
 				$del_result = $conn->query($query);
 				if(!$del_result) die($conn->connect_error);
 			}
-			$query = "DELETE FROM topics WHERE topic_id='$del_topic_id'";
+			$query = "DELETE FROM topics WHERE topic_id=$del_topic_id";
 			$result = $conn->query($query);
 			if(!$result) die($conn->connect_error);
 			echo "<p>Удаление прошло успешно!</p><br>";
@@ -122,8 +102,10 @@
 			echo "<p>Удаление прошло успешно!</p><br>";
 
 		}	
-
 		$conn->close();
+		echo "<br><form action='editor.php' method='POST'>
+			<input type='submit' value='Отменить'>	
+		</form>";
 
 	function check_admin($conn, $pass) {
 		$result = $conn->query("SELECT password FROM sign_in WHERE user_id=1");

@@ -68,11 +68,11 @@
 		if(!$result) die($conn->connect_error);
 		$row = $result->fetch_array(MYSQLI_NUM);
 		if(!$row[0]) die("<p>Такого ID предмета не существует</p><br>");
-		$query = "SELECT * FROM topics WHERE topic_name='$topic_name' OR subject_id='$topic_subject_id'";
+		$query = "SELECT * FROM topics WHERE topic_name='$topic_name'";
 		$result = $conn->query($query);
 		if(!$result) die($conn->connect_error);
 		$row = $result->fetch_array(MYSQLI_NUM);
-		if($row[0] || $row[1] || $row[2]) {
+		if($row[0] || $row[1]) {
 			die("<p>Такая тема уже существует!</p><br>
 			<p>Название темы должно быть уникальным для любого предмета</p><br>
 			<p>Вернитель назад и повторите попытку</p>");

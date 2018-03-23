@@ -47,7 +47,7 @@
 			<label for='n_lection_link'>Имя файла HTML:</label><br>
 			<input type='text' name='n_lection_link' required><br>
 			<input type='text' name='selected_topic_id' value='".$_POST['chosen_topic_id']."' style='display:none'>
-			<p style='font-size:11pt'>(для имени файла HTML использовать только латиницу и символ нижнего подчеркивания \"_\")</p><br>
+			<p style='font-size:11pt'>(для имени файла HTML использовать только латиницу, цифры и символ нижнего подчеркивания \"_\")</p><br>
 			<input type='submit' name='insert_lection' value='Добавить лекцию'><br>
 		</form>";
 		echo "<form action='lection_selection.php' method='POST'>
@@ -63,7 +63,7 @@
 		$conn->query("SET NAMES 'utf8'");
 		$lection_name = fix_string($conn, trim($_POST['n_lection_name']));
 		$lection_link = fix_string($conn, trim($_POST['n_lection_link']));
-		$lection_link = preg_replace("~[^A-Za-z_]+~", "", str_replace(" ", "", $lection_link));
+		$lection_link = preg_replace("~[^A-Za-z0-9_]+~", "", str_replace(" ", "", $lection_link));
 		$selected_topic_id = fix_string($conn, trim($_POST['selected_topic_id']));
 		$query = "SELECT topic_name FROM topics WHERE topic_id='$selected_topic_id'";
 		$result = $conn->query($query);
