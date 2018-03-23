@@ -45,6 +45,13 @@
 			force_delete_material($conn, "lection");
 		}
 		
+		if(isset($_POST['send_del_message'])) {
+			$email = trim(fix_string($conn, $_POST['email']));
+			if(!preg_match('~.+@.+\..+~i', $email)) die("Неверная электронная почта");
+			$message = trim(fix_string($conn, $_POST['message']));
+			require_once '../sender.php';
+			send_mail('trymote@mail.ru', $email, $message, 3); 
+		}
 		$conn->close();
 		echo "<br><form action='editor.php' method='POST'>
 			<input type='submit' value='Отменить'>	
@@ -115,6 +122,14 @@
 			<input type='submit' name='force_delete_$item' value='Удалить'>
 			<input type='text' name='del_$item"."_id' value='$del_item_id' style='display:none'>
 			</form>";
+		echo "<p>Если не знаете ключa, вы можете отправить запрос на удаление</p><br>
+			<form action='editor.php' method='POST'>
+				<label for='email'> Ваша электронная почта</label><br>
+				<input type='email' name='email' required><br>
+				<label for='message'>Причина удаления<label><br>
+				<textarea name='message' cols='50' rows='10' wrap='hard' required></textarea><br>
+				<input type='submit' name='send_del_message' value='Отправить запрос'>
+			</form>";
 	}
 
 
@@ -161,7 +176,7 @@
 			if(!$result) die($conn->connect_error);
 		}
 		echo "<p>Удаление прошло успешно!</p><br>";
-	}	
+	}
 	?>
 </body>
 </html>

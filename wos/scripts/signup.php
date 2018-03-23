@@ -38,7 +38,8 @@
 	
 	$result->close();	
 	$conn->close();
-	//mail($email, "Верификация вашей почты", "Привет");
+	require_once 'sender.php';
+	send_mail($email, 'trymote@mail.ru', '', 1);
 	
 	header("Location: http://localhost/wos/email_ver.php");
 ?>
