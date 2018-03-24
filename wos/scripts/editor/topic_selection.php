@@ -71,6 +71,49 @@
 			header("Location: succes.php");
 		}
 		$result->close();
+	} elseif(isset($_POST['force_edit_topic'])) {
+		require_once '../db_data.php';
+		$conn = new mysqli($hn, $un, $pw, $db);
+		if($conn->connect_error) die($conn->connect_error);
+		$conn->query("SET NAMES 'utf8'");
+
+		$topic_id = fix_string($conn, trim($_POST['e_topic_id']));
+		$topic_name = fix_string($conn, trim($_POST['e_topic_name']));
+		$topic_image_type = (isset($_FILES['e_topic_image']['type']))? fix_string($conn, trim($_FILES['e_topic_image']['type'])) : '';
+		$query = "SELECT topic_name FROM topics WHERE topic_name='$topic_name'";
+		$result = $conn->query($query);
+		$row = $result->fetch_array(MYSQLI_NUM);
+		$query = "LOCK TABLES topics WRITE";
+		$result = $conn->query($query);
+		if(!$result) die($conn->connect_error);
+		if(!$row[0]) {
+			$query = "UPDATE topics SET topic_name='$topic_name' WHERE topic_id='$topic_id'";
+			$result = $conn->query($query);
+		}
+		if(!$result) die($conn->connect_error);
+		require_once 'data_analizer.php';
+		if($topic_image_type && isset($_FILES['e_topic_image']['tmp_name'])) {
+			$result = $conn->query("SELECT subject_id FROM topics WHERE topic_id='$topic_id'");
+			$row = $result->fetch_array(MYSQLI_NUM);
+			if(!$row[0]) die("Ошибка, ID предмета не найден");
+			$subject_id = $row[0];  
+			$result = $conn->query("SELECT topic_name FROM topics WHERE subject_id='$subject_id'");
+			$index = $result->num_rows;
+			$filename = analize_file($topic_image_type, 'topic', $subject_id.$topic_id, $index);
+			if(!move_uploaded_file($_FILES['e_topic_image']['tmp_name'], $img_location.$filename)) {
+				$result = $conn->query("UNLOCK TABLES");
+				if(!$result) die($conn->connect_error);
+				die("Файл не был загружен на сервер!");
+			} else {
+				$query = "UPDATE topics SET topic_image='$filename' WHERE topic_id='$topic_id'";
+				$result = $conn->query($query);
+				if(!$result) die($conn->connect_error);
+			}
+		}       
+		$result = $conn->query("UNLOCK TABLES");
+		if(!$result) die($conn->connect_error);
+		$conn->close(); 
+		header('Location: succes.php'); 
 	}
 ?>
 

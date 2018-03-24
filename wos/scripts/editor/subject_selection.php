@@ -21,9 +21,7 @@
 			echo "</select>
 			<input type='submit' name='select_subject' value='Выбрать'><br>
 			<br><input type='submit' name='delete_subject' value='Удалить' style='width:200px'>
-			</form>";
-			echo "<form action='subject_selection.php' method='POST'>
-				<input type='submit' name='edit_subject' value='Изменить' style='width:200px'>
+			<br><input type='submit' name='edit_subject' value='Изменить' style='width:200px'>
 			</form>";
 		}
 		echo "<form action='subject_selection.php' method='POST'>
@@ -77,7 +75,10 @@
 			if($filename !== 'default') {
 				if(!move_uploaded_file($_FILES['n_subject_image']['tmp_name'], $file_location)) {
 					$filename = 'default';
-					die('Файл не был загружен на сервер! Предмет будет добавлен в базу без изображения.'."\n".'Попробуйте после загрузки изменить данный предмет, выбрав его и нажав "Изменить" в главном меню');
+					echo 'Файл не был загружен на сервер! Предмет будет добавлен в базу без изображения.'."\n".'Попробуйте после загрузки изменить данный предмет, выбрав его и нажав "Изменить" в главном меню';
+					echo "<form action='editor.php' method='POST'>
+						<input type='submit' name='back' value='Отменить добавление'>
+						</form>";
 				}
 			}
                         $query = "INSERT INTO subjects VALUES(?,?,?)";
@@ -92,7 +93,43 @@
 				$conn->close();
                                 header("Location: succes.php");
                         }
-		} elseif(isset($_POST['edit_subject'])) {
+		} elseif(isset($_POST['force_edit_subject'])) {
+			require_once '../db_data.php';
+			$conn = new mysqli($hn, $un, $pw, $db);
+			if($conn->connect_error) die($conn->connect_error);
+			$conn->query("SET NAMES 'utf8'");
+			
+			$subject_id = fix_string($conn, trim($_POST['e_subject_id']));
+			$subject_name = fix_string($conn, trim($_POST['e_subject_name']));
+			$subject_image_type = (isset($_FILES['e_subject_image']['type']))? fix_string($conn, trim($_FILES['e_subject_image']['type'])) : '';
 
+			$query = "SELECT subject_name FROM subjects WHERE subject_name='$subject_name'";
+			$result = $conn->query($query);
+			$row = $result->fetch_array(MYSQLI_NUM);
+			$query = "LOCK TABLES subjects WRITE";
+			$result = $conn->query($query); 
+			if(!$result) die($conn->connect_error);
+			if(!$row[0]) {
+				$query = "UPDATE subjects SET subject_name='$subject_name' WHERE subject_id='$subject_id'";
+				$result = $conn->query($query);
+			} 
+			if(!$result) die($conn->connect_error);
+			require_once 'data_analizer.php';
+			if($subject_image_type && isset($_FILES['e_subject_image']['tmp_name'])) {
+				$filename = analize_file($subject_image_type, 'subject', $subject_id, '');
+				if(!move_uploaded_file($_FILES['e_subject_image']['tmp_name'], $img_location.$filename)) {
+					$result = $conn->query("UNLOCK TABLES");
+					if(!$result) die($conn->connect_error);
+				 	die("Файл не был загружен на сервер!");
+				} else {
+					$query = "UPDATE subjects SET subject_image='$filename' WHERE subject_id='$subject_id'";
+					$result = $conn->query($query);
+					if(!$result) die($conn->connect_error);
+				}
+			}
+			$result = $conn->query("UNLOCK TABLES");
+			if(!$result) die($conn->connect_error);
+			$conn->close();
+			header('Location: succes.php');	
 		}
 ?>

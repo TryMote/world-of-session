@@ -71,5 +71,28 @@
 		}
 		$result->close();
 		$conn->close();
+	} elseif(isset($_POST['force_edit_lection'])) {
+		require_once '../db_data.php';
+		$conn = new mysqli($hn, $un, $pw, $db);
+		if($conn->connect_error) die($conn->connect_error);
+		$conn->query("SET NAMES 'utf8'");
+		
+		$lection_id = fix_string($conn, trim($_POST['e_lection_id']));
+		$lection_name = fix_string($conn, trim($_POST['e_lection_name']));
+		$query = "SELECT lection_name FROM lections WHERE lection_name='$lection_name'";
+		$result = $conn->query($query);
+		$row = $result->fetch_array(MYSQLI_NUM);
+		$result = $conn->query($query);
+		if(!$result) die($conn->connect_error);
+		if(!$row[0]) {
+			$query = "LOCK TABLES lections WRITE";
+			$query = "UPDATE lections SET lection_name='$lection_name' WHERE lection_id='$lection_id'";
+			$result = $conn->query($query);
+			if(!$result) die($conn->connect_error);
+			$result = $conn->query("UNLOCK TABLES");
+			if(!$result) die($conn->connect_error);
+		}
+		$conn->close(); 
+		header('Location: succes.php'); 
 	}
 ?>

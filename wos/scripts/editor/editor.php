@@ -40,9 +40,9 @@
 			$result = $conn->query($query);
 			if(!$result) die($conn->connect_error);
 			if(isset($_POST['rewrite'])) {
-				open_editor($lections_location, $_POST['filename'], 'w');
+				open_editor($conn, $lections_location, $_POST['filename'], 'w');
 			} else {
-				open_editor($lections_location, $_POST['filename'], 'r');
+				open_editor($conn, $lections_location, $_POST['filename'], 'r');
 			}
 		}
 	
@@ -69,7 +69,19 @@
 		if(isset($_POST['force_delete_lection'])) {
 			force_delete_material($conn, "lection");
 		}
+	
+		if(isset($_POST['edit_subject'])) {
+			edit_material($conn, 'subject');
+		}		
 		
+		if(isset($_POST['edit_topic'])) {
+			edit_material($conn, 'topic');
+		}
+		
+		if(isset($_POST['edit_lection'])) {
+			edit_material($conn, 'lection');
+		}
+	
 		if(isset($_POST['send_del_message'])) {
 			$email = trim(fix_string($conn, $_POST['email']));
 			if(!preg_match('~.+@.+\..+~i', $email)) die("Неверная электронная почта");
@@ -121,9 +133,7 @@
 			echo "</select>
 			<input type='submit' name='select_$item' value='Выбрать'><br>
 			<br><input type='submit' name='delete_$item' value='Удалить' style='width:200px'>
-			</form>
-			<form action='$item"."_selection.php' method='POST'>
-			<input type='submit' name='edit_$item' value='Изменить' style='width:200px'>
+			<br><input type='submit' name='edit_$item' value='Изменить' style='width:200px'>
 			</form>";
 		}
 		echo "<form action='$item"."_selection.php' method='POST'>";
@@ -213,6 +223,40 @@
 		}
 		echo "<p>Удаление прошло успешно!</p><br>";
 	}
+	
+	function edit_material($conn, $item) {
+		$item_type;
+		switch($item) {
+			case 'subject':
+				$item_type = 'предмет';
+				break;
+			case 'topic':
+				$item_type = 'тему';
+				break;
+			case 'lection':
+				$item_type = 'лекцию';
+				break;
+		}
+		echo "<fieldset>";
+		echo "<form action='$item"."_selection.php' method='POST' enctype='multipart/form-data'>";
+		$item_id = fix_string($conn, trim($_POST[$item.'_selection']));
+		$query = "SELECT * FROM $item"."s WHERE $item"."_id='$item_id'";
+		$result = $conn->query($query);
+		if(!$result) die($conn->connect_error);
+		$row = $result->fetch_array(MYSQLI_ASSOC);
+		echo "Изменить $item_type <b>'".$row[$item.'_name']."'</b><br>";
+		echo "<br><label for='e_$item"."_name'>Новое название:  </label>
+		<input type='text' name='e_$item"."_name' value='".$row[$item.'_name']."'><br>";
+		if($item != 'lection') {
+			echo "<br><label for='e_$item"."_image'>Новое изображение:  </label>
+			<input type='file' name='e_$item"."_image' value='default'><br>";
+		}
+		echo "<br><input type='submit' name='force_edit_$item' value='Принять изменения'>
+			<input type='text' name='e_$item"."_id' value='$item_id' style='display:none'>
+		</form>"; 
+		echo "</fieldset>";
+	}
+
 	?>
 </body>
 </html>

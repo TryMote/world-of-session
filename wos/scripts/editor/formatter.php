@@ -13,20 +13,27 @@
 				$query = "UPDATE lections SET is_file_opened='1' WHERE lection_link='$filename'";
 				$result = $conn->query($query);
 				if(!$result) die($conn->connect_error);
-				open_editor($location, $filename, 'w');
+				open_editor($conn, $location, $filename, 'w');
 			}
 		} else {
-			open_editor($location, $filename, 'r');
+			open_editor($conn, $location, $filename, 'r');
 		}
 	}
-	function open_editor($location, $filename, $mode) {
+	function open_editor($conn, $location, $filename, $mode) {
+		require_once 'lection_page_creator.php';
+		
 		if($mode == 'w') {
+			$query = "SELECT topic_id FROM lections WHERE lection_link='$filename'";
+			$result = $conn->query($query);
+			if(!$result) die("Файл не найден");
+			$row = $result->fetch_array(MYSQLI_NUM);
+			$query = "SELECT topic_name FROM topics WHERE topic_id='$row[0]'";
+			$result = $conn->query($query);
+			if(!$result) die("Файл не найден");
+			$row = $result->fetch_array(MYSQLI_NUM);
+			
 			$file = fopen($location.$filename, 'w');
-			fwrite($file, "
-					
-	<div>
-
-	</div>");
+			fwrite($file, create_lection_page($row[0], ''));
 			fclose($file);	
 		}
 		$content = file_get_contents($location.$filename);
