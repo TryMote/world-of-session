@@ -62,8 +62,10 @@
 		$result = $conn->query($query);
 		if(!$result) die($conn->connect_error);
 		$pre_select_name = $result->fetch_array(MYSQLI_NUM);
-		echo "<br><p>Выбран(-a) $pre_block_text_type '$pre_select_name[0]'<p><br>";
-		
+		echo "<hr>";
+		echo "<p>Выбран(-a) $pre_block_text_type</p> <h3><b>'$pre_select_name[0]'</b></h3>";
+		echo "<hr>";
+		echo "<fieldset>";	
 		$query = "SELECT * FROM $item"."s WHERE $pre_block_name"."_id='$pre_select_id'";
 		$result = $conn->query($query);
 		if(!$result) die($conn->connect_error);
@@ -78,28 +80,33 @@
 					break;
 			}
 		} else {
+			echo "<form action='editor.php' method='POST'>";
 			if($item === 'lection') {
-				echo "<form action='formatter.php' method='POST'>";
+				echo "<label for='$item"."_selection'>Лекция:</label><br>";
 			} else {
-				echo "<form action='editor.php' method='POST'>";
+				echo "<label for='$item"."_selection'>Тема:</label><br>";
 			}
 			$row_number = $result->num_rows;
-			echo "<select name='$item"."_selection'>";
+			echo "<br><select name='$item"."_selection'>";
 			for($i = 0; $i < $row_number; ++$i) {
 				$result->data_seek($i);
 				$row = $result->fetch_array(MYSQLI_ASSOC);
 				echo "<option value='".$row[$item.'_id']."'>".$row[$item.'_name']."</option>";
 			}
 			echo "</select>
-				<input type='submit' name='select_$item' value='Выбрать'>
-				<input type='submit' name='delete_$item' value='Удалить'>
+			<input type='submit' name='select_$item' value='Выбрать'><br>
+			<br><input type='submit' name='delete_$item' value='Удалить' style='width:200px'>
+			</form>
+			<form action='$item"."_selection.php' method='POST'>
+			<input type='submit' name='edit_$item' value='Изменить' style='width:200px'>
 			</form>";
 		}
 		echo "<form action='$item"."_selection.php' method='POST'>";
 				echo "<input type='text' name='chosen_$pre_block_name"."_name' value='$pre_select_name[0]' style='display:none'>
 			<input type='text' name='chosen_$pre_block_name"."_id' value='$pre_select_id' style='display:none'>
-			<input type='submit' name='create_$item' value='Добавить новую'>
+			<input type='submit' name='create_$item' value='Добавить новую' style='width:200px'>
 		</form>";
+		echo "</fieldset>";
 	}	
 
 	function check_admin($conn, $pass) {

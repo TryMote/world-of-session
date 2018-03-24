@@ -1,4 +1,4 @@
-<?php 
+<?php
 	if(isset($_POST['create_topic'])) {
 		echo "<!DOCTYPE html>
 		<html>
@@ -7,11 +7,13 @@
 			<meta charset='utf8'>
 		</head>
 		<body>";
-		echo "<form action='topic_selection.php' method='POST'>
+		echo "<form action='topic_selection.php' method='POST' enctype='multipart/form-data'>
 			<label for='n_topic_name'>Название темы</label>
 			<input type='text' name='n_topic_name' required>
 			<label for='topic_subject_id'>ID добавленного предмета новой темы</label>
-			<input type='text' name='topic_subject_id' size='3' value='".$_POST['chosen_subject_id']."' required>
+			<input type='text' name='topic_subject_id' size='3' value='".$_POST['chosen_subject_id']."' required><br>
+			<label for='n_topic_image'>Изображение к теме</label>
+			<input type='file' name='n_topic_image' value='default'>
 			<p style='font-size:9pt'>(в форме вписан ID выбранного вами предмета)</p>
 			<input type='submit' name='insert_topic' value='Добавить тему'><br>
 		</form>";
@@ -29,6 +31,7 @@
 
 		$topic_name = fix_string($conn, trim($_POST['n_topic_name']));
 		$topic_subject_id = fix_string($conn, trim($_POST['topic_subject_id']));
+		$topic_image_type = fix_string($conn, trim($_FILES['n_topic_image']['type']));
 		$query = "SELECT subject_name FROM subjects WHERE subject_id='$topic_subject_id'";
 		$result = $conn->query($query);
 		if(!$result) die($conn->connect_error);
@@ -43,10 +46,23 @@
 			<p>Название темы должно быть уникальным для любого предмета</p><br>
 			<p>Вернитель назад и повторите попытку</p>");
 		}
-		$query = "INSERT INTO topics(topic_name, subject_id) VALUES(?,?)";
+		$query = "SELECT * FROM topics WHERE subject_id='$topic_subject_id'";
+		$result = $conn->query($query);
+		if(!$result) die($conn->connect_error);
+		$row_number = $result->num_rows;
+		require_once 'data_analizer.php';
+		$filename = analize_file($topic_image_type, 'topic', $topic_subject_id, $row_number);
+		$file_location = $location.'img/'.$filename;
+		if($filename !== 'default') {
+			if(!move_uploaded_file($_FILES['n_topic_image']['tmp_name'], $file_location)) {
+				$filename = 'default';
+				die('Файл не был загружен на сервер! Тема будет добавлена в базу без изображения.'."\n".'Попробуйте после загрузки изменить данную тему, выбрав ее и нажав "Изменить" в главном меню');
+			}
+		}
+		$query = "INSERT INTO topics(topic_name, topic_image, subject_id) VALUES(?,?,?)";
 		$result = $conn->prepare($query);
 		if(!$result) die($conn->connect_error);
-		$result->bind_param('ss', $topic_name, $topic_subject_id);
+		$result->bind_param('sss', $topic_name, $filename, $topic_subject_id);
 		$result->execute();
 		$conn->close();
 		if(!$result->affected_rows) {
