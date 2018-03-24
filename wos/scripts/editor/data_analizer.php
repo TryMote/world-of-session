@@ -1,6 +1,9 @@
 <?php
 	 
-	$location = '../../material/';
+	$location = '/opt/lampp/htdocs/wos/material/';
+	$img_location = $location.'img/';
+	$lections_location = $location.'lections/';
+
 	function analize_file($file_type, $material_type, $material_index, $material_count_num) {
 		$ext = '';
 		switch($file_type) {

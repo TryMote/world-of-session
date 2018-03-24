@@ -25,13 +25,11 @@ DROP TABLE IF EXISTS `lections`;
 CREATE TABLE `lections` (
   `lection_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `lection_name` varchar(40) CHARACTER SET utf8 NOT NULL,
-  `lection_link` varchar(40) NOT NULL,
+  `lection_link` varchar(40) NOT NULL DEFAULT 'default',
   `is_file_opened` tinyint(4) NOT NULL DEFAULT '0', 
   `topic_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`lection_id`),
-  UNIQUE KEY `lection_link` (`lection_link`),
   KEY `lection_name` (`lection_name`(5)),
-  KEY `lection_link_2` (`lection_link`(5)),
   KEY `topic_id` (`topic_id`),
   CONSTRAINT `lections_ibfk_1` FOREIGN KEY (`topic_id`) REFERENCES `topics` (`topic_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

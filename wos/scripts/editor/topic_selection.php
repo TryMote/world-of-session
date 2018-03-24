@@ -52,7 +52,7 @@
 		$row_number = $result->num_rows;
 		require_once 'data_analizer.php';
 		$filename = analize_file($topic_image_type, 'topic', $topic_subject_id, $row_number);
-		$file_location = $location.'img/'.$filename;
+		$file_location = $img_location.$filename;
 		if($filename !== 'default') {
 			if(!move_uploaded_file($_FILES['n_topic_image']['tmp_name'], $file_location)) {
 				$filename = 'default';

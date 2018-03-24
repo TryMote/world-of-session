@@ -65,7 +65,7 @@
 			$subject_image_type = fix_string($conn, trim($_FILES['n_subject_image']['type']));
 			require_once 'data_analizer.php';
 			$filename = analize_file($subject_image_type, 'subject', $subject_id, '');
-			$file_location = $location.'img/'.$filename;	
+			$file_location = $img_location.$filename;	
                         $query = "SELECT * FROM subjects WHERE subject_id='$subject_id' OR subject_name='$subject_name'";
                         $result = $conn->query($query);
                         if(!$result) die($conn->connect_error);
