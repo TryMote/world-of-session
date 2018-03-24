@@ -78,7 +78,11 @@
 					break;
 			}
 		} else {
-			echo "<form action='editor.php' method='POST'>";
+			if($item === 'lection') {
+				echo "<form action='formatter.php' method='POST'>";
+			} else {
+				echo "<form action='editor.php' method='POST'>";
+			}
 			$row_number = $result->num_rows;
 			echo "<select name='$item"."_selection'>";
 			for($i = 0; $i < $row_number; ++$i) {

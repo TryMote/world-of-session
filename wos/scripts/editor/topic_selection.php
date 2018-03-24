@@ -15,7 +15,7 @@
 			<p style='font-size:9pt'>(в форме вписан ID выбранного вами предмета)</p>
 			<input type='submit' name='insert_topic' value='Добавить тему'><br>
 		</form>";
-		echo "<form action='topic_selection.php' method='POST'>
+		echo "<form action='editor.php' method='POST'>
 			<input type='submit' name='cancel_creation' value='Отменить'>
 		</form>";
 		echo "</body></html>";
@@ -48,11 +48,13 @@
 		if(!$result) die($conn->connect_error);
 		$result->bind_param('ss', $topic_name, $topic_subject_id);
 		$result->execute();
+		$conn->close();
 		if(!$result->affected_rows) {
 			die($conn->connect_error);
 		} else {
 			header("Location: succes.php");
 		}
-	} elseif(isset($_POST['back'])) header("Location: ".$_SERVER['HTTP_REFERER']);
+		$result->close();
+	}
 ?>
 

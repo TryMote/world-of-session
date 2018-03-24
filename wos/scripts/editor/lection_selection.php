@@ -73,13 +73,17 @@
 			die("<p>Что-то пошло не так! Попробуйте заного</p><br>
 			<form action='editor.php'><input type='submit' name='error_back' value='Вернуться назад'></form>");
 		}
-		$query = "SELECT * FROM lections WHERE lection_name='$lection_name' OR lection_link='$lection_link'";
+		$query = "SELECT lection_link FROM lections WHERE lection_link='$lection_link'";
 		$result = $conn->query($query);
-		if(!$result) die($conn->connect_error);
+		$query_name = "SELECT lection_name FROM lections WHERE topic_id='$selected_topic_id' AND lection_name='$lection_name'";
+		$result_name = $conn->query($query_name);
+		if(!$result || !$result_name) die($conn->connect_error);
 		$row = $result->fetch_array(MYSQLI_NUM);
-		if($row[0] || $row[1] || $row[2]) {
+		$row_name = $result_name->fetch_array(MYSQLI_NUM);	
+		if($row[0] || $row_name[0]) {
 			die("<p>Такая лекция уже существует!</p><br> 
-				<p>Название лекции и имя файла HTML должны быть уникальными для всех тем</p><br>
+				<p>Название лекции должно быть уникальным для данной темы</p><br>
+				<p>Имя файла HTML должно быть уникальным для всех тем</p><br>
 				<p>Вернитесь назад и повторите попытку</p>");
 		}
 		$query = "INSERT INTO lections(lection_name, lection_link, topic_id) VALUES(?,?,?)";
@@ -92,5 +96,7 @@
 		} else {
 			header("Location: succes.php");
 		}
+		$result->close();
+		$conn->close();
 	}
 ?>

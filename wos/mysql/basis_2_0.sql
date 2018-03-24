@@ -26,6 +26,7 @@ CREATE TABLE `lections` (
   `lection_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `lection_name` varchar(40) CHARACTER SET utf8 NOT NULL,
   `lection_link` varchar(40) NOT NULL,
+  `is_file_opened` tinyint(4) NOT NULL DEFAULT '0', 
   `topic_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`lection_id`),
   UNIQUE KEY `lection_link` (`lection_link`),
@@ -113,8 +114,9 @@ DROP TABLE IF EXISTS `subjects`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `subjects` (
-  `subject_id` varchar(4) NOT NULL DEFAULT 'UND',
+  `subject_id` varchar(4) NOT NULL,
   `subject_name` varchar(40) CHARACTER SET utf8 NOT NULL,
+  `subject_image` varchar(40) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`subject_id`),
   UNIQUE KEY `subject_id` (`subject_id`),
   UNIQUE KEY `subject_name` (`subject_name`),
@@ -128,7 +130,7 @@ CREATE TABLE `subjects` (
 
 LOCK TABLES `subjects` WRITE;
 /*!40000 ALTER TABLE `subjects` DISABLE KEYS */;
-INSERT INTO `subjects` VALUES ('M','Математика');
+INSERT INTO `subjects` VALUES ('M','Математика', 'default');
 /*!40000 ALTER TABLE `subjects` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -169,6 +171,7 @@ DROP TABLE IF EXISTS `topics`;
 CREATE TABLE `topics` (
   `topic_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `topic_name` varchar(40) CHARACTER SET utf8 NOT NULL,
+  `topic_image` varchar(40) NOT NULL DEFAULT 'default',
   `subject_id` varchar(2) NOT NULL,
   PRIMARY KEY (`topic_id`),
   UNIQUE KEY `topic_name` (`topic_name`),
