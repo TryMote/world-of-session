@@ -57,6 +57,7 @@ CREATE TABLE `sign_in` (
   `email` varchar(50) DEFAULT NULL,
   `nickname` varchar(30) CHARACTER SET utf8 NOT NULL,
   `password` varchar(30) CHARACTER SET utf8 NOT NULL,
+  `editor` tinyint(4) NOT NULL DEFAULT '0',  
   UNIQUE KEY `nickname` (`nickname`),
   KEY `nickname_2` (`nickname`(5)),
   KEY `user_id` (`user_id`),
@@ -72,7 +73,7 @@ CREATE TABLE `sign_in` (
 
 LOCK TABLES `sign_in` WRITE;
 /*!40000 ALTER TABLE `sign_in` DISABLE KEYS */;
-INSERT INTO `sign_in` VALUES (1,'jokey13@bk.ru','m13kj','42cUvNhLow35M');
+INSERT INTO `sign_in` VALUES (1,'jokey13@bk.ru','m13kj','42cUvNhLow35M', '1');
 /*!40000 ALTER TABLE `sign_in` ENABLE KEYS */;
 UNLOCK TABLES;
 

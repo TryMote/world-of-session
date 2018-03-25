@@ -5,16 +5,43 @@
 	<meta charset='utf8'>
 </head>
 <body>
-	<?php
+	<?php	
 		require_once '../db_data.php';
-		require_once 'formatter.php';
-		require_once 'data_analizer.php';
 		$conn = new mysqli($hn, $un, $pw, $db);
 		if($conn->connect_error) die($conn->connect_error);
 		$conn->query("SET NAMES 'utf8'");
-		
+
+
+	/*	$access;
+		if(isset($_POST['access'])) {
+			$login = fix_string($conn, trim($_POST['login']));
+			$query = "SELECT password, editor FROM sign_in WHERE email='$login' OR nickname='$login'";
+			$result = $conn->query($query);
+			if(!$result) die($conn->connect_error);
+			$row = $result->fetch_array(MYSQLI_NUM);
+			if(!$row[0]) die("Ошибка, такой пользователь не зарегистрирован!");
+			if(!hash_equals($row[0], crypt(fix_string($conn, trim($_POST['pass'])), $row[0]))) die("Неверный логин или пароль!");
+			if($row[1] != 1 || $row[1] == 0) die("У вас нет прав на вход в редактор");
+			$access = true;
+		}
+		if(!$access) {
+			echo "<fieldset>
+			<form action='editor.php' method='POST'>
+			<label for='login'>Логин:  </label><br>
+			<input type='text' name='login'><br>
+			<label for='pass'>Пароль:  </label><br>
+			<input type='password' name='pass'><br>
+			<input type='submit' name='access' value='Войти в редактор'>
+			</form>
+			</fieldset>";
+			die();
+		} */
+		require_once 'formatter.php';
+		require_once 'data_analizer.php';
+			
 		include_once "subject_selection.php";
 		subject_page_work($conn);
+		
 		
 		if(isset($_POST['select_subject'])) {
 			generate_block($conn, 'topic', 'subject',fix_string($conn, $_POST['subject_selection']), 'предмет');
