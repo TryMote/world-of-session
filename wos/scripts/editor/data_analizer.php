@@ -1,6 +1,6 @@
 <?php
 	 
-	$location = '/opt/lampp/htdocs/wos/material/';
+	$location = '../../material/';
 	$img_location = $location.'img/';
 	$lections_location = $location.'lections/';
 
