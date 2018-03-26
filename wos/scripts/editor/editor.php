@@ -3,6 +3,7 @@
 <head>
 	<title>Lection editor 1.0</title>
 	<meta charset='utf8'>
+
 </head>
 <body>
 	<?php	
@@ -157,9 +158,13 @@
 				$row = $result->fetch_array(MYSQLI_ASSOC);
 				echo "<option value='".$row[$item.'_id']."'>".$row[$item.'_name']."</option>";
 			}
-			echo "</select>
-			<input type='submit' name='select_$item' value='Выбрать'><br>
-			<br><input type='submit' name='delete_$item' value='Удалить' style='width:200px'>
+			echo "</select>";
+			if($item == 'lection') {
+				echo "<input type='submit' name='select_$item' formaction='formatter.php' value='Выбрать'><br>";
+			} else {
+				echo "<input type='submit' name='select_$item' value='Выбрать'><br>";
+			}
+			echo "<br><input type='submit' name='delete_$item' value='Удалить' style='width:200px'>
 			<br><input type='submit' name='edit_$item' value='Изменить' style='width:200px'>
 			</form>";
 		}
