@@ -37,7 +37,6 @@
 			</fieldset>";
 			die();
 		} */
-		require_once 'formatter.php';
 		require_once 'data_analizer.php';
 			
 		include_once "subject_selection.php";
@@ -52,27 +51,6 @@
 			generate_block($conn, 'lection',  'topic', fix_string($conn, $_POST['topic_selection']), 'тема');
 		}
 
-		if(isset($_POST['select_lection']) && $_POST['lection_selection']) {
-			$lection_id = fix_string($conn, trim($_POST['lection_selection']));
-			$query = "SELECT lection_link, is_file_opened FROM lections WHERE lection_id='$lection_id'";
-			$result = $conn->query($query);
-			if(!$result) die($conn->connect_error);
-			$row = $result->fetch_array(MYSQLI_NUM);
-			$filename = $row[0];
-			$is_opened = $row[1];
-			open_file($conn, $lections_location, $filename, $is_opened);	
-		}
-	
-		if(isset($_POST['rewrite']) || isset($_POST['continue'])) {
-			$query = "UPDATE lections SET is_file_opened='1' WHERE lection_link='".$_POST['filename']."'";
-			$result = $conn->query($query);
-			if(!$result) die($conn->connect_error);
-			if(isset($_POST['rewrite'])) {
-				open_editor($conn, $lections_location, $_POST['filename'], 'w');
-			} else {
-				open_editor($conn, $lections_location, $_POST['filename'], 'r');
-			}
-		}
 	
 		if(isset($_POST['delete_subject'])) {
 			delete_material($conn, 'subject', 'Предмет');		
