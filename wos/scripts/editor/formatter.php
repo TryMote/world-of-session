@@ -21,7 +21,8 @@
 	}
 	function open_editor($conn, $location, $filename, $mode) {
 		$topic_name = get_topic_name($conn, $filename);
-		$lection_name = get_lection_name($conn, $filename);
+		$lection_name = get_from_lections($conn, $filename, 'lection_name');
+		$test_id = get_from_lections($conn, $filename, 'test_id');
 		if($mode == 'w') {	
 			create_lection_page($location.$filename, $topic_name, $lection_name, '');
 		}
@@ -43,18 +44,25 @@
 		}
 		echo "<fieldset>
 		<h2>$topic_name</h2>
-		<h3>$lection_name</h3>
-		<form action='formatter.php' method='POST' enctype='multipart/form-data'>
+		<h3>$lection_name</h3>";
+
+		echo "<form action='formatter.php' method='POST' enctype='multipart/form-data'>
 		<br>
 		<textarea cols='100' rows='15' name='content'>$text</textarea><br>
 		<br>
 		<input type='text' name='filename' value='$filename' style='display:none;'>
-		<input type='hidden' name='location' value='$location'>
 		<fieldset style='width:500px'>
 		<input type='file' name='image' value='Изображение к лекции'>
 		<input type='submit' name='add_image' value='Добавить изображение'><br>
-		</fieldset>
-		<br><input type='submit' name='save' value='Сохранить'>
+		</fieldset><br>";
+		if($topic_id == 0) {
+			echo "<p>Тест не добавлен</p>
+			<input type='submit' name='add_test' value='Добавить тест'><br>";
+		else {
+			echo "<p>Тест добавлен</p>
+			<input type='submit' name='change_test' value='Изменить тест'><br>";
+		}
+		echo "<br><input type='submit' name='save' value='Сохранить'>
 		</form>
 		</fieldset>";
 	}
@@ -72,8 +80,8 @@
 		return $row[0];
 	}
 
-	function get_lection_name($conn, $filename) {
-		$query = "SELECT lection_name FROM lections WHERE lection_link='$filename'";
+	function get_from_lections($conn, $filename, $get_type) {
+		$query = "SELECT $get_type FROM lections WHERE lection_link='$filename'";
 		$result = $conn->query($query);
 		if(!$result) die($conn->connect_error);
 		$row = $result->fetch_array(MYSQLI_NUM);
@@ -127,10 +135,9 @@ $content
 			
 		$content = trim(str_replace('</script>', '', str_replace('<script>', '', $_POST['content'])));
 		$filename = fix_string($conn, trim($_POST['filename']));
-		$location = fix_string($conn, trim($_POST['location']));
 		$topic_name = get_topic_name($conn, $filename);	
-		$lection_name = get_lection_name($conn, $filename);
-		create_lection_page($location.$filename, $topic_name, $lection_name, $content);
+		$lection_name = get_from_lections($conn, $filename, 'lection_name');
+		create_lection_page($lections_location.$filename, $topic_name, $lection_name, $content);
 		if(isset($_POST['save'])) {
 			echo "<h2>Файл сохранен.</h2> 
 			<h1><strong>Вернитесь назад</strong></h1>
