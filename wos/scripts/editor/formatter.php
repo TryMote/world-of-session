@@ -118,7 +118,9 @@
 </header>
 <div id='lection_page'>
 <div id='lections_list'>
-<?php include_once 'lection_list.php' ?>
+<?php include_once 'lections_list.php'; 
+	show_list('$topic_name');
+?>
 </div>
 <div id='main_headers'>
 <h1>$topic_name</h1>
@@ -128,10 +130,11 @@
 $content
 </div>
 <div id='lection_test'>
-<include_once 
 </div>
 <div id='lection_controller'>
-<?php include_once 'lection_controller.php' ?>
+<?php include_once 'lection_navigator.php';
+	show_navigator('$lection_name');
+ ?>
 </div>
 </div>
 <footer>
