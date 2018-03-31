@@ -30,11 +30,11 @@
 	function open_editor($conn, $location, $filename, $mode) {
 		$topic_name = get_topic_name($conn, $filename);
 		$lection_name = get_from_lections($conn, $filename, 'lection_name');
-		$test_id = get_from_lections($conn, $filename, 'test_id');
 		if($mode == 'w') {	
 			create_lection_page($location.$filename, $topic_name, $lection_name, '');
 		}
 		$content = file_get_contents($location.$filename);
+		
 		$line = explode("\n", $content);
 		$flag = false;
 		$text = '';
@@ -50,6 +50,7 @@
 				$flag = true;
 			}
 		}
+		
 		echo "<fieldset>
 		<h2>$topic_name</h2>
 		<h3>$lection_name</h3>";
@@ -63,13 +64,13 @@
 		<input type='file' name='image' value='Изображение к лекции'>
 		<input type='submit' name='add_image' value='Добавить изображение'><br>
 		</fieldset><br>";
-		if($test_id == 0) {
-			echo "<p>Тест не добавлен</p>
-			<input type='submit' name='create_test' formaction='test_creator.php' value='Добавить тест'><br>";
-		} else {
-			echo "<p>Тест добавлен</p>
-			<input type='submit' name='change_test' formaction='test_creator.php' value='Изменить тест'><br>";
-		}
+//		if($test_id == 0) {
+//			echo "<p>Тест не добавлен</p>
+//			<input type='submit' name='create_test' formaction='test_creator.php' value='Добавить тест'><br>";
+//		} else {
+//			echo "<p>Тест добавлен</p>
+//			<input type='submit' name='change_test' formaction='test_creator.php' value='Изменить тест'><br>";
+//		}
 		echo "<br><input type='submit' name='show_page' value='Перейти на страницу лекции'><br>";
 		selection_form();
 		echo "<br><input type='submit' name='save' value='Сохранить'><br>
@@ -105,6 +106,8 @@
 	}
 
 	function create_lection_page($full_location, $topic_name, $lection_name, $content) {
+		require_once 'math_worker.php';
+		$content = find_math($content);
 		$page = "<!DOCTYPE html>
 <html>
 <head>
