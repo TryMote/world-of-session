@@ -24,9 +24,14 @@
 				$row = $result->fetch_array(MYSQLI_ASSOC);
 				$lection_name = $row['lection_name'];
 				$lection_link = $row['lection_link'];
-				echo "<a href='$lection_link'>$lection_name</a>";			
+				echo "<a href='http://localhost/wos/material/lections/$lection_link'>$lection_name</a>";			
 			}
 		}
+		$result = $conn->query("SELECT test_link FROM tests WHERE topic_id='$topic_id'");
+		$row = $result->fetch_array(MYSQLI_NUM);
+		if($row[0]) {
+			echo "<a href='http://localhost/wos/material/tests/$row[0]'>Тест</a>";
+		}  
 		$result->close();
 		$conn->close();
 	}

@@ -141,6 +141,7 @@
 				echo "<input type='submit' name='select_$item' formaction='formatter.php' value='Выбрать'><br>";
 			} else {
 				echo "<input type='submit' name='select_$item' value='Выбрать'><br>";
+				echo "<input type='submit' name='add_test' value='Добавить/изменить тест' formaction='test_creator.php' style='width:200px;'>";
 			}
 			echo "<br><input type='submit' name='delete_$item' value='Удалить' style='width:200px'>
 			<br><input type='submit' name='edit_$item' value='Изменить' style='width:200px'>
@@ -221,8 +222,9 @@
 				$row = $result->fetch_array(MYSQLI_NUM);
 				$query = "DELETE FROM lections WHERE topic_id=$del_item_id";
 				$del_result = $conn->query($query);
-				if(!$del_result) die($conn->connect_error);
+				if(!$del_result) die("Произошла ошибка при выполнении удаления");
 			}
+			$result = $conn->query("DELETE FROM tests WHERE topic_id='$del_item_id'"); 
 			$query = "DELETE FROM topics WHERE topic_id=$del_item_id";
 			$result = $conn->query($query);
 			if(!$result) die($conn->connect_error);

@@ -3,10 +3,11 @@
 	$location = '../../material/';
 	$img_location = $location.'img/';
 	$lections_location = $location.'lections/';
+	$tests_location = $location.'tests/';
 
 	function analize_file($file_type, $material_type, $material_index, $material_count_num) {
 		$ext = analize_type($file_type);
-		if($material_type != 'lection' && $ext == '.php') die("Неверный тип файла"); 
+		if(($material_type != 'lection' && $material_type != 'test') && $ext == '.php') die("Неверный тип файла"); 
 		$filename = ($ext == 'default')? 'default' : strtolower($material_index).'_'.$material_type.'_'.$material_count_num.$ext;
 		return $filename;
 	}	
@@ -28,6 +29,7 @@
 				$ext = '.png';
 				break;
 			case 'php':
+			case '.php':
 				$ext = '.php';
 				break;
 			case '':
@@ -44,5 +46,94 @@
 		$lection_filename = str_replace('.php', '', $lection_filename);
 		$img_filename = substr(md5($img_filename), 0, 5);
 		return $lection_filename."_".$img_filename.$ext;
-	}  
+	}
+
+	function find_math($content) {
+		return $content;
+	}
+
+	function create_test_page($location, $topic_name, $content) {
+		$page = "
+<!DOCTYPE html>
+<html>
+<head>
+<title>$topic_name</title>
+<meta charset='utf8'>
+<link rel='stylesheet' href='../../assets/css/styles.css'>
+</head>
+<body>
+<header>
+<?php include_once '../../menu.php' ?>
+</header>
+<div id='test_page'>
+<div id='lections_list'>
+<?php include_once '../lections_list.php'; 
+show_list('$topic_name');
+?>
+</div>
+<div id='main_headers'>
+<h1>$topic_name</h1>
+<h2>Тест</h2>
+</div>
+<div id='test_content'>
+$content
+</div>
+<div class='navigator'>
+<?php include_once 'test_navigator.php';
+show_navigator('$topic_name');
+?>
+</div>
+</div>
+<footer>
+<?php include_once '../../footer.php' ?>
+</footer>
+</body>
+</html>";
+		file_put_contents($location, $page);
+	}
+
+        function create_lection_page($full_location, $topic_name, $lection_name, $content) {
+                $content = find_math($content);
+                $page = "<!DOCTYPE html>
+<html>
+<head>
+<title>$topic_name</title>
+<meta charset='utf8'>
+<link rel='stylesheet' href='../../assets/css/styles.css'>
+</head>
+<body>
+<header>
+<?php include_once '../../menu.php' ?>
+</header>
+<div id='lection_page'>
+<div id='lections_list'>
+<?php include_once '../lections_list.php'; 
+show_list('$topic_name');
+?>
+</div>
+<div id='main_headers'>
+<h1>$topic_name</h1>
+<h2>$lection_name</h2>
+</div>
+<div id='lection_content'>
+$content
+</div>
+<div id='lection_test'>
+</div>
+<div id='lection_controller'>
+<?php include_once 'lection_navigator.php';
+show_navigator('$lection_name');
+?>
+</div>
+</div>
+<footer>
+<?php include_once '../../footer.php' ?>
+</footer>
+</body>
+</html>";
+                file_put_contents($full_location, $page);
+        }
+
+
+ 
 ?>
