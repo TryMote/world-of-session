@@ -1,1 +1,1 @@
-<?php require_once 'editor.php' ?>
+<?php require_once '../scripts/editor/editor.php' ?>
