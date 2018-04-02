@@ -63,10 +63,15 @@
 
 	if(isset($_POST['add_question'])) {
 		echo "<fieldset>
-		<form action='test_creator.php' method='POST'>
+		<form action='test_creator.php' method='POST' enctype='multipart/form-data'>
 		<input type='hidden' name='topic_selection' value='".fix_string($conn, $_POST['topic_selection'])."'>
 		<label for='question_text'>Вопрос:</label><br>
-		<input type='text' name='question_text' placeholder='Сколько цифр в числе ПИ?'>";  	
+		<input type='text' name='question_text' placeholder='Сколько цифр в числе ПИ?'>
+		<ul>
+			<li><input type='text' name='ans_1'><input type='file' name='img_ans_1'>
+			<li><input type='text' name='ans_2'><input type='file' name='img_ans_2'>
+			<li><input type='text' name='ans_3'>
+			<li><input type='text' name='ans_4'";  	
 	}
 
 	if(isset($_POST['topic_selection'])) {
