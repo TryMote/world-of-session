@@ -43,7 +43,7 @@
 		subject_page_work($conn);
 		
 		
-		if(isset($_POST['select_subject'])) {
+		if(isset($_POST['select_subject']) && isset($_POST['subject_selection'])) {
 			generate_block($conn, 'topic', 'subject',fix_string($conn, $_POST['subject_selection']), 'предмет');
 		}
 
