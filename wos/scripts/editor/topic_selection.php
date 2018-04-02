@@ -1,26 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Темы</title>
+	<meta charset='utf8'>
+	<style>
+		h2 {
+			margin-left:10%;
+		}
+	</style>
+</head>
+<body>
+
 <?php
 	if(isset($_POST['create_topic'])) {
-		echo "<!DOCTYPE html>
-		<html>
-		<head>
-			<title>Темы</title>
-			<meta charset='utf8'>
-		</head>
-		<body>";
-		echo "<form action='topic_selection.php' method='POST' enctype='multipart/form-data'>
-			<label for='n_topic_name'>Название темы</label>
-			<input type='text' name='n_topic_name' required>
-			<label for='topic_subject_id'>ID добавленного предмета новой темы</label>
-			<input type='text' name='topic_subject_id' size='3' value='".$_POST['chosen_subject_id']."' required><br>
-			<label for='n_topic_image'>Изображение к теме</label>
-			<input type='file' name='n_topic_image' value='default'>
-			<p style='font-size:9pt'>(в форме вписан ID выбранного вами предмета)</p>
+		echo "<h2>Новая тема</h2>
+			<fieldset>
+			<form action='topic_selection.php' method='POST' enctype='multipart/form-data'>
+			<p>Название темы будет отображаться на сайте
+			<br>Оно может быть либо на русском языке, либо на английском</p>	
+			<label for='n_topic_name'><b>Название темы</b></label>
+			<br><input type='text' name='n_topic_name' required>
+			<br><br><hr>
+			<p>Изображение темы будет отображаться при выборе материала для изучения</p>
+			<label for='n_topic_image'><b>Изображение темы</b></label>
+			<br><input type='file' name='n_topic_image' value='default'>
+			<br><br><hr>
 			<input type='submit' name='insert_topic' value='Добавить тему'><br>
 		</form>";
 		echo "<form action='editor.php' method='POST'>
 			<input type='submit' name='cancel_creation' value='Отменить'>
-		</form>";
-		echo "</body></html>";
+		</form>
+		</fieldset>";
 	} elseif(isset($_POST['cancel_creation'])) {
 		header("Location: editor.php");
 	} elseif(isset($_POST['insert_topic'])) {

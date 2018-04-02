@@ -1,3 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Предметы</title>
+	<meta charset='utf8'>
+	<style>
+	h2 {
+		margin-left: 5%;	
+	}
+	</style>
+</head>
+<body>
+
 <?php
 	function subject_page_work($conn) {
 		$query = "SELECT * FROM subjects";
@@ -5,12 +18,11 @@
 		if(!$result) die($conn->connect_error);
 		
 		$row = $result->fetch_array(MYSQLI_NUM);
-		echo "<fieldset>";
 		if(!$row[0] && !$row[1]) {
 			echo "<p>Ни одного предмета еще не добавлено</p><br>";
 		} else {
+			echo "<h3>Предметы:</h3>";
 			echo "<form action='editor.php' method='POST'>
-			<label for='subject_name'>Предмет:</label><br>
 			<br><select name='subject_selection'>";
 			$row_number = $result->num_rows;
 			for($i = 0; $i < $row_number; ++$i) {
@@ -27,29 +39,31 @@
 		echo "<form action='subject_selection.php' method='POST'>
 		<input type='submit' name='create_subject' value='Добавить новый' style='width:200px'>
 		</form>";
-		echo "</fieldset>";
 	}
 	        if(isset($_POST['create_subject'])) {
-			echo "<!DOCTYPE html>
-				<html>
-				<head>
-					<title>Предметы</title>
-					<meta charset='utf8'>
-				</head>
-				<body>";
-                        echo "<form action='subject_selection.php' method='POST' enctype='multipart/form-data'>
-                                <br><label for='n_subject_id'>ID предмета</label>
-                                <input type='text' name='n_subject_id' size='5' required>
-                                <label for='n_subject_name'>Название предмета</label>
-                                <input type='text' name='n_subject_name' required><br>
-				<label for='n_subject_image'>Изображение к предмету</label>
+			echo "<h2>Новый предмет</h2>
+				<fieldset>
+				<form action='subject_selection.php' method='POST' enctype='multipart/form-data'>
+				<p>Название предмета на русском или английском языке будет отображаться на сайте<br></p>
+				<label for='n_subject_name'><b>Название предмета</b></label><br>
+                                <input type='text' name='n_subject_name' size='20' required><br>
+				<br><hr>
+				<p><b>Идентификатор должен состоять из символов латиницы!</b><br>
+				Идентификатор предмета используется для его краткого обозначения при добавлении новых тем<br>
+				Например, для предмета 'Алгоритмизация и программирование' можно ввести 'A' или 'AP' или 'AandP' и т.п.</p>
+                                <br><label for='n_subject_id'><b>Идентификатор предмета</b></label><br>
+                                <input type='text' maxlength='5' name='n_subject_id' size='20' required><br>
+				<br><hr>
+				<br><p>Изображение будет отображаться на сайте при выборе материала для изучения<br>
+                                <br><label for='n_subject_image'><b>Изображение к предмету</b></label>
 				<input type='file' name='n_subject_image' value='default'><br>
+				<hr>
 				<br><input type='submit' name='insert_subject' value='Добавить предмет'><br>
                         </form>";
                         echo "<form action='subject_selection.php' method='POST'>
                                 <input type='submit' name='cancel_creation' value='Отменить'>
-                        </form>";
-			echo "</body></html>";
+                        </form>
+			</fieldset>";
                 } elseif(isset($_POST['cancel_creation'])) {
                         header("Location: editor.php");
                 } elseif(isset($_POST['insert_subject'])) {
@@ -133,3 +147,5 @@
 			header('Location: succes.php');	
 		}
 ?>
+</body>
+</html>

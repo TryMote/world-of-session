@@ -104,6 +104,7 @@ DROP TABLE IF EXISTS `answers`;
 CREATE TABLE `answers` (
   `answer_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `answer_text` varchar(100) CHARACTER SET utf8 NOT NULL,
+  `answer_order_id` int(4) unsigned NOT NULL,  
   `is_right_answer` tinyint(4) NOT NULL DEFAULT '0',
   `question_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`answer_id`),
@@ -190,7 +191,7 @@ DROP TABLE IF EXISTS `subjects`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `subjects` (
-  `subject_id` varchar(4) NOT NULL,
+  `subject_id` varchar(5) NOT NULL,
   `subject_name` varchar(40) CHARACTER SET utf8 NOT NULL,
   `subject_image` varchar(40) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`subject_id`),
@@ -220,7 +221,7 @@ DROP TABLE IF EXISTS `teachers`;
 CREATE TABLE `teachers` (
   `teacher_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `teacher_name` varchar(30) CHARACTER SET utf8 NOT NULL,
-  `subject_id` varchar(4) NOT NULL,
+  `subject_id` varchar(5) NOT NULL,
   PRIMARY KEY (`teacher_id`),
   KEY `teacher_name` (`teacher_name`(5)),
   KEY `subject_id` (`subject_id`),

@@ -3,8 +3,11 @@
 <head>
 	<title>Редактор лекции</title>
 	<meta charset='utf8'>
+	<link rel='stylesheet' href='../../assets/css/styles.css'>
 </head>
 <body>
+<?php include_once '../../menu.php' ?>
+<h2>Редактор лекции приветствует вас!</h2>
 <?php
 	
 	function open_file($conn, $location,  $filename, $file_is_opened) {

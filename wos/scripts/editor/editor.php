@@ -3,9 +3,24 @@
 <head>
 	<title>Lection editor 1.0</title>
 	<meta charset='utf8'>
-
+	<link rel='stylesheet' href='../../assets/css/styles.css'>
+	<style>
+		li {
+			font-size:18pt;
+			font-family: 'Times New Roman', sans-serif;
+		}
+	</style>
 </head>
 <body>
+	<?php include_once '../../menu.php' ?>
+	<h2>Редактор материала сайта вас приветствует!</h2>
+	<ul>
+		<li>Последовательно выберите предмет, тему, а затем лекцию для перехода на страницу ее редактирования
+		<li>При нажатии кнопки "Изменить" вы сможете поменять название материала или загрузить новое изображение для него
+		<li>Для удаления материала, вам нужно будет ввести специальный ключ или отправить по электронной почте соответствующий запрос
+		<li>Для отмены выбора нажмите кнопку "Отменить"
+	</ul>
+<fieldset>
 	<?php	
 		require_once '../db_data.php';
 		$conn = new mysqli($hn, $un, $pw, $db);
@@ -125,9 +140,9 @@
 		} else {
 			echo "<form action='editor.php' method='POST'>";
 			if($item === 'lection') {
-				echo "<label for='$item"."_selection'>Лекция:</label><br>";
+				echo "<h3>Лекции:</h3>";
 			} else {
-				echo "<label for='$item"."_selection'>Тема:</label><br>";
+				echo "<h3>Темы:</h3>";
 			}
 			$row_number = $result->num_rows;
 			echo "<br><select name='$item"."_selection'>";
@@ -249,7 +264,6 @@
 				$item_type = 'лекцию';
 				break;
 		}
-		echo "<fieldset>";
 		echo "<form action='$item"."_selection.php' method='POST' enctype='multipart/form-data'>";
 		$item_id = fix_string($conn, trim($_POST[$item.'_selection']));
 		$query = "SELECT * FROM $item"."s WHERE $item"."_id='$item_id'";
@@ -266,10 +280,11 @@
 		echo "<br><input type='submit' name='force_edit_$item' value='Принять изменения'>
 			<input type='text' name='e_$item"."_id' value='$item_id' style='display:none'>
 		</form>"; 
-		echo "</fieldset>";
 	}
 
 	?>
+</fieldset>
+<?php include_once '../../footer.php' ?>
 </body>
 </html>
 
