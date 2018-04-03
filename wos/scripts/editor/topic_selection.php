@@ -25,6 +25,7 @@
 			<label for='n_topic_image'><b>Изображение темы</b></label>
 			<br><input type='file' name='n_topic_image' value='default'>
 			<br><br><hr>
+			<input type='hidden' name='subject_selection' value='".$_POST['chosen_subject_id']."'>
 			<input type='submit' name='insert_topic' value='Добавить тему'><br>
 		</form>";
 		echo "<form action='editor.php' method='POST'>
@@ -40,7 +41,7 @@
 		$conn->query("SET NAMES 'utf8'");
 
 		$topic_name = fix_string($conn, trim($_POST['n_topic_name']));
-		$topic_subject_id = fix_string($conn, trim($_POST['topic_subject_id']));
+		$topic_subject_id = fix_string($conn, trim($_POST['subject_selection']));
 		$topic_image_type = fix_string($conn, trim($_FILES['n_topic_image']['type']));
 		$query = "SELECT subject_name FROM subjects WHERE subject_id='$topic_subject_id'";
 		$result = $conn->query($query);

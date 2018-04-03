@@ -70,20 +70,25 @@
 		<label for='question_text' style='font-size:20pt'><strong>Вопрос</strong></label><br>
 		<br><p>Вы можете ввести текст как самостоятельно в поле ниже, так и загрузив в формате <b>txt</b><br>
 		Для загрузки txt файла нажмите кнопку 'Browse...' рядом с 'Выбрать содержание вопроса в виде txt файла' <br>и выберите его<br>
+		Добавление к вопросу изображения не обязательно. Также, вместо самостоятельного <br>
+		заполнения, можно загрузить изображение с полным содержанием вопроса
 		</p>
-		<br><p>После заполнения содержания вопроса переходите к полю \"Варианты ответов\"</p>
+		<p>После заполнения содержания вопроса переходите к полю \"Варианты ответов\"</p>
 		<br><label for='question_text'><b>Содержание вопроса:</b></label><br>
 		<textarea type='text' name='question_text' rows='5' cols='80'></textarea><br>
-		<br><label style='font-size:11pt' for='add_image'>Добавить изображение</label>
+		<br><label style='font-size:11pt' for='add_image'><b>Добавить изображение</b></label>
 		<input type='file' name='q_image'>
-		<p style='font-size:11pt; padding:0; margin:0;'> изображение будет добавлено в конец введенного в поле текста</p>
-		<br><br><label for='question_image'>Выбрать содержание вопроса в виде txt файла: </label>
+		<input type='checkbox' name='ignore_q_image'> - игнорировать изображение
+		<p style='font-size:11pt; padding:0; margin:0;'> изображение будет добавлено в конец введенного в поле текста
+		<br>Если поставлена отметка '- игнорировать изображение', выбранное вами изображение не будет загружено и использовано в тесте</p>
+		<hr>
+		<br><br><label for='question_image'><b>Добавить содержание вопроса в виде txt файла: </b></label>
 		<br><input type='file' name='q_file'>	
-		<br><input type='checkbox' value='0' name='cancel_q_file'> Отменить использование файла
+		<input type='checkbox' value='0' name='cancel_q_file'> - игнорировать файл
 		<p>Если вы уже выбрали файл, но не хотите его использовать как содержание вопроса<br>
-		поставьте отмету на <b>'Отменить использование файла'</b><br>
+		поставьте отмету на <b>'- игнорировать файл'</b><br>
 		<br><strong>Внимание!</strong>
-		Если был выбран txt файл, и не поставлена отметка на 'Отменить использование файла'<br>
+		Если был выбран txt файл, и не поставлена отметка на '- игнорировать файл'<br>
 		текст введенный в поле будет проигнорирован</p>
 		<hr>";
 		echo "<p style='font-size:20pt'><strong>Варианты ответов</strong></p>
@@ -97,26 +102,39 @@
 		<p><b>Если заполнен только один, первый вариант, то он НЕ должен быть в виде изображения</b></p>
 		<p>Если заполнен только один, первый вариант ответа, то при прохождении теста, для решения данного вопроса<br>
 		необходимо будет ввести значение, равное введенному вами сейчас в поле для первого варианта ответа</p>
+		<p>При отметке '- игнорировать файл', изображение выбранное вами не будет загружено на сервер и использовано в тесте</p>
 		<ol>
 			<li style='padding-bottom:25px'><input type='text' style='margin:10px' name='ans_1'>
 			<input type='checkbox' name='is_right_1' value='1'> - это верный ответ
 			<br>В виде изображения: <br><input type='file' name='img_ans_1'>
+			<br><input type='checkbox' name='ignore_img_1' value='1'> - игнорировать файл
 			<li style='padding-bottom:25px'><input type='text' style='margin:10px' name='ans_2'>
 			<input type='checkbox' name='is_right_2' value='2'> - это верный ответ
 			<br>В виде изображения: <br><input type='file' name='img_ans_2'>
+			<br><input type='checkbox' name='ignore_img_2' value='1'> - игнорировать файл
 			<li style='padding-bottom:25px'><input type='text' style='margin:10px' name='ans_3'>
 			<input type='checkbox' name='is_right_3' value='3'> - это верный ответ
 			<br>В виде изображения: <br><input type='file' name='img_ans_3'>
+			<br><input type='checkbox' name='ignore_img_3' value='1'> - игнорировать файл
 			<li><input type='text' style='margin:10px' name='ans_4'>
 			<input type='checkbox' name='is_right_4' value='4'> - это верный ответ
 			<br>В виде избражения: <br><input type='file' name='img_ans_4'>  	
+			<br><input type='checkbox' name='ignore_img_4' value='1'> - игнорировать файл
 		</ol>
 		<input type='submit' value='Добавить' name='force_add_question'>
 		</fieldset>";
 	}
 	
 	if(isset($_POST['force_add_question'])) {
-		if(!$_POST['ans_1'] && !$_FILES['img_ans_1']['type']) {
+		if((!$_POST['question_text'] && !$_FILES['q_image']['type'] && !$_FILES['q_file']['type']) || ($_FILES['q_file']['name'] && isset($_POST['cancel_q_file']))) {
+			die("<p><b>Отсутствует содержание вопроса!</b></p>
+			<p>Как минимум должно быть заполнено поле \"Содержание вопроса\", <br>
+			либо загружено изображение с содержанием, либо txt файл!</p><br>");	
+		}
+		if(!isset($_POST['cancel_q_file']) && $_FILES['q_file']['type'] != 'text/plain') {
+			die("<p><b>Файл с содержанием вопроса должен быть в формате txt</b></p>");
+		}
+		if(!$_POST['ans_1'] && !$_FILES['img_ans_1']['type'] && ($_FILES['img_ans_1']['type'] && isset($_POST['ignore_img_1']))) {
 			die("<br><b>Первый вариант ответа должен быть заполнен обязательно!</b>
 			<br><br>Если вы заполнили только один ответ, то он обязательно должен быть первым!");	
 		}
@@ -124,22 +142,32 @@
 		$rights = array(1 => 0, 2 => 0, 3 => 0, 4 => 0);
 		for($i = 1; $i < 5; ++$i) {
 			if(isset($_POST['is_right_'.$i])) {
-				if(!$_POST['ans_'.$i] && !$_FILES['img_ans_'.$i]['type']) {
+				if((!$_POST['ans_'.$i] && !$_FILES['img_ans_'.$i]['type']) || ($_FILES['img_ans_'.$i]['name'] && isset($_POST['ignore_img_'.$i]))) {
 					die("<br><b>К правильному ответу <i>номер $i</i> не было добавлено ни текста, ни изображения</b><br>
 					<br>Вернитесь назад и заполните его");
+				} else {
+					$rights[$i]++;
+					$right_number++;
 				}
-
-				$rights[$i]++;
-				$right_number++;
 			}
-			if($_FILES['img_ans_'.$i]['type']) {
-					
+			if($_FILES['img_ans_'.$i]['type'] && !isset($_POST['ignore_img_'.$i])) {
+				$rights[$i] += 2;	
 			}		
 		}
 		if($right_number == 0) {
 			die("<br><strong>Хотя бы один вариант должен быть помечен правильным</strong><br>
 			<br>Ни один вариант ответа не был отмечен правильным. 
 			<br>Вернитесь назад и поставьте галочку на верном варианте.<br><br>");
+		}
+		if($rights[2] == 0 && $rights[3] == 0 && $rights[4] == 0) {
+			if($rights[1] == 0) {
+				die("<h2>Ни один вариант ответа не заполнен!<h2>
+				<p>Вернитесь назад и заполните хотя бы первый, обязательный, вариант!</p>");
+			} elseif($rights[1] == 2) {
+				die("<h2>Если заполнен только первый вариант, то он обязательно должен быть введен самостоятельно в поле для ввода!</h2>
+				<p>Это необходимо, потому что, если введен только первый вариант, то при прохождении теста, правильным ответом будет<br>
+				введенное значение, равное тому, что введете сейчас вы!</p>");
+			} 
 		}
 		die(print_r($rights));
 	}
