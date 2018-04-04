@@ -8,12 +8,14 @@
 <?php 
 
 	function open_editor($conn, $test_id, $topic_name) {
-		$result = $conn->query("SELECT question_id FROM question WHERE test_id='$test_id'");
-		if(!$result) {
+		$result = $conn->query("SELECT question_id FROM questions WHERE test_id='$test_id'");
+		$row = $result->fetch_array(MYSQLI_NUM);
+		if(!$row[0]) {
 			echo "<fieldset><p>Ни одного вопроса не добавлено</p></fieldset>";
 		} else {
 			$row_number = $result->num_rows;
-			echo "Вопросов в тесте: $row_number";
+			echo "<fieldset>";
+			echo "<h3>Вопросов в тесте: $row_number</h3>";
 			for($i = 0; $i < $row_number; ++$i) {
 				$result->data_seek($i);
 				$row = $result->fetch_array(MYSQLI_NUM);
@@ -23,7 +25,8 @@
 				echo $q_text[0];
 				echo "<hr>";
 				$at_result = $conn->query("SELECT answer_text, is_right_answer FROM answers WHERE question_id='$row[0]'");
-				if(!$at_result) {
+				$a_row = $at_result->fetch_array(MYSQLI_NUM);
+				if(!$a_row[0]) {
 					echo "Ответов к вопросу не добавлено";
 				} else {
 					$at_row_number = $at_result->num_rows;
@@ -31,9 +34,15 @@
 					for($j = 0; $j < $at_row_number; ++$j) {
 						$at_result->data_seek($j);
 						$a_text = $at_result->fetch_array(MYSQLI_NUM);
-						echo "<li>".$a_text[0];
+						if(!$a_text[0]) continue;
+						if(strpos($a_text[0], '_answer_')) {
+							echo "<li><img src='../../material/tests/$a_text[0]' width='300px' height='200px' alt='$a_text[0]'>";
+						} else { 
+							echo "<li>".$a_text[0];
+						
+						}
 						if($a_text[1]) {
-							echo " --- верный ответ --- ";
+							echo "   (<u><i>верный ответ</i></u>)";
 						}
 					}
 					echo "</ul>";
@@ -44,6 +53,7 @@
 				</form>";
 				echo "</fieldset>";
 			}
+			echo "</fieldset>";
 		}
 		
 		echo "<fieldset>
@@ -65,6 +75,7 @@
 	if(isset($_POST['add_question'])) {
 		echo "<fieldset>
 		<form action='test_creator.php' method='POST' enctype='multipart/form-data'>
+		<input type='hidden' name='test_id' value='".fix_string($conn, $_POST['test_id'])."'>
 		<input type='hidden' name='topic_selection' value='".fix_string($conn, $_POST['topic_selection'])."'>
 		<br>
 		<label for='question_text' style='font-size:20pt'><strong>Вопрос</strong></label><br>
@@ -126,15 +137,8 @@
 	}
 	
 	if(isset($_POST['force_add_question'])) {
-		if((!$_POST['question_text'] && !$_FILES['q_image']['type'] && !$_FILES['q_file']['type']) || ($_FILES['q_file']['name'] && isset($_POST['cancel_q_file']))) {
-			die("<p><b>Отсутствует содержание вопроса!</b></p>
-			<p>Как минимум должно быть заполнено поле \"Содержание вопроса\", <br>
-			либо загружено изображение с содержанием, либо txt файл!</p><br>");	
-		}
-		if(!isset($_POST['cancel_q_file']) && $_FILES['q_file']['type'] != 'text/plain') {
-			die("<p><b>Файл с содержанием вопроса должен быть в формате txt</b></p>");
-		}
-		if(!$_POST['ans_1'] && !$_FILES['img_ans_1']['type'] && ($_FILES['img_ans_1']['type'] && isset($_POST['ignore_img_1']))) {
+
+		if(!$_POST['ans_1'] && !$_FILES['img_ans_1']['type'] || ($_FILES['img_ans_1']['type'] && isset($_POST['ignore_img_1']) && !$_POST['ans_1'])) {
 			die("<br><b>Первый вариант ответа должен быть заполнен обязательно!</b>
 			<br><br>Если вы заполнили только один ответ, то он обязательно должен быть первым!");	
 		}
@@ -142,7 +146,7 @@
 		$rights = array(1 => 0, 2 => 0, 3 => 0, 4 => 0);
 		for($i = 1; $i < 5; ++$i) {
 			if(isset($_POST['is_right_'.$i])) {
-				if((!$_POST['ans_'.$i] && !$_FILES['img_ans_'.$i]['type']) || ($_FILES['img_ans_'.$i]['name'] && isset($_POST['ignore_img_'.$i]))) {
+				if((!$_POST['ans_'.$i] && !$_FILES['img_ans_'.$i]) || ($_FILES['img_ans_'.$i]['name'] && isset($_POST['ignore_img_'.$i]) && !$_POST['ans_'.$i])) {
 					die("<br><b>К правильному ответу <i>номер $i</i> не было добавлено ни текста, ни изображения</b><br>
 					<br>Вернитесь назад и заполните его");
 				} else {
@@ -163,13 +167,74 @@
 			if($rights[1] == 0) {
 				die("<h2>Ни один вариант ответа не заполнен!<h2>
 				<p>Вернитесь назад и заполните хотя бы первый, обязательный, вариант!</p>");
-			} elseif($rights[1] == 2) {
-				die("<h2>Если заполнен только первый вариант, то он обязательно должен быть введен самостоятельно в поле для ввода!</h2>
+			} elseif($rights[1] == 3) {
+				die("<p><b>Если заполнен только первый вариант, то он обязательно должен быть введен самостоятельно в поле для ввода!</b></p>
 				<p>Это необходимо, потому что, если введен только первый вариант, то при прохождении теста, правильным ответом будет<br>
 				введенное значение, равное тому, что введете сейчас вы!</p>");
 			} 
 		}
-		die(print_r($rights));
+
+		if((!$_POST['question_text'] && !$_FILES['q_image']['type'] && !$_FILES['q_file']['type']) || ($_FILES['q_file']['name'] && isset($_POST['cancel_q_file']) && !$_POST['question_text'])) {
+			die("<p><b>Отсутствует содержание вопроса!</b></p>
+			<p>Как минимум должно быть заполнено поле \"Содержание вопроса\", <br>
+			либо загружено изображение с содержанием, либо txt файл!</p><br>");	
+		} elseif(!isset($_POST['cancel_q_file']) && $_FILES['q_file']['type'] != 'text/plain' && $_FILES['q_file']['name']) {
+			die("<p><b>Файл с содержанием вопроса должен быть в формате txt</b></p>");
+		}
+	//////////////////////////////////////////////////////////////////////////////////
+	
+		$question_text = '';
+		$question_image = '';
+		if(!isset($_POST['cancel_q_file']) && $_FILES['q_file']['name']) {
+			$question_text = fix_string($conn, file_get_contents($_FILES['q_file']['tmp_name']));	
+		} else {
+			$question_text = fix_string($conn, $_POST['question_text']);
+		}
+
+		$test_id = fix_string($conn, $_POST['test_id']);
+		$topic_id = fix_string($conn, $_POST['topic_selection']);
+		$result = $conn->query("SELECT subject_id FROM topics WHERE topic_id='$topic_id'");
+		if(!$result) die("Произошла непредвиденная ошибка");
+		$row = $result->fetch_array(MYSQLI_NUM);
+		$subject_id = $row[0];
+		$result = $conn->query("SELECT question_id FROM questions WHERE test_id='$test_id'");
+		$row_number = $result->num_rows;
+		if($_FILES['q_image']['name']) {
+			$question_image = analize_file($_FILES['q_image']['type'], 'question', $topic_id.$test_id, $row_number);
+			if(!move_uploaded_file($_FILES['q_image']['tmp_name'], $tests_location.$question_image)) {
+				die("Изображение не было загружено на сервер!");
+			}
+		}
+
+		$result = $conn->prepare("INSERT INTO questions(question_text, question_image, test_id) VALUES(?,?,?)");
+		$result->bind_param('ssi', $question_text, $question_image, $test_id);
+		$result->execute();
+		
+		$result = $conn->query("SELECT question_id FROM questions WHERE test_id='$test_id'");
+		$row = $result->fetch_array(MYSQLI_NUM);
+		if(!$row[0]) die("Непредвиденная ошибка! Попробуйте заного");
+		$row_number = $result->num_rows;
+		$question_id = $row[$row_number-1];
+		
+		$result = $conn->query("SELECT answer_id FROM answers WHERE question_id='$question_id'");
+		$row = $result->fetch_array(MYSQLI_NUM);
+		if(!$row[0]) {
+			foreach($rights as $index => $mode) {
+				$is_right_answer = 0;
+				if($mode == 1 || $mode == 3) {
+					$is_right_answer = 1;
+				}
+				if($mode == 0 || $mode == 1) {
+					$answer_text = fix_string($conn, $_POST['ans_'.$index]);
+				} elseif($mode == 2 || $mode == 3) {
+					$answer_text = analize_file($_FILES['img_ans_'.$index]['type'], 'answer', $test_id.$question_id, $index);
+					if(!move_uploaded_file($_FILES['img_ans_'.$index]['tmp_name'], $tests_location.$answer_text)) die("Не удалось загрузить файл на сервер!");  
+				}
+				$result = $conn->prepare("INSERT INTO answers(answer_text, answer_order_id, is_right_answer, question_id) VALUE(?,?,?,?)");
+				$result->bind_param('siii', $answer_text, $index, $is_right_answer, $question_id);
+				$result->execute();  
+			}
+		}
 	}
 
 	if(isset($_POST['topic_selection'])) {

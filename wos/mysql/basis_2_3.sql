@@ -57,6 +57,7 @@ CREATE TABLE `tests` (
   `test_link` varchar(40) NOT NULL DEFAULT 'default',
   `topic_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`test_id`),
+  UNIQUE KEY(`test_link`),
   CONSTRAINT `tests_ibfk_1` FOREIGN KEY (`topic_id`) REFERENCES `topics` (`topic_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -79,7 +80,9 @@ DROP TABLE IF EXISTS `questions`;
 CREATE TABLE `questions` (
   `question_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `question_text` varchar(500) CHARACTER SET utf8 NOT NULL,
+  `question_image` varchar(40),
   `test_id` int(10) unsigned NOT NULL,
+  UNIQUE KEY(`question_image`),
   PRIMARY KEY (`question_id`),
   CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`test_id`) REFERENCES `tests` (`test_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

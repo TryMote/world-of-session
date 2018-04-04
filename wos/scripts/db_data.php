@@ -16,6 +16,7 @@
 	function fix_string($conn, $str) {
 		if(get_magic_quotes_gpc()) $str = stripslashes($str);
 		$result = $conn->real_escape_string($str);
+		$result = str_replace('<script>', '', str_replace('</script>', '', $result));
 		return htmlentities($result);
 	}
 ?>
