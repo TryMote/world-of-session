@@ -3,8 +3,11 @@
 <head>
 	<title>Создать тест</title>
 	<meta charset='utf8'>
+	<link rel='stylesheet' href='../../assets/css/styles.css'>  
 </head>
 <body>
+<?php include_once '../../menu.php' ?>
+<h2>Редактор тестов</h2>
 <?php 
 
 	function open_editor($conn, $test_id, $topic_name) {
@@ -68,7 +71,8 @@
 
 	require_once '../db_data.php';
 	require_once 'data_analizer.php';
-	$conn = new mysqli($hn, $un, $pw, $db);
+	$data = get_db_data('editor');
+	$conn = new mysqli($data[0], $data[1], $data[2], $data[3]);
 	if($conn->connect_error) die($conn->connect_error);
 	$conn->query("SET NAMES 'utf8'");
 
@@ -235,6 +239,7 @@
 				$result->execute();  
 			}
 		}
+		
 	}
 
 	if(isset($_POST['topic_selection'])) {
@@ -259,7 +264,7 @@
 			$test_id = $row[0];
 			$query = "UPDATE topics SET test_id='$test_id' WHERE topic_id='$topic_id'";
 			$conn->query($query);	
-			create_test_page($location, $topic_name, ''); 
+			create_test_page($location, $topic_name, $test_id); 
 			open_editor($conn, $filename, $topic_name);
 		} else {
 			$query = "SELECT test_link FROM tests WHERE test_id='$test_id'";

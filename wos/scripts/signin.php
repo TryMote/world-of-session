@@ -2,7 +2,8 @@
 	require_once 'db_data.php';
 	include_once 'error_page_func.php';
 	
-	$conn = new mysqli($hn, $un, $pw, $db);
+	$data = get_db_data('');
+	$conn = new mysqli($data[0], $data[1], $data[2], $data[3]);
 	if($conn->connect_error) error_page('sie_c');
 	$conn->query("SET NAMES 'utf8'");
 

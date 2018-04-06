@@ -22,7 +22,8 @@
 		header("Location: editor.php");
 	} elseif(isset($_POST['insert_lection'])) {
 		require_once '../db_data.php';
-		$conn = new mysqli($hn, $un, $pw, $db);
+		$data = get_db_data('editor');
+		$conn = new mysqli($data[0], $data[1], $data[2], $data[3]);
 		if($conn->connect_error) die($conn->connect_error);
 		$conn->query("SET NAMES 'utf8'");
 		$lection_name = fix_string($conn, trim($_POST['n_lection_name']));
@@ -73,7 +74,8 @@
 		$conn->close();
 	} elseif(isset($_POST['force_edit_lection'])) {
 		require_once '../db_data.php';
-		$conn = new mysqli($hn, $un, $pw, $db);
+		$data = get_db_data('editor');
+		$conn = new mysqli($data[0], $data[1], $data[2], $data[3]);
 		if($conn->connect_error) die($conn->connect_error);
 		$conn->query("SET NAMES 'utf8'");
 		

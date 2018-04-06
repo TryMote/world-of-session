@@ -1,8 +1,8 @@
 <?php
 
 	function show_navigator($lection_name) {
-		require_once '../../scripts/db_data.php';
-		$conn = new mysqli($hn, $un, $pw, $db);
+		$data = get_db_data('lections');
+		$conn = new mysqli($data[0], $data[1], $data[2], $data[3]);
 		if($conn->connect_error) die($conn->connect_error);
 		$conn->query("SET NAMES 'utf8'");
 	
@@ -38,8 +38,8 @@
 			echo "<div class='next_lection'><a href='$row[0]'>Следующая</a></div>"; 
 		} else {
 			$result = $conn->query("SELECT test_link FROM tests WHERE topic_id='$topic_id'");
-			if($result) {
-				$row = $result->fetch_array(MYSQLI_NUM);
+			$row = $result->fetch_array(MYSQLI_NUM);
+			if($row[0]) {
 				echo "<div class='next_lection'><a href='http://localhost/wos/material/tests/$row[0]'>Тест</a></div>";
 			} 
 		}

@@ -86,7 +86,7 @@
 		selection_form();
 		echo "<br><input type='submit' name='save' value='Сохранить'><br>
 		<br><hr><br>
-		<br><input type='submit' name='back' value='К выбору предмета'>
+		<br><input type='submit' name='back' formaction='editor.php' value='К выбору предмета'>
 		</form>
 		</fieldset>";
 	}
@@ -137,7 +137,8 @@
 	
 	require_once '../db_data.php';
 	require_once 'data_analizer.php';
-	$conn = new mysqli($hn, $un, $pw, $db);
+	$data = get_db_data('editor');
+	$conn = new mysqli($data[0], $data[1], $data[2], $data[3]);
 	if($conn->connect_error) die($conn->connect_error);
 	$conn->query("SET NAMES 'utf8'");		
 
@@ -182,9 +183,6 @@
 		}     
 	}
 	
-	if(isset($_POST['back'])) {
-		header("Location: editor.php");
-	}
 
 
 ?>

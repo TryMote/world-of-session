@@ -1,7 +1,7 @@
 <?php 
 	function show_navigator($topic_name) {
-		require_once '../../scripts/db_data.php';
-		$conn = new mysqli($hn, $un, $pw, $db);
+		$data = get_db_data('tests');	
+		$conn = new mysqli($data[0], $data[1], $data[2], $data[3]);
 		if($conn->connect_error) die($conn->connect_error);	
 		$conn->query("SET NAMES 'utf8'");
 

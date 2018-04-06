@@ -52,7 +52,7 @@
 		return $content;
 	}
 
-	function create_test_page($location, $topic_name, $content) {
+	function create_test_page($location, $topic_name, $test_id) {
 		$page = "
 <!DOCTYPE html>
 <html>
@@ -76,7 +76,10 @@ show_list('$topic_name');
 <h2>Тест</h2>
 </div>
 <div id='test_content'>
-$content
+<?php 
+include_once 'show_test.php';
+show_test('$test_id');
+?>
 </div>
 <div class='navigator'>
 <?php include_once 'test_navigator.php';

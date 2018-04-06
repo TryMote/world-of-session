@@ -1,10 +1,10 @@
 <?php
-	require_once 'salt.php';
 	require_once 'db_data.php';
 	require_once 'generator.php';
 	include_once 'error_page_func.php';
-	
-	$conn = new mysqli($hn, $un, $pw, $db);
+
+	$data = get_db_data('');	
+	$conn = new mysqli($data[0], $data[1], $data[2], $data[3]);
 	$conn->query("SET NAMES 'utf8'");
 	if($conn->connect_error) die($conn->connect_error);
 	

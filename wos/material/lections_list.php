@@ -1,7 +1,8 @@
 <?php 
 	function show_list($topic_name) {
-		require_once 'db_data_l.php';
-		$conn = new mysqli($hn, $un, $pw, $db);
+		require_once '../../scripts/db_data.php';
+		$data = get_db_data('material');
+		$conn = new mysqli($data[0], $data[1], $data[2], $data[3]);
 		if($conn->connect_error) die($conn->connect_error);
 		$conn->query("SET NAMES 'utf8'");
 		

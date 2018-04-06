@@ -1,6 +1,6 @@
 <div class="center-block-main">
         <div class="header-top ">
-		<p class="logo"> <a href="index.php">World of session </a></p>
+		<p class="logo"> <a href="http://localhost/wos/index.php">World of session </a></p>
 		<div class="vxod">
 			<form action="scripts/signin.php" method="post">
 				<legend>Вход</legend>
