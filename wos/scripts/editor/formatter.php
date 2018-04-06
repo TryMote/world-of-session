@@ -60,20 +60,28 @@
 
 		echo "<form action='formatter.php' method='POST' enctype='multipart/form-data'>
 		<br>
+		<p>Заполните самостоятельно поле ниже содержанием лекции, или выберите txt файл с содержанием, 
+		<br>нажав на \"Browse...\" рядом с \"Выбрать txt файл\"
+		<br>Если вы уже выбрали txt файл, но не хотите его использовать, просто поставьте отметку на \" - игнорировать файл\"<p>
+		<label for='content'><b>Содержание лекции</b></label><br>
 		<textarea cols='100' rows='15' name='content'>$text</textarea><br>
 		<br>
 		<input type='text' name='filename' value='$filename' style='display:none;'>
-		<fieldset style='width:500px'>
+		<hr>
+		<p>Для того, чтобы добавить изображение в лекцию, выберите его, нажав на 'Browse...'. Изображение может быть в формате jpg, png, tiff
+		<br>После выбора нажмите кнопку \"Добавить изображение\". При удачной загрузке, сверху появится сообщение с готовой строкой, которую 
+		<br>необходимо будет скорировать и вставить в любое место в содержании вашей лекции (либо в форму выше, либо в ваш txt файл)</p>
+		<label for='image'><b>Выбрать изображение</b></lable><br>
 		<input type='file' name='image' value='Изображение к лекции'>
 		<input type='submit' name='add_image' value='Добавить изображение'><br>
-		</fieldset><br>";
-//		if($test_id == 0) {
-//			echo "<p>Тест не добавлен</p>
-//			<input type='submit' name='create_test' formaction='test_creator.php' value='Добавить тест'><br>";
-//		} else {
-//			echo "<p>Тест добавлен</p>
-//			<input type='submit' name='change_test' formaction='test_creator.php' value='Изменить тест'><br>";
-//		}
+		<hr><br>
+		<p>Заметьте, что txt файл не нужен, если вы самостоятельно заполнили форму выше
+		<br>Если форма выше уже заполнена и выбран txt файл, то к тексту в форме будет добавлен текст из txt
+		<br>Если вы уже выбрали txt файл и не хотите его использовать, поставьте отметку на \"- игнорировать файл\"<br>
+		<br><label for='txt'><b>Выбрать txt файл</b></lable><br>
+		<input type='file' name='txt'><input type='checkbox' name='ignore_txt'> - игнорировать файл<br>
+		<p>После выбора txt файла нажмите \"Сохранить\"
+		<br><hr><br>";
 		echo "<br><input type='submit' name='show_page' value='Перейти на страницу лекции'><br>";
 		selection_form();
 		echo "<br><input type='submit' name='save' value='Сохранить'><br>
@@ -110,11 +118,21 @@
 
 
 	function save_page($conn, $location) {
-		$content = trim(str_replace('</script>', '', str_replace('<script>', '', $_POST['content'])));
+		$content = str_replace('</script>', '', str_replace('<script>', '', $_POST['content']));
 		$filename = fix_string($conn, trim($_POST['filename']));
 		$topic_name = get_topic_name($conn, $filename);	
 		$lection_name = get_from_lections($conn, $filename, 'lection_name');
-		create_lection_page($location.$filename, $topic_name, $lection_name, $content);
+		$txt_content = '';
+		if($_FILES['txt']['name'] && !isset($_POST['ignore_txt'])) {
+			if($_FILES['txt']['type'] != 'text/plain') {
+				echo "<h1><u>Файл с содержанием лекции должен быть в формате txt</u></h1>";
+			} else {
+				$txt_content = fix_string($conn, trim(file_get_contents($_FILES['txt']['tmp_name'])));
+				echo "<h3>К содержанию лекции был добавлен материал из txt файла ".$_FILES['txt']['name'];
+			}
+		}
+		$content .= $txt_content;
+		create_lection_page($location.$filename, $topic_name, $lection_name, trim($content));
 	}
 	
 	require_once '../db_data.php';
