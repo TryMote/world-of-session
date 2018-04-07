@@ -8,22 +8,30 @@ function show_test($test_id) {
 	$conn->query("SET NAMES 'utf8'");
 	$result = $conn->query("SELECT test_link FROM tests WHERE test_id='$test_id'");
 	$row = $result->fetch_array(MYSQLI_NUM);
-	echo "<form action='$row[0]' method='POST'>";
+	$test_link = $row[0];
+	echo "<form action='$test_link' method='POST'>";
 	$result = $conn->query("SELECT question_id FROM questions WHERE test_id='$test_id'");
 	$row_number = $result->num_rows;
 	if($row_number) {
-		if(isset($_POST['next_q'])) {
+		$reload = false;
+		if(isset($_POST['next_q']) && !isset($_POST['again']) || isset($_POST['pass'])) {
 			$setted_index = fix_string($conn, $_POST['done_index']);
 			$reload = check_answer($conn);
 			$done_index = ($reload)? $setted_index-1 : $setted_index;
+			if(isset($_POST['pass'])) {
+				$done_index++;
+				$reload = false;
+			}
 		}
-		if($done_index < $row_number) {
-			show_result_line($conn, $result, $row_number);
-			$result->data_seek($done_index);
-			$row = $result->fetch_array(MYSQLI_NUM);
-			show_question($conn, $row[0], $done_index, $reload);
+		show_result_line($conn, $result, $row_number);
+		$result->data_seek($done_index);
+		$row = $result->fetch_array(MYSQLI_NUM);
+		if($done_index == $row_number-1) {
+			show_question($conn, $row[0], $done_index, $reload, true);
+		} elseif($done_index < $row_number) {
+			show_question($conn, $row[0], $done_index, $reload, false);
 		} else {
-			
+			show_congrates();
 		}
 	} else {
 		echo "Ни одного вопроса не добавлено!";
@@ -31,6 +39,17 @@ function show_test($test_id) {
 
 	$result->close();
 	$conn->close();	
+}
+
+function show_congrates() {
+	$CONGRATES = array("Сессия уже начинает дрожать от страха!", "Я горжусь тобой.", "+10 к интеллекту!", "Ты достоен пиццы! Пора пойти и заказать!", 
+	"Сайт не был готов к такому!", "Можешь рассказать об этом одногруппникам!!! Представляешь!", "Ого, ты дошел до этой страницы!? Она же была сделана только на всякий случай!");
+	$rand_index = rand(0, count($CONGRATES)-1);
+	echo "<div class='congrats'>
+	<h2>Поздравляем! Ты прошел тест!</h2>";
+	echo "<h3 style='color:green;'>".$CONGRATES[$rand_index]."</h3></div>";
+	echo "<input type='submit' name='again' value='Повторить'>
+	</form>";
 }
 
 function check_answer($conn) {
@@ -86,7 +105,7 @@ function check_answer($conn) {
 	return $reload;
 }
 
-function show_question($conn, $question_id, $done_index, $reload) {
+function show_question($conn, $question_id, $done_index, $reload, $last) {
 	require_once '../../scripts/editor/data_analizer.php';
 	$result = $conn->query("SELECT question_text, question_image, test_id FROM questions WHERE question_id='$question_id'");
 	$row = $result->fetch_array(MYSQLI_NUM);
@@ -136,15 +155,40 @@ function show_question($conn, $question_id, $done_index, $reload) {
 	if($reload) {
 		$MISTAKES = array("Подуймай еще!", "Будь внимательнее", "Еще раз?", "Нет", "Мы подождем...", "Что-то не так в твоем ответе");
 		$rand_index = rand(0, count($MISTAKES)-1);
-		echo "<p style='color:red;'>".$MISTAKES[$rand_index]."</p>";
+		$trys = fix_string($conn, $_POST['trys']);
+		if($trys > 1) {
+			$hint = null;
+			$result = $conn->query("SELECT question_hint FROM questions WHERE question_id='$question_id'");
+			if($result) $hint = $result->fetch_row()[0];
+			echo "<h4 style='color:green;'>Подсказка!</h4>";
+			if(!$hint) {
+				echo "<p style='color:green;'>Можешь снова почитать лекции или попробовать еще пару раз ответить на вопрос
+				<br>Экстренный пропуск вопроса появиться через две неверные попытки!</p>
+				<p style='font-size:10pt;color:green;'>Появиться... Если это не последний вопрос</p>";
+			} else {
+				echo "<p style='color:green;'>$hint</p>";
+			}
+		}
+		if($trys > 3) {
+			if(!$last) {
+				echo "<input type='submit' name='pass' value='Пропустить вопрос'>";
+			}
+		}
+		$trys++;
+		echo "<p style='color:red;'>".$MISTAKES[$rand_index]."</p>
+		<input type='hidden' name='trys' value='$trys'>";
+	} else {
+		echo "<input type='hidden' name='trys' value='0'>";
 	}
+	
 	$done_index++;
 	echo "<input type='hidden' name='done_index' value='$done_index'>
-	<input type='hidden' name='id' value='$question_id'>
-	<input type='submit' name='next_q' value='Далее'>
-	</form>"; 
+	<input type='hidden' name='id' value='$question_id'>";
+	echo "<input type='submit' name='next_q' value='Далее'>";
+	echo "</form>"; 
 
 }
+
 
 function show_result_line($conn, $result, $row_number) {
 	for($i = 0; $i < $row_number; ++$i) {
