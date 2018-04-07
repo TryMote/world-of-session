@@ -11,10 +11,10 @@
 	$query = "LOCK TABLES $upd WRITE";
 	$result = $conn->query($query);
 	if(!$result) error_page('srl_upd');
-	$query = "INSERT INTO $upd(first_name, last_name, email) VALUES(?,?,?)";
+	$query = "INSERT INTO $upd(first_name, last_name) VALUES(?,?,?)";
 	$result = $conn->prepare($query);
 	if(!$result) error_page('sri_upd');
-	$result->bind_param('sss', $first_name, $last_name, $email);
+	$result->bind_param('ss', $first_name, $last_name);
 	$result->execute();
 	if(!$result->affected_rows) error_page('srn_rupd');
 	$insertID = $conn->insert_id;
