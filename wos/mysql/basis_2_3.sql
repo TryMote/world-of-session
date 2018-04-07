@@ -82,7 +82,6 @@ CREATE TABLE `questions` (
   `question_text` varchar(500) CHARACTER SET utf8 NOT NULL,
   `question_image` varchar(40),
   `test_id` int(10) unsigned NOT NULL,
-  UNIQUE KEY(`question_image`),
   PRIMARY KEY (`question_id`),
   CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`test_id`) REFERENCES `tests` (`test_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

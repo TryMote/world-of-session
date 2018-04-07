@@ -39,7 +39,7 @@
 						$a_text = $at_result->fetch_array(MYSQLI_NUM);
 						if(!$a_text[0]) continue;
 						if(strpos($a_text[0], '_answer_')) {
-							echo "<li><img src='../../material/tests/$a_text[0]' width='300px' height='200px' alt='$a_text[0]'>";
+							echo "<li><img src='../../material/img/$a_text[0]' width='300px' height='200px' alt='$a_text[0]'>";
 						} else { 
 							echo "<li>".$a_text[0];
 						
@@ -171,11 +171,7 @@
 			if($rights[1] == 0) {
 				die("<h2>Ни один вариант ответа не заполнен!<h2>
 				<p>Вернитесь назад и заполните хотя бы первый, обязательный, вариант!</p>");
-			} elseif($rights[1] == 3) {
-				die("<p><b>Если заполнен только первый вариант, то он обязательно должен быть введен самостоятельно в поле для ввода!</b></p>
-				<p>Это необходимо, потому что, если введен только первый вариант, то при прохождении теста, правильным ответом будет<br>
-				введенное значение, равное тому, что введете сейчас вы!</p>");
-			} 
+			}
 		}
 
 		if((!$_POST['question_text'] && !$_FILES['q_image']['type'] && !$_FILES['q_file']['type']) || ($_FILES['q_file']['name'] && isset($_POST['cancel_q_file']) && !$_POST['question_text'])) {
@@ -205,7 +201,7 @@
 		$row_number = $result->num_rows;
 		if($_FILES['q_image']['name']) {
 			$question_image = analize_file($_FILES['q_image']['type'], 'question', $topic_id.$test_id, $row_number);
-			if(!move_uploaded_file($_FILES['q_image']['tmp_name'], $tests_location.$question_image)) {
+			if(!move_uploaded_file($_FILES['q_image']['tmp_name'], $img_location.$question_image)) {
 				die("Изображение не было загружено на сервер!");
 			}
 		}
@@ -215,10 +211,11 @@
 		$result->execute();
 		
 		$result = $conn->query("SELECT question_id FROM questions WHERE test_id='$test_id'");
-		$row = $result->fetch_array(MYSQLI_NUM);
 		if(!$row[0]) die("Непредвиденная ошибка! Попробуйте заного");
 		$row_number = $result->num_rows;
-		$question_id = $row[$row_number-1];
+		$result->data_seek($row_number-1);
+		$row = $result->fetch_array(MYSQLI_NUM);
+		$question_id = $row[0];
 		
 		$result = $conn->query("SELECT answer_id FROM answers WHERE question_id='$question_id'");
 		$row = $result->fetch_array(MYSQLI_NUM);
@@ -232,7 +229,10 @@
 					$answer_text = fix_string($conn, $_POST['ans_'.$index]);
 				} elseif($mode == 2 || $mode == 3) {
 					$answer_text = analize_file($_FILES['img_ans_'.$index]['type'], 'answer', $test_id.$question_id, $index);
-					if(!move_uploaded_file($_FILES['img_ans_'.$index]['tmp_name'], $tests_location.$answer_text)) die("Не удалось загрузить файл на сервер!");  
+					if(!move_uploaded_file($_FILES['img_ans_'.$index]['tmp_name'], $img_location.$answer_text)) die("Не удалось загрузить файл на сервер!");  
+				}
+				if((!$_POST['ans_'.$index] && !$_FILES['img_ans_'.$index]['name']) || ($_FILES['img_ans_'.$index]['type'] && isset($_POST['ignore_img_'.$index]) && !$_POST['ans_'.$index])) {
+					continue;
 				}
 				$result = $conn->prepare("INSERT INTO answers(answer_text, answer_order_id, is_right_answer, question_id) VALUE(?,?,?,?)");
 				$result->bind_param('siii', $answer_text, $index, $is_right_answer, $question_id);
