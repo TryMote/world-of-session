@@ -249,6 +249,7 @@ DROP TABLE IF EXISTS `topics`;
 CREATE TABLE `topics` (
   `topic_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `topic_name` varchar(40) CHARACTER SET utf8 NOT NULL,
+  `test_id` int(10) unsigned DEFAULT 0,
   `topic_image` varchar(40) NOT NULL DEFAULT 'default',
   `subject_id` varchar(5) NOT NULL,
   PRIMARY KEY (`topic_id`),
