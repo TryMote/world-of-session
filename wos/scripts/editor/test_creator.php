@@ -4,11 +4,6 @@
 	<title>Создать тест</title>
 	<meta charset='utf8'>
 	<link rel='stylesheet' href='../../assets/css/styles.css'>  
-	<style>
-		html {
-			background-color: #777;
-		}
-	</style>
 </head>
 <body>
 <?php include_once '../../menu.php' ?>
@@ -296,6 +291,8 @@
 
 	if(isset($_POST['force_delete_test'])) {
 		check_admin($conn, fix_string($conn, $_POST['pass']));
+		$test_id = fix_string($conn, $_POST['del_test_id']);
+		 
 	}
 	
 	$conn->close();
