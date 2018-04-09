@@ -218,6 +218,20 @@
 			for($i=0; $i < $row_number; ++$i) {
 				$result->data_seek($i);
 				$row = $result->fetch_array(MYSQLI_NUM);
+				$del_result = $conn->query("SELECT test_id FROM tests WHERE topic_id='$row[0]'");
+				$row = $del_result->fetch_row()[0];
+				if($row) {
+					$q_result = $conn->query("SELECT question_id FROM questions WHERE test_id='$row'");
+					$row_number = $q_result->num_rows;
+					for($i = 0; $i < $row_number; ++$i) {
+						$q_result->data_seek($i);
+						$row = $q_result->fetch_row()[0];
+						$q_result = $conn->query("DELETE FROM answers WHERE question_id='$row'");
+						$q_result = $conn->query("DELETE FROM questions WHERE question_id='$row'");
+						if(!$q_result) die("Произошла ошибка при удалении");
+					}
+				}
+				$result = $conn->query("DELETE FROM tests WHERE topic_id='$row[0]'"); 
 				$query = "DELETE FROM lections WHERE topic_id='$row[0]'";
 				$del_result = $conn->query($query);
 				if(!$del_result) die($conn->connect_error);
@@ -239,6 +253,19 @@
 				$query = "DELETE FROM lections WHERE topic_id=$del_item_id";
 				$del_result = $conn->query($query);
 				if(!$del_result) die("Произошла ошибка при выполнении удаления");
+			}
+			$result = $conn->query("SELECT test_id FROM tests WHERE topic_id='$del_item_id'");
+			if($result) $row = $result->fetch_row()[0];
+			if($row) {
+				$result = $conn->query("SELECT question_id FROM questions WHERE test_id='$row'");
+				$row_number = $result->num_rows;
+				for($i = 0; $i < $row_number; ++$i) {
+					$result->data_seek($i);
+					$row = $result->fetch_row()[0];
+					$del_result = $conn->query("DELETE FROM answers WHERE question_id='$row'");
+					$del_result = $conn->query("DELETE FROM questions WHERE question_id='$row'");
+					if(!$del_result) die("Произошла ошибка при удалении");
+				}
 			}
 			$result = $conn->query("DELETE FROM tests WHERE topic_id='$del_item_id'"); 
 			$query = "DELETE FROM topics WHERE topic_id=$del_item_id";
