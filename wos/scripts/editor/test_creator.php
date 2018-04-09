@@ -292,7 +292,19 @@
 	if(isset($_POST['force_delete_test'])) {
 		check_admin($conn, fix_string($conn, $_POST['pass']));
 		$test_id = fix_string($conn, $_POST['del_test_id']);
-		 
+		$result = $conn->query("SELECT question_id FROM questions WHERE test_id='$test_id'");
+		$row_number = $result->num_rows;
+		for($i = 0; $i < $row_number; ++$i) {
+			$result->data_seek($i);
+			$question_id = $result->fetch_row()[0];
+			$del_result = $conn->query("DELETE FROM answers WHERE question_id='$question_id'");
+			if(!$del_result) die("Ошибка подключения");
+			$del_result = $conn->query("DELETE FROM questions WHERE question_id='$question_id'");
+			if(!$del_result) die("Ошибка подключения");
+		}
+		$result = $conn->query("DELETE FROM tests WHERE test_id='$test_id'");
+		if(!$result) die("Ошибка при удалении! Побробуйте еще раз!");
+		header("Location: http://localhost/wos/scripts/editor/"); 
 	}
 	
 	$conn->close();

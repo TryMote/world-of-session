@@ -272,6 +272,12 @@
 			echo "<br><label for='e_$item"."_image'>Новое изображение:  </label>
 			<input type='file' name='e_$item"."_image' value='default'><br>";
 		}
+		if($item == 'topic') {
+			echo "<br><label for='e_attack_image'>Новое изображения атаки босса:  </label>
+			<input type='file' name='e_attack_image' value='default'><br>
+			<br><label for='e_fail_image'>Новое изображение повреждения босса:  </label>
+			<input type='file' name='e_fail_image' value='default'><br>";
+		}
 		echo "<br><input type='submit' name='force_edit_$item' value='Принять изменения'>
 			<input type='text' name='e_$item"."_id' value='$item_id' style='display:none'>
 		</form>"; 

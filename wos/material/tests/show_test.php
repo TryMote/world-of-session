@@ -23,7 +23,7 @@ function show_test($test_id) {
 				$reload = false;
 			}
 		}
-		show_result_line($conn, $result, $row_number);
+		show_result_line($conn, $result, $row_number, $done_index);
 		$result->data_seek($done_index);
 		$row = $result->fetch_array(MYSQLI_NUM);
 		if($done_index == $row_number-1) {
@@ -190,10 +190,43 @@ function show_question($conn, $question_id, $done_index, $reload, $last) {
 }
 
 
-function show_result_line($conn, $result, $row_number) {
-	for($i = 0; $i < $row_number; ++$i) {
-
-	}	
+function show_result_line($conn, $result, $row_number, $done_index) {
+	if($done_index < $row_number) {
+		$max_hp = $row_number * 100;
+		$hp = (($row_number - $done_index) * 99)-1;
+		$blood_block = ($row_number * 99)-1;
+		echo "
+	<div 'health-bar'>
+	$hp HP
+		<div class='health-form' style='background-color:#000; 
+						width:$max_hp"."px; 
+						border-radius:50px; 
+						position:absolute;
+						height:20px;
+						color:white;'>
+			<div class='blood-health' style='background-color:red; 
+							width:$blood_block"."px;
+							position:absolute;
+							top:2.5px;
+							left:2.5px;
+							border-radius:50px;
+							height:15px;'>
+			
+			</div>
+	
+			<div class='left-health' style='background-color:green; 
+							width:$hp"."px;
+							position:absolute;
+							top:2.5px;
+							left:2.5px;
+							border-radius:50px;
+							height:15px;'>
+			
+			</div>
+			
+		</div>
+	</div>";	
+	}
 }
 
 ?>

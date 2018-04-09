@@ -20,13 +20,16 @@
 				$ext = '.jpg';
 				break;
 			case 'image/gif':
-				$ext = '.git';
+				$ext = '.gif';
 				break;
 			case 'image/tif':
 				$ext = '.tif';
 				break;
 			case 'image/png':
 				$ext = '.png';
+				break;
+			case 'image/svg':
+				$ext = '.svg';
 				break;
 			case 'php':
 			case '.php':
