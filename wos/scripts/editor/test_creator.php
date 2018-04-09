@@ -4,6 +4,11 @@
 	<title>Создать тест</title>
 	<meta charset='utf8'>
 	<link rel='stylesheet' href='../../assets/css/styles.css'>  
+	<style>
+		html {
+			background-color: #777;
+		}
+	</style>
 </head>
 <body>
 <?php include_once '../../menu.php' ?>
@@ -63,6 +68,7 @@
 		<form action='test_creator.php' method='POST'>";
 		echo "<input type='submit' name='add_question' value='Добавить вопрос'>
 		<input type='submit' name='show_page' value='Перейти на страницу теста'>
+		<input type='submit' name='delete_test' value='Удалить тест'>
 		<input type='submit' name='back' formaction='editor.php' value='Вернуться к выбору предмета'>
 		<input type='hidden' value='$test_id' name='test_id'>
 		<input type='hidden' name='topic_selection' value='".$_POST['topic_selection']."'>";
@@ -282,7 +288,15 @@
 		$filename = $result->fetch_array(MYSQLI_NUM);
 		if(!$filename[0]) die("Ошибка, при переходе на страницу теста. Попробуйте обновить редактор теста");
 		header("Location: ".$tests_location.$filename[0]);
+	}
+
+	if(isset($_POST['delete_test'])) {
+		delete_material($conn, 'test', 'Тест');
 	}	
+
+	if(isset($_POST['force_delete_test'])) {
+		check_admin($conn, fix_string($conn, $_POST['pass']));
+	}
 	
 	$conn->close();
 ?>

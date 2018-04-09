@@ -138,5 +138,49 @@ show_navigator('$lection_name');
         }
 
 
- 
+	function check_admin($conn, $pass) { 
+		$result = $conn->query("SELECT password FROM sign_in WHERE user_id=1"); 
+		if(!$result) die($conn->connect_error); 
+		$row = $result->fetch_array(MYSQLI_NUM); 
+		if(!hash_equals($row[0], crypt($pass, $row[0]))) { 
+			die("Неверный пароль"); 
+		} else { 
+			return true; 
+		} 
+	} 	
+
+       function delete_material($conn, $item, $text_item_type) {
+		if($item != 'test') {
+			if(isset($_POST[$item.'_selection'])) $del_item_id = fix_string($conn, $_POST[$item.'_selection']);
+                	$query = "SELECT $item"."_name FROM $item"."s WHERE $item"."_id='$del_item_id'";
+               	
+			$result = $conn->query($query);
+               		if(!$result) die($conn->connect_error);
+               	 	$item_name = $result->fetch_row()[0];
+                	$result->close();
+		} else {
+			$item_name = '';
+			$del_item_id = $_POST[$item.'_id'];
+		}
+		if($item != 'test') {
+			$action = 'editor.php';
+		} else {
+			$action = 'test_creator.php';
+		}
+                echo "<br><form action='$action' method='POST'>
+                        <label style='color:#f00' for='force_delete_$item'>$text_item_type <b> $item_name </b> и весь входящий материал будут безвозвратно удалены!</label><br>
+                        <input type='password' name='pass' placeholder='Ключ' required>
+                        <input type='submit' name='force_delete_$item' value='Удалить'>
+                        <input type='text' name='del_$item"."_id' value='$del_item_id' style='display:none'>
+                        </form>";
+                echo "<p>Если не знаете ключa, вы можете отправить запрос на удаление</p><br>
+                        <form action='editor.php' method='POST'>
+                                <label for='email'> Ваша электронная почта</label><br>
+                                <input type='email' name='email' required><br>
+                                <label for='message'>Причина удаления<label><br>
+                                <textarea name='message' cols='50' rows='10' wrap='hard' required></textarea><br>
+                                <input type='submit' name='send_del_message' value='Отправить запрос'>
+                        </form>";
+        }
+
 ?>
