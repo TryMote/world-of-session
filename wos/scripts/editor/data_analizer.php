@@ -4,6 +4,7 @@
 	$img_location = $location.'img/';
 	$lections_location = $location.'lections/';
 	$tests_location = $location.'tests/';
+	$topic_img_location = $location.'topic_img/';
 
 	function analize_file($file_type, $material_type, $material_index, $material_count_num) {
 		$ext = analize_type($file_type);

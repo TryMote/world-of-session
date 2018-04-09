@@ -75,20 +75,20 @@
 		$attack_filename = analize_file($attack_image_type, 'topic_attack', $topic_subject_id, $row_number);
 		$fail_filename = analize_file($fail_image_type, 'topic_fail', $topic_subject_id, $row_number); 
 		if($filename != 'default') {
-			if(!move_uploaded_file($_FILES['n_topic_image']['tmp_name'], $img_location.$filename)) {
+			if(!move_uploaded_file($_FILES['n_topic_image']['tmp_name'], $topic_img_location.$filename)) {
 				$filename = 'default';
 				die('Файл не был загружен на сервер! Тема будет добавлена в базу без изображения.'."\n".'Попробуйте после загрузки изменить данную тему, выбрав ее и нажав "Изменить" в главном меню');
 			}
 		}
 		if($attack_filename != 'default') {
-			if(!move_uploaded_file($_FILES['attack_image']['tmp_name'], $img_location.$attack_filename)) {
+			if(!move_uploaded_file($_FILES['attack_image']['tmp_name'], $topic_img_location.$attack_filename)) {
 				$attack_filename = 'default';
 				die("Ошибка при загрузке файла!");
 			}
 
 		}
 		if($fail_filename != 'default') {
-			if(!move_uploaded_file($_FILES['fail_image']['tmp_name'], $img_location.$fail_filename)) {
+			if(!move_uploaded_file($_FILES['fail_image']['tmp_name'], $topic_img_location.$fail_filename)) {
 				$fail_filename = 'default';
 				die("Ошибка при загрузке файла!");
 			}
@@ -139,7 +139,7 @@
 		$attack_filename = analize_file($attack_image_type, 'topic_attack', $subject_id.$topic_id, $index);
 		$fail_filename = analize_file($fail_image_type, 'topic_fail', $subject_id.$topic_id, $index);
 		if($filename != 'default') {
-			if(!move_uploaded_file($_FILES['e_topic_image']['tmp_name'], $img_location.$filename)) {
+			if(!move_uploaded_file($_FILES['e_topic_image']['tmp_name'], $topic_img_location.$filename)) {
 				$result = $conn->query("UNLOCK TABLES");
 				if(!$result) die($conn->connect_error);
 				die("Основной файл не был загружен на сервер!");
@@ -150,7 +150,7 @@
 			}
 		}
 		if($attack_filename != 'default') {
-			if(!move_uploaded_file($_FILES['e_attack_image']['tmp_name'], $img_location.$attack_filename)) {
+			if(!move_uploaded_file($_FILES['e_attack_image']['tmp_name'], $topic_img_location.$attack_filename)) {
 				$result = $conn->query("UNLOCK TABLES");
 				if(!$result) die($conn->connect_error);
 				die("Файл изображения-атаки не был загружен на сервер!");
@@ -161,7 +161,7 @@
 			}	  
 		}
 		if($fail_filename != 'default') {
-			if(!move_uploaded_file($_FILES['e_fail_image']['tmp_name'], $img_location.$fail_filename)) {
+			if(!move_uploaded_file($_FILES['e_fail_image']['tmp_name'], $topic_img_location.$fail_filename)) {
 				$result = $conn->query("UNLOCK TABLES");
 				if(!$result) die($conn->connect_error);
 				die("Файл изображения-повреждения не был загружен на сервер!");
