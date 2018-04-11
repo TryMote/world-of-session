@@ -206,18 +206,25 @@
 				die("Изображение не было загружено на сервер!");
 			}
 		}
-
-		$result = $conn->prepare("INSERT INTO questions(question_text, question_image, test_id) VALUES(?,?,?)");
-		$result->bind_param('ssi', $question_text, $question_image, $test_id);
-		$result->execute();
+		if($row_number > 0) {
+			$result->data_seek($row_number-1);
+		}
+		$row = $result->fetch_row()[0];
+		$row = get_first_select_array($conn, "SELECT question_text FROM questions WHERE question_id='$row' and test_id='$test_id'", MYSQLI_ASSOC);
+		if(!$row || $row['question_text'] != $question_text) {
+				$result = $conn->prepare("INSERT INTO questions(question_text, question_image, test_id) VALUES(?,?,?)");
+				$result->bind_param('ssi', $question_text, $question_image, $test_id);
+				$result->execute();
+			}
+		
 		
 		$result = $conn->query("SELECT question_id FROM questions WHERE test_id='$test_id'");
-		if(!$row[0]) die("Непредвиденная ошибка! Попробуйте заного");
 		$row_number = $result->num_rows;
 		$result->data_seek($row_number-1);
 		$row = $result->fetch_array(MYSQLI_NUM);
+		if(!$row[0]) die("Непредвиденная ошибка! Попробуйте заного");
 		$question_id = $row[0];
-		
+			
 		$result = $conn->query("SELECT answer_id FROM answers WHERE question_id='$question_id'");
 		$row = $result->fetch_array(MYSQLI_NUM);
 		if(!$row[0]) {
@@ -240,7 +247,6 @@
 				$result->execute();  
 			}
 		}
-		
 	}
 
 	if(isset($_POST['topic_selection'])) {
@@ -266,7 +272,7 @@
 			$query = "UPDATE topics SET test_id='$test_id' WHERE topic_id='$topic_id'";
 			$conn->query($query);	
 			create_test_page($location, $topic_name, $test_id); 
-			open_editor($conn, $filename, $topic_name);
+			open_editor($conn, $test_id, $topic_name);
 		} else {
 			$query = "SELECT test_link FROM tests WHERE test_id='$test_id'";
 			$result = $conn->query($query);
@@ -303,6 +309,7 @@
 			if(!$del_result) die("Ошибка подключения");
 		}
 		$result = $conn->query("DELETE FROM tests WHERE test_id='$test_id'");
+		get_first_query_result($conn, "UPDATE topics SET test_id='0' WHERE test_id='$test_id'");
 		if(!$result) die("Ошибка при удалении! Побробуйте еще раз!");
 		header("Location: http://localhost/wos/scripts/editor/"); 
 	}

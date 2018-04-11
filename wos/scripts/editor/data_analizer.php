@@ -175,7 +175,7 @@ show_navigator('$lection_name');
                         <label style='color:#f00' for='force_delete_$item'>$text_item_type <b> $item_name </b> и весь входящий материал будут безвозвратно удалены!</label><br>
                         <input type='password' name='pass' placeholder='Ключ' required>
                         <input type='submit' name='force_delete_$item' value='Удалить'>
-                        <input type='text' name='del_$item"."_id' value='$del_item_id' style='display:none'>
+                        <input type='hidden' name='del_$item"."_id' value='$del_item_id'>
                         </form>";
                 echo "<p>Если не знаете ключa, вы можете отправить запрос на удаление</p><br>
                         <form action='editor.php' method='POST'>
