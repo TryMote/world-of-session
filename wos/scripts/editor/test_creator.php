@@ -11,9 +11,9 @@
 <?php 
 
 	function open_editor($conn, $test_id, $topic_name) {
-		$result = $conn->query("SELECT question_id FROM questions WHERE test_id='$test_id'");
-		$row = $result->fetch_array(MYSQLI_NUM);
-		if(!$row[0]) {
+		$result = get_first_query_result($conn, "SELECT question_id FROM questions WHERE test_id='$test_id'");
+		$row = $result->fetch_row()[0];
+		if(!$row) {
 			echo "<fieldset><p>Ни одного вопроса не добавлено</p></fieldset>";
 		} else {
 			$row_number = $result->num_rows;
@@ -21,13 +21,11 @@
 			echo "<h3>Вопросов в тесте: $row_number</h3>";
 			for($i = 0; $i < $row_number; ++$i) {
 				$result->data_seek($i);
-				$row = $result->fetch_array(MYSQLI_NUM);
-				$qt_result = $conn->query("SELECT question_text FROM questions WHERE question_id='$row[0]'");
-				$q_text = $qt_result->fetch_array(MYSQLI_NUM);
-				echo "<fieldset>";
-				echo $q_text[0];
-				echo "<hr>";
-				$at_result = $conn->query("SELECT answer_text, is_right_answer FROM answers WHERE question_id='$row[0]'");
+				$row = $result->fetch_row()[0];
+				$q_text = get_first_select_array($conn,"SELECT question_text FROM questions WHERE question_id='$row'", MYSQLI_NUM)[0];
+				$q_text = fix_content($q_text);
+				echo "<fieldset> $q_text <hr>";
+				$at_result = get_first_query_result($conn, "SELECT answer_text, is_right_answer FROM answers WHERE question_id='$row'");
 				$a_row = $at_result->fetch_array(MYSQLI_NUM);
 				if(!$a_row[0]) {
 					echo "Ответов к вопросу не добавлено";
@@ -53,30 +51,26 @@
 				echo "<form action='test_creator.php' method='POST'>
 				<br><input type='submit' name='edit_question' value='Изменить вопрос'>
 				<input type='hidden' name='question_id' value='$row[0]'>
-				</form>";
-				echo "</fieldset>";
+				</form> </fieldset>";
 			}
 			echo "</fieldset>";
 		}
 		
 		echo "<fieldset>
-		<form action='test_creator.php' method='POST'>";
-		echo "<input type='submit' name='add_question' value='Добавить вопрос'>
+		<form action='test_creator.php' method='POST'>
+		<input type='submit' name='add_question' value='Добавить вопрос'>
 		<input type='submit' name='show_page' value='Перейти на страницу теста'>
 		<input type='submit' name='delete_test' value='Удалить тест'>
 		<input type='submit' name='back' formaction='editor.php' value='Вернуться к выбору предмета'>
 		<input type='hidden' value='$test_id' name='test_id'>
-		<input type='hidden' name='topic_selection' value='".$_POST['topic_selection']."'>";
-		echo "</form></fieldset>";
+		<input type='hidden' name='topic_selection' value='".$_POST['topic_selection']."'>
+		</form></fieldset>";
 	}
 
 	require_once '../db_data.php';
 	require_once 'data_analizer.php';
-	$data = get_db_data('editor');
-	$conn = new mysqli($data[0], $data[1], $data[2], $data[3]);
-	if($conn->connect_error) die($conn->connect_error);
-	$conn->query("SET NAMES 'utf8'");
-
+	$conn = get_connection_object('editor');
+	
 	if(isset($_POST['add_question'])) {
 		echo "<fieldset>
 		<form action='test_creator.php' method='POST' enctype='multipart/form-data'>
@@ -106,8 +100,8 @@
 		<br><strong>Внимание!</strong>
 		Если был выбран txt файл, и не поставлена отметка на '- игнорировать файл'<br>
 		текст введенный в поле будет проигнорирован</p>
-		<hr>";
-		echo "<p style='font-size:20pt'><strong>Варианты ответов</strong></p>
+		<hr>
+		<p style='font-size:20pt'><strong>Варианты ответов</strong></p>
 		<p>Вместо ввода текста ответа, можно загрузить изображение в формате png или jpeg (jpg) <br>
 		<br>Варианты ответов в виде изображений используются при невозможности их представления в виде текста
 		<br>Если ответ приведен и в виде изображения и в виде текста, на странице будет показан вариант в виде изображения</p>
@@ -147,6 +141,7 @@
 			die("<br><b>Первый вариант ответа должен быть заполнен обязательно!</b>
 			<br><br>Если вы заполнили только один ответ, то он обязательно должен быть первым!");	
 		}
+
 		$right_number = 0;
 		$rights = array(1 => 0, 2 => 0, 3 => 0, 4 => 0);
 		for($i = 1; $i < 5; ++$i) {
@@ -187,18 +182,15 @@
 		$question_text = '';
 		$question_image = '';
 		if(!isset($_POST['cancel_q_file']) && $_FILES['q_file']['name']) {
-			$question_text = fix_string($conn, file_get_contents($_FILES['q_file']['tmp_name']));	
+			$question_text = fix_content(file_get_contents($_FILES['q_file']['tmp_name']));	
 		} else {
-			$question_text = fix_string($conn, $_POST['question_text']);
+			$question_text = fix_content($_POST['question_text']);
 		}
 
 		$test_id = fix_string($conn, $_POST['test_id']);
 		$topic_id = fix_string($conn, $_POST['topic_selection']);
-		$result = $conn->query("SELECT subject_id FROM topics WHERE topic_id='$topic_id'");
-		if(!$result) die("Произошла непредвиденная ошибка");
-		$row = $result->fetch_array(MYSQLI_NUM);
-		$subject_id = $row[0];
-		$result = $conn->query("SELECT question_id FROM questions WHERE test_id='$test_id'");
+		$subject_id = get_first_select_array($conn, "SELECT subject_id FROM topics WHERE topic_id='$topic_id'", MYSQLI_NUM)[0];
+		$result = get_first_query_result($conn, "SELECT question_id FROM questions WHERE test_id='$test_id'");
 		$row_number = $result->num_rows;
 		if($_FILES['q_image']['name']) {
 			$question_image = analize_file($_FILES['q_image']['type'], 'question', $topic_id.$test_id, $row_number);
@@ -218,7 +210,7 @@
 			}
 		
 		
-		$result = $conn->query("SELECT question_id FROM questions WHERE test_id='$test_id'");
+		$result = get_first_query_result($conn, "SELECT question_id FROM questions WHERE test_id='$test_id'");
 		$row_number = $result->num_rows;
 		$result->data_seek($row_number-1);
 		$row = $result->fetch_array(MYSQLI_NUM);
@@ -251,9 +243,7 @@
 
 	if(isset($_POST['topic_selection'])) {
 		$topic_id = fix_string($conn, trim($_POST['topic_selection']));
-		$query = "SELECT test_id, subject_id, topic_name FROM topics WHERE topic_id='$topic_id'";
-		$result = $conn->query($query);
-		$row = $result->fetch_array(MYSQLI_ASSOC);
+		$row = get_first_select_array($conn, "SELECT test_id, subject_id, topic_name FROM topics WHERE topic_id='$topic_id'", MYSQLI_ASSOC);
 		$test_id = $row['test_id'];
 		$topic_name = $row['topic_name'];
 		if($test_id == 0) {
@@ -264,11 +254,7 @@
 			$result = $conn->prepare($query);
 			$result->bind_param('si', $filename, $topic_id);
 			$result->execute();
-			$query = "SELECT test_id FROM tests WHERE topic_id='$topic_id'";
-			$result = $conn->query($query);
-			if(!$result) die($conn->connect_error);
-			$row = $result->fetch_array(MYSQLI_NUM);
-			$test_id = $row[0];
+			$test_id = get_first_select_array($conn, "SELECT test_id FROM tests WHERE topic_id='$topic_id'", MYSQLI_NUM)[0];
 			$query = "UPDATE topics SET test_id='$test_id' WHERE topic_id='$topic_id'";
 			$conn->query($query);	
 			create_test_page($location, $topic_name, $test_id); 
@@ -285,10 +271,9 @@
 	}
 
 	if(isset($_POST['show_page'])) {
-		$result = $conn->query("SELECT test_link FROM tests WHERE test_id='".fix_string($conn, $_POST['test_id'])."'");
-		$filename = $result->fetch_array(MYSQLI_NUM);
-		if(!$filename[0]) die("Ошибка, при переходе на страницу теста. Попробуйте обновить редактор теста");
-		header("Location: ".$tests_location.$filename[0]);
+		$filename = get_first_select_array($conn, "SELECT test_link FROM tests WHERE test_id='".fix_string($conn, $_POST['test_id'])."'", MYSQLI_NUM)[0];
+		if(!$filename) die("Ошибка, при переходе на страницу теста. Попробуйте обновить редактор теста");
+		header("Location: ".$tests_location.$filename);
 	}
 
 	if(isset($_POST['delete_test'])) {
@@ -298,19 +283,16 @@
 	if(isset($_POST['force_delete_test'])) {
 		check_admin($conn, fix_string($conn, $_POST['pass']));
 		$test_id = fix_string($conn, $_POST['del_test_id']);
-		$result = $conn->query("SELECT question_id FROM questions WHERE test_id='$test_id'");
+		$result = get_first_query_result($conn, "SELECT question_id FROM questions WHERE test_id='$test_id'");
 		$row_number = $result->num_rows;
 		for($i = 0; $i < $row_number; ++$i) {
 			$result->data_seek($i);
 			$question_id = $result->fetch_row()[0];
-			$del_result = $conn->query("DELETE FROM answers WHERE question_id='$question_id'");
-			if(!$del_result) die("Ошибка подключения");
-			$del_result = $conn->query("DELETE FROM questions WHERE question_id='$question_id'");
-			if(!$del_result) die("Ошибка подключения");
+			get_first_query_result($conn, "DELETE FROM answers WHERE question_id='$question_id'");
+			get_first_query_result($conn, "DELETE FROM questions WHERE question_id='$question_id'");
 		}
-		$result = $conn->query("DELETE FROM tests WHERE test_id='$test_id'");
+		get_first_query_result($conn, "DELETE FROM tests WHERE test_id='$test_id'");
 		get_first_query_result($conn, "UPDATE topics SET test_id='0' WHERE test_id='$test_id'");
-		if(!$result) die("Ошибка при удалении! Побробуйте еще раз!");
 		header("Location: http://localhost/wos/scripts/editor/"); 
 	}
 	

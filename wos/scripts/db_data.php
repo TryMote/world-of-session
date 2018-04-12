@@ -46,6 +46,17 @@
 		return htmlentities($result);
 	}
 
+	function fix_content($content) {
+		$content = str_replace('<script>', '', str_replace('</script>', '', $content));
+		$content = str_replace("\r\n", '<br>', $content);
+		return $content;
+	}
+
+
+	function get_clear_content($content) {
+		return str_replace('<br>', "\n", $content);
+	}	
+
 	function get_query_result($conn, $query, $row_index) {
 		$result = $conn->query($query);
 		if(!$result) header("Location: http://localhost/wos/connect_error.php");
@@ -59,7 +70,9 @@
 
 	function get_select_array($conn, $query, $row_index, $mode) {
 		$result = get_query_result($conn, $query, $row_index);
-		return $result->fetch_array($mode);
+		$row = $result->fetch_array($mode);
+		$result->close();
+		return $row;
 	}
 
 	function get_first_select_array($conn, $query, $mode) {

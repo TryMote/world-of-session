@@ -21,9 +21,7 @@
 						<input type='text' name='filename' value='$filename' style='display:none'>
 					</form>";
 			} else {
-				$query = "UPDATE lections SET is_file_opened='1' WHERE lection_link='$filename'";
-				$result = $conn->query($query);
-				if(!$result) die($conn->connect_error);
+				get_first_query_result($conn, "UPDATE lections SET is_file_opened='1' WHERE lection_link='$filename'");
 				open_editor($conn, $location, $filename, 'w');
 			}
 		} else {
@@ -31,8 +29,10 @@
 		}
 	}
 	function open_editor($conn, $location, $filename, $mode) {
-		$topic_name = get_topic_name($conn, $filename);
-		$lection_name = get_from_lections($conn, $filename, 'lection_name');
+		$row = get_first_select_array($conn, "SELECT topic_id FROM lections WHERE lection_link='$filename'", MYSQLI_NUM)[0];
+		$topic_name = get_first_select_array($conn, "SELECT topic_name FROM topics WHERE topic_id='$row'", MYSQLI_NUM)[0];
+		$lection_name = get_first_select_array($conn, "SELECT lection_name FROM lections WHERE lection_link='$filename'", MYSQLI_NUM)[0];
+
 		if($mode == 'w') {	
 			create_lection_page($location.$filename, $topic_name, $lection_name, '');
 		}
@@ -53,6 +53,7 @@
 				$flag = true;
 			}
 		}
+		$text = get_clear_content($text);
 		
 		echo "<fieldset>
 		<h2>$topic_name</h2>
@@ -91,26 +92,6 @@
 		</fieldset>";
 	}
 	
-	function get_topic_name($conn, $filename) {
-		$query = "SELECT topic_id FROM lections WHERE lection_link='$filename'";
-		$result = $conn->query($query);
-		if(!$result) die("Файл не найден");
-		$row = $result->fetch_array(MYSQLI_NUM);
-		$query = "SELECT topic_name FROM topics WHERE topic_id='$row[0]'";
-		$result = $conn->query($query);
-		if(!$result) die("Файл не найден");
-		$row = $result->fetch_array(MYSQLI_NUM);
-
-		return $row[0];
-	}
-
-	function get_from_lections($conn, $filename, $get_type) {
-		$query = "SELECT $get_type FROM lections WHERE lection_link='$filename'";
-		$result = $conn->query($query);
-		if(!$result) die($conn->connect_error);
-		$row = $result->fetch_array(MYSQLI_NUM);
-		return $row[0];
-	}
 	
 	function selection_form() {
 		echo "<input type='hidden' name='lection_selection' value='".$_POST['lection_selection']."'>";
@@ -118,16 +99,17 @@
 
 
 	function save_page($conn, $location) {
-		$content = str_replace('</script>', '', str_replace('<script>', '', $_POST['content']));
+		$content = fix_content($_POST['content']);
 		$filename = fix_string($conn, trim($_POST['filename']));
-		$topic_name = get_topic_name($conn, $filename);	
-		$lection_name = get_from_lections($conn, $filename, 'lection_name');
+		$row = get_first_select_array($conn, "SELECT topic_id FROM lections WHERE lection_link='$filename'", MYSQLI_NUM)[0];
+		$topic_name = get_first_select_array($conn, "SELECT topic_name FROM topics WHERE topic_id='$row'", MYSQLI_NUM)[0];
+		$lection_name = get_first_select_array($conn, "SELECT lection_name FROM lections WHERE lection_link='$filename'", MYSQLI_NUM)[0];
 		$txt_content = '';
 		if($_FILES['txt']['name'] && !isset($_POST['ignore_txt'])) {
 			if($_FILES['txt']['type'] != 'text/plain') {
 				echo "<h1><u>Файл с содержанием лекции должен быть в формате txt</u></h1>";
 			} else {
-				$txt_content = fix_string($conn, trim(file_get_contents($_FILES['txt']['tmp_name'])));
+				$txt_content = fix_content(trim(file_get_contents($_FILES['txt']['tmp_name'])));
 				echo "<h3>К содержанию лекции был добавлен материал из txt файла ".$_FILES['txt']['name'];
 			}
 		}
@@ -137,11 +119,8 @@
 	
 	require_once '../db_data.php';
 	require_once 'data_analizer.php';
-	$data = get_db_data('editor');
-	$conn = new mysqli($data[0], $data[1], $data[2], $data[3]);
-	if($conn->connect_error) die($conn->connect_error);
-	$conn->query("SET NAMES 'utf8'");		
-
+	$conn = get_connection_object('editor');
+	
 	if(isset($_POST['save']) || isset($_POST['add_image'])) {
 		save_page($conn, $lections_location);	
 		if(isset($_POST['save'])) {

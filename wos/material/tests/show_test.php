@@ -2,15 +2,10 @@
 
 function show_test($test_id) {
 	$done_index = 0;
-	$data = get_db_data('tests');
-	$conn = new mysqli($data[0], $data[1], $data[2], $data[3]);
-	if($conn->connect_error) die($conn->connect_error);
-	$conn->query("SET NAMES 'utf8'");
-	$result = $conn->query("SELECT test_link FROM tests WHERE test_id='$test_id'");
-	$row = $result->fetch_array(MYSQLI_NUM);
-	$test_link = $row[0];
+	$conn = get_connection_object('tests');
+	$test_link = get_first_select_array($conn, "SELECT test_link FROM tests WHERE test_id='$test_id'", MYSQLI_NUM)[0];
 	echo "<form action='$test_link' method='POST'>";
-	$result = $conn->query("SELECT question_id FROM questions WHERE test_id='$test_id'");
+	$result = get_first_query_result($conn, "SELECT question_id FROM questions WHERE test_id='$test_id'");
 	$row_number = $result->num_rows;
 	if($row_number) {
 		$reload = false;
@@ -107,9 +102,7 @@ function check_answer($conn) {
 
 function show_question($conn, $question_id, $done_index, $reload, $last) {
 	require_once '../../scripts/editor/data_analizer.php';
-	$result = $conn->query("SELECT question_text, question_image, test_id FROM questions WHERE question_id='$question_id'");
-	$row = $result->fetch_array(MYSQLI_NUM);
-	
+	$row = get_first_select_array($conn, "SELECT question_text, question_image, test_id FROM questions WHERE question_id='$question_id'", MYSQLI_NUM);
 	echo "<div class='question_text'>
 		<p>$row[0]</p>
 	</div>";
@@ -118,7 +111,7 @@ function show_question($conn, $question_id, $done_index, $reload, $last) {
 			<img src='$img_location$row[1]' alt='$row[1]'>
 		</div>";
 	}
-	$result = $conn->query("SELECT answer_text, answer_order_id, is_right_answer FROM answers WHERE question_id='$question_id'");
+	$result = get_first_query_result($conn, "SELECT answer_text, answer_order_id, is_right_answer FROM answers WHERE question_id='$question_id'");
 	$row_number = $result->num_rows;
 	if($row_number == 1) {
 		$row = $result->fetch_array(MYSQLI_NUM);
@@ -170,9 +163,7 @@ function show_question($conn, $question_id, $done_index, $reload, $last) {
 			}
 		}
 		if($trys > 3) {
-			if(!$last) {
-				echo "<input type='submit' name='pass' value='Пропустить вопрос'>";
-			}
+			die("Очень жаль, но ты проиграл");
 		}
 		$trys++;
 		echo "<p style='color:red;'>".$MISTAKES[$rand_index]."</p>
