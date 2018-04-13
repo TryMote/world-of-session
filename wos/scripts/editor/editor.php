@@ -22,12 +22,11 @@
 	</ul>
 <fieldset>
 	<?php	
+		require_once '../auth.php';
 		require_once '../db_data.php';
 		require_once 'data_analizer.php';
 		include_once "subject_selection.php";
 		$conn = get_connection_object('editor');	
-	
-			
 		subject_page_work($conn);
 		
 		
