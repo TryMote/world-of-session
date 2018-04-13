@@ -1,8 +1,39 @@
 <?php
 
 function show_test($test_id) {
-	$done_index = 0;
 	$conn = get_connection_object('tests');
+	$test_link = get_first_select_array($conn, "SELECT test_link FROM tests WHERE test_id='$test_id'", MYSQLI_NUM)[0];
+	$user_ip = $_SERVER['REMOTE_ADDR'];
+	if(!strpos($_SERVER['HTTP_REFERER'], $test_link)) {
+		$exist = get_first_select_array($conn, "SELECT user_ip FROM test_progress WHERE user_ip='$user_ip'", MYSQLI_NUM)[0];
+		if($exist) {
+			$date = get_first_select_array($conn, "SELECT test_progress_date FROM test_progress WHERE user_ip='$user_ip'", MYSQLI_NUM)[0];
+			if(strpos($date, date('d'))) {
+				die("<form action='$test_link' method='POST'>
+				<input type='submit' name='start_again' value='Начать заного'>
+				<input type='submit' name='continue' value='Продолжить'>
+				</form>");
+			}
+		} else {
+			$result = $conn->prepare("INSERT INTO test_progress(test_id, user_ip) VALUES(?,?)");
+			$user_ip .= substr(crypt($user_ip, $user_ip), 0, 6);
+			$result->bind_param('is', $test_id, $user_ip);
+			$result->execute();
+			$test_progress_id = get_first_select_array($conn, "SELECT test_progress_id FROM test_progress WHERE test_id='$test_id' AND user_ip='$user_ip'", MYSQLI_NUM)[0];
+			die("<form action='$test_link' method='POST'>
+			<input type='hidden' name='test_progress_id' value='$test_progress_id'>
+			<input type='submit' name='go' value='В бой'>
+			</form>");
+		}
+	}
+	if(isset($_POST['start_again'])) { 	
+		get_first_query_result($conn, "UPDATE test_progress SET test_id='$test_id', 
+						health_counter='5', 
+						coin_counter='0', 
+						done_index='0', 
+						test_progress_date='".date(DATE_RSS)."' 
+					WHERE user_ip='$user_ip'");
+	} 
 	$test_link = get_first_select_array($conn, "SELECT test_link FROM tests WHERE test_id='$test_id'", MYSQLI_NUM)[0];
 	echo "<form action='$test_link' method='POST'>";
 	$result = get_first_query_result($conn, "SELECT question_id FROM questions WHERE test_id='$test_id'");
