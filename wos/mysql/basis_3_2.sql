@@ -96,35 +96,6 @@ LOCK TABLES `questions` WRITE;
 /*!40000 ALTER TABLE `questions` ENABLE KEYS */;
 UNLOCK TABLES;
 
---
--- Table structure for table `test_progress`
---
-
-DROP TABLE IF EXISTS `test_progress`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `test_progress` (
-  `test_progress_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_ip` varchar(40) NOT NULL, 
-  `test_id` int(10) unsigned NOT NULL, 
-  `health_counter` int(2) unsigned NOT NULL DEFAULT '5',
-  `coin_counter` int(5) unsigned NOT NULL DEFAULT '0',
-  `done_index` int(3) unsigned NOT NULL DEFAULT '0', 
-  `test_progress_date` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY(`test_progress_id`),
-  UNIQUE KEY(`user_ip`),
-  CONSTRAINT `test_progress_ibfk_1` FOREIGN KEY(`test_id`) REFERENCES `tests`(`test_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `test_progress`
---
-
-LOCK TABLES `test_progress` WRITE;
-/*!40000 ALTER TABLE `test_progress` DISABLE KEYS */;
-/*!40000 ALTER TABLE `test_progress` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `answers`
