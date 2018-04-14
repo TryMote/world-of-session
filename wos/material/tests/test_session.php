@@ -3,7 +3,7 @@
 			$_SESSION['test_id'] = $test_id;
 			$_SESSION['done_index'] = 0; 
 			$_SESSION['health'] = 5;
-			$_SESSION['coins'] = 0;
+			$_SESSION['coins'] = 1;
 	}
 
 	function stop_test() {

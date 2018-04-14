@@ -56,10 +56,11 @@
 			echo "</fieldset>";
 		}
 		
+		$test_link = get_first_select_array($conn, "SELECT test_link FROM tests WHERE test_id='$test_id'", MYSQLI_NUM)[0];
 		echo "<fieldset>
+		<a style='margin:3%;text-decoration:none;' href='../../material/tests/$test_link'>Страница теста</a>
 		<form action='test_creator.php' method='POST'>
-		<input type='submit' name='add_question' value='Добавить вопрос'>
-		<input type='submit' name='show_page' value='Перейти на страницу теста'>
+		<br><input type='submit' name='add_question' value='Добавить вопрос'>
 		<input type='submit' name='delete_test' value='Удалить тест'>
 		<input type='submit' name='back' formaction='editor.php' value='Вернуться к выбору предмета'>
 		<input type='hidden' value='$test_id' name='test_id'>
@@ -270,11 +271,6 @@
 		
 	}
 
-	if(isset($_POST['show_page'])) {
-		$filename = get_first_select_array($conn, "SELECT test_link FROM tests WHERE test_id='".fix_string($conn, $_POST['test_id'])."'", MYSQLI_NUM)[0];
-		if(!$filename) die("Ошибка, при переходе на страницу теста. Попробуйте обновить редактор теста");
-		header("Location: ".$tests_location.$filename);
-	}
 
 	if(isset($_POST['delete_test'])) {
 		delete_material($conn, 'test', 'Тест');
