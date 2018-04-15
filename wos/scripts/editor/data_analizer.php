@@ -154,7 +154,7 @@ show_navigator('$lection_name');
 	} 	
 
        function delete_material($conn, $item, $text_item_type) {
-		if($item != 'test') {
+		if($item != 'test' && $item != 'question') {
 			if(isset($_POST[$item.'_selection'])) $del_item_id = fix_string($conn, $_POST[$item.'_selection']);
                 	$query = "SELECT $item"."_name FROM $item"."s WHERE $item"."_id='$del_item_id'";
                	
@@ -165,8 +165,8 @@ show_navigator('$lection_name');
 		} else {
 			$item_name = '';
 			$del_item_id = $_POST[$item.'_id'];
-		}
-		if($item != 'test') {
+		} 
+		if($item != 'test' && $item != 'question') {
 			$action = 'editor.php';
 		} else {
 			$action = 'test_creator.php';
@@ -175,9 +175,12 @@ show_navigator('$lection_name');
                         <label style='color:#f00' for='force_delete_$item'>$text_item_type <b> $item_name </b> и весь входящий материал будут безвозвратно удалены!</label><br>
                         <input type='password' name='pass' placeholder='Ключ' required>
                         <input type='submit' name='force_delete_$item' value='Удалить'>
-                        <input type='hidden' name='del_$item"."_id' value='$del_item_id'>
-                        </form>";
-                echo "<p>Если не знаете ключa, вы можете отправить запрос на удаление</p><br>
+                        <input type='hidden' name='del_$item"."_id' value='$del_item_id'>";
+		if($item == 'question') {
+                 	echo "<input type='hidden' name='topic_selection' value='".fix_string($conn, $_POST['topic_selection'])."'>";       
+		}
+		echo "</form>
+			<p>Если не знаете ключa, вы можете отправить запрос на удаление</p><br>
                         <form action='editor.php' method='POST'>
                                 <label for='email'> Ваша электронная почта</label><br>
                                 <input type='email' name='email' required><br>

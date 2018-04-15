@@ -50,7 +50,10 @@
 				}
 				echo "<form action='test_creator.php' method='POST'>
 				<br><input type='submit' name='edit_question' value='Изменить вопрос'>
+				<input type='hidden' name='topic_selection' value='".fix_string($conn, $_POST['topic_selection'])."'>
 				<input type='hidden' name='question_id' value='$row[0]'>
+				<input type='hidden' name='test_id' value='$test_id'>
+				<input type='submit' name='delete_question' value='Удалить вопрос'>
 				</form> </fieldset>";
 			}
 			echo "</fieldset>";
@@ -68,11 +71,10 @@
 		</form></fieldset>";
 	}
 
-	require_once '../db_data.php';
-	require_once 'data_analizer.php';
-	$conn = get_connection_object('editor');
-	
-	if(isset($_POST['add_question'])) {
+	function show_question_editor($conn, $mode) {	
+		if($mode == 'e') {
+			$question_id = fix_string($conn, $_POST['question_id']);
+		}	
 		echo "<fieldset>
 		<form action='test_creator.php' method='POST' enctype='multipart/form-data'>
 		<input type='hidden' name='test_id' value='".fix_string($conn, $_POST['test_id'])."'>
@@ -86,7 +88,12 @@
 		</p>
 		<p>После заполнения содержания вопроса переходите к полю \"Варианты ответов\"</p>
 		<br><label for='question_text'><b>Содержание вопроса:</b></label><br>
-		<textarea type='text' name='question_text' rows='5' cols='80'></textarea><br>
+		<textarea type='text' name='question_text' rows='5' cols='80'>";
+		if($mode == 'e') {
+			$question_text = get_first_select_array($conn, "SELECT question_text FROM questions WHERE question_id='$question_id'", MYSQLI_NUM)[0];
+			echo "$question_text";
+		}
+		echo "</textarea><br>
 		<br><label style='font-size:11pt' for='add_image'><b>Добавить изображение</b></label>
 		<input type='file' name='q_image'>
 		<input type='checkbox' name='ignore_q_image'> - игнорировать изображение
@@ -114,29 +121,41 @@
 		<p>Если заполнен только один, первый вариант ответа, то при прохождении теста, для решения данного вопроса<br>
 		необходимо будет ввести значение, равное введенному вами сейчас в поле для первого варианта ответа</p>
 		<p>При отметке '- игнорировать файл', изображение выбранное вами не будет загружено на сервер и использовано в тесте</p>
-		<ol>
-			<li style='padding-bottom:25px'><input type='text' style='margin:10px' name='ans_1'>
-			<input type='checkbox' name='is_right_1' value='1'> - это верный ответ
-			<br>В виде изображения: <br><input type='file' name='img_ans_1'>
-			<br><input type='checkbox' name='ignore_img_1' value='1'> - игнорировать файл
-			<li style='padding-bottom:25px'><input type='text' style='margin:10px' name='ans_2'>
-			<input type='checkbox' name='is_right_2' value='2'> - это верный ответ
-			<br>В виде изображения: <br><input type='file' name='img_ans_2'>
-			<br><input type='checkbox' name='ignore_img_2' value='1'> - игнорировать файл
-			<li style='padding-bottom:25px'><input type='text' style='margin:10px' name='ans_3'>
-			<input type='checkbox' name='is_right_3' value='3'> - это верный ответ
-			<br>В виде изображения: <br><input type='file' name='img_ans_3'>
-			<br><input type='checkbox' name='ignore_img_3' value='1'> - игнорировать файл
-			<li><input type='text' style='margin:10px' name='ans_4'>
-			<input type='checkbox' name='is_right_4' value='4'> - это верный ответ
-			<br>В виде избражения: <br><input type='file' name='img_ans_4'>  	
-			<br><input type='checkbox' name='ignore_img_4' value='1'> - игнорировать файл
-		</ol>
-		<input type='submit' value='Добавить' name='force_add_question'>
-		</fieldset>";
+		<ol>";
+
+		for($i = 1; $i <= 4; ++$i) {
+			$seek_index = $i - 1;
+			echo "<li style='padding-bottom:25px'><input type='text' style='margin:10px' name='ans_$i'";
+			if($mode == 'e') {
+				$answer_text = get_select_array($conn, "SELECT answer_text FROM answers WHERE question_id='$question_id' AND answer_order_id='$i'", $seek_index, MYSQLI_NUM)[0];
+				if($answer_text ) {
+					echo "value='$answer_text'";
+				}
+			}
+			echo "><input type='checkbox' name='is_right_$i' value='1' ";
+			if($mode == 'e') {
+				$is_right_answer = get_select_array($conn, "SELECT is_right_answer FROM answers WHERE question_id='$question_id' and answer_order_id='$i'", $seek_index, MYSQLI_NUM)[0];
+				if($is_right_answer) {
+					echo "checked";
+				}
+			}
+
+			echo  "> - это верный ответ		
+			<br>В виде изображения: <br><input type='file' name='img_ans_$i'>
+			<br><input type='checkbox' name='ignore_img_$i' value='1'> - игнорировать файл";
+		}
+		echo "</ol>";
+		if($mode == 'a') {
+			echo "<input type='submit' value='Добавить' name='force_add_question'>";
+		} else {
+			echo "<input type='hidden' name='question_id' value='$question_id'>
+			<input type='submit' value='Изменить' name='force_edit_question'>";
+		}
+		echo "</fieldset>";
+
 	}
-	
-	if(isset($_POST['force_add_question'])) {
+
+	function edit_question($conn, $mode) {
 
 		if(!$_POST['ans_1'] && !$_FILES['img_ans_1']['type'] || ($_FILES['img_ans_1']['type'] && isset($_POST['ignore_img_1']) && !$_POST['ans_1'])) {
 			die("<br><b>Первый вариант ответа должен быть заполнен обязательно!</b>
@@ -195,7 +214,7 @@
 		$row_number = $result->num_rows;
 		if($_FILES['q_image']['name']) {
 			$question_image = analize_file($_FILES['q_image']['type'], 'question', $topic_id.$test_id, $row_number);
-			if(!move_uploaded_file($_FILES['q_image']['tmp_name'], $img_location.$question_image)) {
+			if(!move_uploaded_file($_FILES['q_image']['tmp_name'], '../../material/img/'.$question_image)) {
 				die("Изображение не было загружено на сервер!");
 			}
 		}
@@ -204,13 +223,25 @@
 		}
 		$row = $result->fetch_row()[0];
 		$row = get_first_select_array($conn, "SELECT question_text FROM questions WHERE question_id='$row' and test_id='$test_id'", MYSQLI_ASSOC);
-		if(!$row || $row['question_text'] != $question_text) {
-				$result = $conn->prepare("INSERT INTO questions(question_text, question_image, test_id) VALUES(?,?,?)");
-				$result->bind_param('ssi', $question_text, $question_image, $test_id);
-				$result->execute();
+		if(!$row || $row['question_text'] != $question_text || $mode == 'e') {
+				if($mode == 'a') {
+					$result = $conn->prepare("INSERT INTO questions(question_text, question_image, test_id) VALUES(?,?,?)");
+					$result->bind_param('ssi', $question_text, $question_image, $test_id);
+					$result->execute();
+				} else {
+					$question_id = fix_string($conn, $_POST['question_id']);
+					if($question_image) {
+						get_first_query_result($conn, "UPDATE questions SET question_text='$question_text', question_image='$question_image' WHERE question_id='$question_id'");
+					} else {
+						if(!isset($_POST['ignore_q_image'])) {
+							get_first_query_result($conn, "UPDATE questions SET question_text='$question_text' WHERE question_id='$question_id'");
+						} else {
+							get_first_query_result($conn, "UPDATE questions SET question_text='$question_text', question_image='' WHERE question_id='$question_id'"); 
+						}
+					}
+				}
 			}
-		
-		
+
 		$result = get_first_query_result($conn, "SELECT question_id FROM questions WHERE test_id='$test_id'");
 		$row_number = $result->num_rows;
 		$result->data_seek($row_number-1);
@@ -239,7 +270,44 @@
 				$result->bind_param('siii', $answer_text, $index, $is_right_answer, $question_id);
 				$result->execute();  
 			}
+		} elseif($row[0] && $mode == 'e') {
+			foreach($rights as $index => $mode) {
+				$is_right_answer = 0;
+				if($mode == 1 || $mode == 3) {
+					$is_right_answer = 1;
+				}
+				if($mode == 0 || $mode == 1) {
+					$answer_text = fix_string($conn, $_POST['ans_'.$index]);
+				} elseif($mode == 2 || $mode == 3) {
+					$answer_text = analize_file($_FILES['img_ans_'.$index]['type'], 'answer', $test_id.$question_id, $index);
+					if(!move_uploaded_file($_FILES['img_ans_'.$index]['tmp_name'], $img_location.$answer_text)) die("Не удалось загрузить файл на сервер!");  
+				}
+				if((!$_POST['ans_'.$index] && !$_FILES['img_ans_'.$index]['name']) || ($_FILES['img_ans_'.$index]['type'] && isset($_POST['ignore_img_'.$index]) && !$_POST['ans_'.$index])) {
+					continue;
+				}
+				get_first_query_result($conn, "UPDATE answers SET answer_text='$answer_text', answer_order_id='$index', is_right_answer='$is_right_answer' WHERE question_id='$question_id'");
+			}
 		}
+	}	
+
+	require_once '../db_data.php';
+	require_once 'data_analizer.php';
+	$conn = get_connection_object('editor');
+	
+	if(isset($_POST['add_question'])) {
+		show_question_editor($conn, 'a');
+	}
+	
+	if(isset($_POST['force_add_question'])) {
+		edit_question($conn, 'a');
+	}
+
+	if(isset($_POST['edit_question'])) {
+		show_question_editor($conn, 'e');	
+	}
+
+	if(isset($_POST['force_edit_question'])) {
+		edit_question($conn, 'e');
 	}
 
 	if(isset($_POST['topic_selection'])) {
@@ -274,6 +342,17 @@
 
 	if(isset($_POST['delete_test'])) {
 		delete_material($conn, 'test', 'Тест');
+	}
+
+	if(isset($_POST['delete_question'])) {
+		delete_material($conn, 'question', 'Вопрос'); 
+	}
+
+	if(isset($_POST['force_delete_question'])) {
+		check_admin($conn, fix_string($conn, $_POST['pass']));
+		$question_id = fix_string($conn, $_POST['del_question_id']);
+		get_first_query_result($conn, "DELETE FROM answers WHERE question_id='$question_id'");
+		get_first_query_result($conn, "DELETE FROM questions WHERE question_id='$question_id'");
 	}	
 
 	if(isset($_POST['force_delete_test'])) {

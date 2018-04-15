@@ -180,7 +180,7 @@ function show_question($conn, $test_id, $done_index) {
 	</div>";
 	if($row[1]) {
 		echo "<div class='question_image'>
-			<img src='$img_location$row[1]' alt='$row[1]'>
+			<img src='../../material/img/$row[1]' alt='$row[1]'>
 		</div>";
 	}
 	$result = get_first_query_result($conn, "SELECT answer_text, answer_order_id, is_right_answer FROM answers WHERE question_id='$row[2]'");
