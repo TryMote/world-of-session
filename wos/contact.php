@@ -9,14 +9,41 @@
 	<header>
 		<?php require_once "menu.php" ?>
 	</header>
-	<div class="recovery">
-	    <form action="scripts/signin.html" method="post">
+	<div class="contact center-block-main ">
+	<article>
+    	<a href="/"><img src="assets/img/birds.png" alt="" class="birds"></a>
+    	<h1>Свяжись с нами</h1>
+        <h5>Cообщи о проблеме</h5>
+        <h5>Задай свой вопрос</h5>	
+        <h5>Подкинь свои идеи</h5>
+    </article>
+  </div>
+</div>
+
+	
+  </div>
+</div>
+<div class="sent">
+<div class="recovery center-block-main">
+	<article>
+    	<h2>Контакты</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dictum lectus sit amet varius pulvinar. Proin vitae 
+dui tincidunt nibh facilisis pellentesque.  Fusce tortor turpis, facilisis ut condimentum eu, sagittis at est.</p>
+</article>
+	        <form action="scripts/signin.html" method="post">
 			<legend>Задайте свои вопросы</legend>
 			<input type="text" name="тфьу" placeholder="Введите свое имя" required><br/>
-        	<input type="email" name="Email" placeholder="Введите свое  почту" required><br/>
-        	<textarea name="mesage" rows="4" cols="55" wrap="virtual"> Текст по умолчанию </textarea> 
+       <input type="email" name="Email" placeholder="Введите свое  почту" required><br/>
+         <textarea name="mesage" rows="4" cols="55" wrap="virtual"> Текст по умолчанию </textarea> <br>
+		  <label for='uploaded_file'>Выберите файл для загрузки :</label>
+  <input type="file" name="uploaded_file" id="uploaded_file" ><br>
+  
+  <input type="submit" value="Отправить" name='submit'>
 		</form>
-	</div>
+
+	</div>		
+    </div>
+
 	<footer>
 		<?php include_once "footer.php" ?>
 	</footer>		

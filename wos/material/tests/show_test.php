@@ -1,25 +1,29 @@
 <?php
 
-function show_test($test_id) {
-	session_start();
-	if(!isset($_SESSION['test_id'])) {
+function show_test($test_id, $topic_name) {
+	$conn = get_connection_object('tests');
+	$test_link = get_first_select_array($conn, "SELECT test_link FROM tests WHERE test_id='$test_id'", MYSQLI_NUM)[0];
+	if(!strpos($_SERVER['HTTP_REFERER'], $test_link)) {
 		require_once 'test_session.php';
 		start_test($test_id);
+	} else {
+		session_start();
 	}
-	$conn = get_connection_object('tests');
 	$done_index = $_SESSION['done_index'];
 	$health = $_SESSION['health'];
 	$coins = $_SESSION['coins'];
-	$test_link = get_first_select_array($conn, "SELECT test_link FROM tests WHERE test_id='$test_id'", MYSQLI_NUM)[0];
 	$question_id = get_select_array($conn, "SELECT question_id FROM questions WHERE test_id='$test_id'", $done_index, MYSQLI_NUM)[0];
 	if(isset($_POST['next_q_'.$done_index])) {
 		if(check_answer($conn, $question_id)) {
 			$done_index++;
 			$coins++;
+			show_boss($conn, $test_id, $topic_name, 'topic_fail');
 		} else {
 			$health--;
-			show_boss_attack($conn, $test_id);
+			show_boss($conn, $test_id, $topic_name, 'topic_attack');
 		}
+	} else {
+		show_boss($conn, $test_id, $topic_name, 'topic_image');
 	}
 
 	if(isset($_POST['buy_health'])) {
@@ -51,7 +55,6 @@ function show_test($test_id) {
 		stop_test();
 		die("END"); 
 	} else {
-		show_boss($conn, $test_id, $done_index-1);
 		show_result($conn, $row_number, $done_index, $health, $coins);
 		show_store($test_link);
 		echo "<form action='$test_link' method='POST'>";
@@ -61,49 +64,40 @@ function show_test($test_id) {
 	$conn->close();	
 }
 
-function show_boss_attack($conn, $test_id) {
-	require_once '../../scripts/editor/data_analizer.php';
-	$boss_attack = get_first_select_array($conn, "SELECT topic_attack FROM topics WHERE test_id='$test_id'", MYSQLI_NUM)[0];
-	$boss_name = get_first_select_array($conn, "SELECT topic_name FROM topics WHERE test_id='$test_id'", MYSQLI_NUM)[0];
-	echo "<div class='boss_image_attack'>";
-	if($boss_attack != 'default') {
-		echo "<img src='$topic_img_location$boss_attack'>";
+function show_boss($conn, $test_id, $boss_name, $mode) {
+	$DEFAULT_PHRASE = array("скучает, ожидая твой ход!", "зачем-то ожидает твой ход...", "готовиться к атаке!", "уже на готове! Твой ход!", "атакует задачей!");
+	$ATTACK_PHRASE = array("знатно наподдал тебе этим вопросом!");
+	$FAIL_PHRASE = array("переживает твое точное попадание!");
+	$rand_d_phrase = rand(0, count($DEFAULT_PHRASE)-1);
+	$rand_a_phrase = rand(0, count($ATTACK_PHRASE)-1);
+	$rand_f_phrase = rand(0, count($FAIL_PHRASE)-1);
+	$boss_image = get_first_select_array($conn, "SELECT $mode FROM topics WHERE test_id='$test_id'", MYSQLI_NUM)[0];
+	if($boss_image == 'default') {
+		switch($mode) {
+			case 'topic_image':
+				$boss_image = "<p>$boss_name ".$DEFAULT_PHRASE[$rand_d_phrase]."</p>";
+				break;
+			case 'topic_attack':
+				$boss_image = "<p>$boss_name ".$ATTACK_PHRASE[$rand_a_phrase]."</p>";
+				break;
+			case 'topic_fail':
+				$boss_image = "<p>$boss_name ".$FAIL_PHRASE[$rand_f_phrase]."</p>";
+				break; 
+		}
 	} else {
-		echo "<p>$boss_name атакует!</p>";
+		require_once '../../scripts/editor/data_analizer.php';
+		$boss_image = "<img width='500px' height='300px' src='$topic_img_location$boss_image'>";
 	}
-	echo "</div>";
-}
-
-function show_boss($conn, $test_id, $last_index) {
-	require_once '../../scripts/editor/data_analizer.php';
-	$boss_name = get_first_select_array($conn, "SELECT topic_name FROM topics WHERE test_id='$test_id'", MYSQLI_NUM)[0];
-	if(!isset($_POST['next_q_'.$last_index])) {
-		echo "<div class='boss_images'>";
-		$boss_image = get_first_select_array($conn, "SELECT topic_image FROM topics WHERE test_id='$test_id'", MYSQLI_NUM)[0];
-		if($boss_image != 'default') {
-			echo "<img width='500px' height='300px' src='$topic_img_location$boss_image'>";
-		} else {
-			echo "<p>$boss_name приготовился к вашей атаке!</p>";
-		}	
-		echo "</div>";
-	}	
-}
+	echo $boss_image;
+}	
 
 function show_store($test_link) {
 	echo "<div class='test-store'>
 		<form action='$test_link' method='POST'>
-			<input type='submit' name='buy_health' value='' 
-				style=' background-image:url(idea_plus.png); 
-					height:60px; 
-					width:54px;
-					background-repeat:no-repeat;'>
+			<input type='submit' name='buy_health' value=''>
 			
-			<input type='submit' name='buy_pass' value='' 
-				style=' background-image:url(buy_pass.png); 
-					height:60px; 
-					width:54px;
-					background-repeat:no-repeat;'>
-
+			<input type='submit' name='buy_pass' value=''> 
+				
 		</form>
 	</div>";
 }

@@ -49,12 +49,11 @@
 					$text .= $line[$i];
 				}
 			}
-			if($line[$i] == "<div id='lection_content'>") {
+			if($line[$i] == "<div class='lection_content'>") {
 				$flag = true;
 			}
 		}
 		$text = get_clear_content($text);
-		
 		echo "<fieldset>
 		<h2>$topic_name</h2>
 		<h3>$lection_name</h3>";
@@ -83,7 +82,7 @@
 		<input type='file' name='txt'><input type='checkbox' name='ignore_txt'> - игнорировать файл<br>
 		<p>После выбора txt файла нажмите \"Сохранить\"
 		<br><hr><br>";
-		echo "<br><input type='submit' name='show_page' value='Перейти на страницу лекции'><br>";
+		echo "<br><a href='$location$filename'>Страница лекции</a><br>";
 		selection_form();
 		echo "<br><input type='submit' name='save' value='Сохранить'><br>
 		<br><hr><br>
@@ -135,10 +134,6 @@
 		}	
 	}
 
-	if(isset($_POST['show_page'])) {
-		save_page($conn, $lections_location);
-		header("Location: ".$lections_location.fix_string($conn, $_POST['filename']));
-	}
 
 	if(isset($_POST['select_lection']) || isset($_POST['lection_selection'])) { 
 		$lection_id = fix_string($conn, trim($_POST['lection_selection'])); 

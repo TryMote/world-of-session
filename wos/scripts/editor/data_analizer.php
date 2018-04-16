@@ -69,27 +69,28 @@
 <header>
 <?php include_once '../../menu.php' ?>
 </header>
-<div id='test_page'>
-<div id='lections_list'>
+<div class='lections_list'>
 <?php include_once '../lections_list.php'; 
 show_list('$topic_name');
 ?>
 </div>
-<div id='main_headers'>
+<section class='block4-section center-block-main'>
+<div class='test_page'>
+<div class='main_headers'>
 <h1>$topic_name</h1>
-<h2>Тест</h2>
 </div>
-<div id='test_content'>
+<div class='test_content'>
 <?php 
 include_once 'show_test.php';
-show_test('$test_id');
+show_test('$test_id', '$topic_name');
 ?>
 </div>
-<div class='navigator'>
+</div>
+</section>
+<div class='lection_controller'>
 <?php include_once 'test_navigator.php';
 show_navigator('$topic_name');
 ?>
-</div>
 </div>
 <footer>
 <?php include_once '../../footer.php' ?>
@@ -112,22 +113,24 @@ show_navigator('$topic_name');
 <header>
 <?php include_once '../../menu.php' ?>
 </header>
-<div id='lection_page'>
-<div id='lections_list'>
+<div class='lections_list'>
 <?php include_once '../lections_list.php'; 
 show_list('$topic_name');
 ?>
 </div>
-<div id='main_headers'>
+<div class='lection_page'>
+<section class='block4-section center-block-main'>
+<div class='main_headers'>
 <h1>$topic_name</h1>
-<h2>$lection_name</h2>
+<h1>$lection_name</h1>
 </div>
-<div id='lection_content'>
+<div class='lection_content'>
 $content
 </div>
-<div id='lection_test'>
+</section>
+<div class='lection_test'>
 </div>
-<div id='lection_controller'>
+<div class='lection_controller'>
 <?php include_once 'lection_navigator.php';
 show_navigator('$lection_name');
 ?>

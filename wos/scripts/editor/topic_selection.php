@@ -101,8 +101,6 @@
 		$conn->close();
 		if(!$result->affected_rows) {
 			die($conn->connect_error);
-		} else {
-			header("Location: succes.php");
 		}
 		$result->close();
 	} elseif(isset($_POST['force_edit_topic'])) {

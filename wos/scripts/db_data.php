@@ -10,6 +10,8 @@
 			case 'material':
 			$location = '../../scripts/';
 			break;
+			default:
+			$location = 'scripts/';
 		}
 		$data = file_get_contents($location.'.dt');
 		$data = explode('|', $data);
@@ -33,7 +35,7 @@
 	function get_connection_object($place) {
 		$data = get_db_data($place);
 		$conn = new mysqli($data[0], $data[1], $data[2], $data[3]);
-		if($conn->connect_error) header("Location: http://localhost/wos/connect_error.php");
+		if($conn->connect_error) die("Произошла ошибка подключения. Попробуйте обновить страницу.");
 		$conn->query("SET NAMES 'utf8'");
 		return $conn;
 	}
@@ -59,7 +61,7 @@
 
 	function get_query_result($conn, $query, $row_index) {
 		$result = $conn->query($query);
-		if(!$result) header("Location: http://localhost/wos/connect_error.php");
+		if(!$result) die("Произошла непредвиденная ошибка. Попробуйте перезагрузить страницу.");
 		if($row_index != 0) $result->data_seek($row_index);
 		return $result;
 	}
