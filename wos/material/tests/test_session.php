@@ -7,7 +7,7 @@
 	}
 
 	function stop_test() {
-		session_unset();
+		$_SESSION = array();
 		session_destroy();
 	}
 ?>

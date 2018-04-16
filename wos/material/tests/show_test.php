@@ -1,14 +1,13 @@
 <?php
 
 function show_test($test_id, $topic_name) {
-	$conn = get_connection_object('tests');
-	$test_link = get_first_select_array($conn, "SELECT test_link FROM tests WHERE test_id='$test_id'", MYSQLI_NUM)[0];
-	if(!strpos($_SERVER['HTTP_REFERER'], $test_link)) {
+	if(!isset($_SESSION['test_id'])) {
 		require_once 'test_session.php';
 		start_test($test_id);
-	} else {
-		session_start();
 	}
+	$conn = get_connection_object('tests');
+	$test_link = get_first_select_array($conn, "SELECT test_link FROM tests WHERE test_id='$test_id'", MYSQLI_NUM)[0];
+	
 	$done_index = $_SESSION['done_index'];
 	$health = $_SESSION['health'];
 	$coins = $_SESSION['coins'];
