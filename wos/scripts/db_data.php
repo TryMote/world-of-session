@@ -10,6 +10,9 @@
 			case 'material':
 			$location = '../../scripts/';
 			break;
+			case 'scripts':
+			$location = '';
+			break;
 			default:
 			$location = 'scripts/';
 		}

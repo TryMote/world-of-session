@@ -22,55 +22,10 @@
 <section class="block4-section center-block-main">
     <h2>ВЫБЕРИ ТЕСТ ПО НУЖНОЙ ТЕМЕ</h2>
     <div class="block4-main ">
-    	<article>
-        	<img src="images/img44.jpg" alt="">
-            <div class="block4-main-content">
-            	<h2>Производная</h2>
-                <h4></h4>
-                <p></p>
-
-				<p class="price-basket ">
-            <span class="basket-btn"><a href="#"><img src="assets/img/ico-plus.jpg" alt=""></a></span>
-                </p>
-            </div>
-        </article>
-        <article>
-        	<img src="images/img44.jpg" alt="">
-            <div class="block4-main-content">
-            	<h2>Пределы</h2>
-                <h3></h3>
-                <p></p>
-
-				<p class="price-basket ">
-            <span class="basket-btn"><a href="#"><img src="assets/img/ico-plus.jpg" alt=""></a></span>
-                </p>
-            </div>
-        </article>
-
-				<article>
-        	<img src="images/img44.jpg" alt="">
-            <div class="block4-main-content">
-            	<h2>Интиеграл</h2>
-                <h3></h3>
-                <p></p>
-
-				<p class="price-basket ">
-            <span class="basket-btn"><a href="#"><img src="assets/img/ico-plus.jpg" alt=""></a></span>
-                </p>
-            </div>
-        </article>
-         <article>
-        	<img src="images/img44.jpg" alt="">
-            <div class="block4-main-content">
-            	<h2>Интеграл</h2>
-                <h3></h3>
-                <p></p>
-
-				<p class="price-basket ">
-            <span class="basket-btn"><a href="#"><img src="assets/img/ico-plus.jpg" alt=""></a></span>
-                </p>
-            </div>
-        </article>
+    	<?php 
+		require_once 'scripts/selector.php';
+		show_tests_selector('p');
+	?> 
     </div>
 </section>
 
