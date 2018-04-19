@@ -13,45 +13,32 @@
 <footer class="ftr">
 	<div class="block4-main center-block-main clearfix">
     	<article>
-        	<h2>Our Stores</h2>
+        	<h2>Разработчики</h2>
             <div class="ftr-block-content">
-            	<p>Feel free to visit our stores or contact us.
-                1401 South Grand Avenue 
-                Los Angeles, CA 90015 
-                (213) 748-2411</p>
-                
-                <p>100 Fairview Drive 
-                Franklin, VA 23851 
-                (757) 569-6100 </p>
+		<p class='support'>
+            	<a>Телеграмм</a>
+		<a>ВКонтакте</a>
+                </p>
             </div>
         </article>
         <article>
-        	<h2>Blog posts</h2>
-            <div class="ftr-block-content">
-            	<h3><a href="#">Justin Bieber confirmed that he is gay.</a></h3>
-                <p>Lorem ipsum dolor sit amet, consectetur
-adipiscing elit. Donec sed auctor elit.</p>
-				
-                <h3><a href="#">Justin Bieber confirmed that he is gay.</a></h3>
-                <p>Lorem ipsum dolor sit amet, consectetur
-adipiscing elit. Donec sed auctor elit.</p>
+        	<h2>FAQ</h2>    
+		<div class="ftr-block-content">
+		<p class='support'>
+		
+		</p>
             </div>
         </article>
         <article>
-        	<h2>Support</h2>
+        	<h2>Навигация</h2>
             <div class="ftr-block-content">
             	<p class="support">
-                    <a href="#">Terms & Conditions</a>
-                    <a href="#">FAQ</a>
-                    <a href="#">Payment</a>
-                    <a href="#">Refunds</a>
-                    <a href="#">Track Order</a>
+		    <a href="http://localhost/wos/">Главная</a>	
+                    <a href="http://localhost/wos/lections.php">Лекции</a>
 				</p>
                 <p class="support">
-                    <a href="#">Services</a>
-                    <a href="#">Privacy & Security</a>
-                    <a href="#">Careers</a>
-                    <a href="#">Press</a>
+                    <a href="http://localhost/wos/practice.php">Практика</a>
+                    <a href="http://localhost/wos/contact.php">Контакты</a>
                 </p>
             </div>
         </article>

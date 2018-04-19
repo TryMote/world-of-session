@@ -32,7 +32,7 @@
 </div>
 </div>
 <section class="block4-section center-block-main">
-    <h2>POPULAR PRODUCTS</h2>
+    <h2>Новинки</h2>
     <div class="block4-main ">
     	<?php 
 		require_once 'scripts/selector.php';
@@ -43,20 +43,12 @@
 
 <div class="about center-block-main ">
 	<article>
-    	<h2>About</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dictum lectus sit amet varius pulvinar. Proin vitae 
-dui tincidunt nibh facilisis pellentesque.  Fusce tortor turpis, facilisis ut condimentum eu, sagittis at est.</p>
-
-<p>Praesent egestas posuere urna a egestas. Maecenas facilisis orci vitae ante  tempor accumsan. Aenean aliquam 
-justo ac sagittis vehicula. Nam mattis pretium odio sit amet vulputate.</p>
-
-<p>Quisque non lobortis orci. Morbi augue mauris, ultrices at fermentum ac, consequat vitae magna. Pellentesque 
-non cursus mi, eu cursus nunc. Nullam  et odio tristique, volutpat urna vitae, dignissim orci. Fusce eu nulla urna.
-This template was created by Erik Padamans.</p>
-
-<p>Praesent egestas posuere urna a egestas. Maecenas facilisis orci vitae ante  tempor accumsan. Aenean aliquam 
-justo ac sagittis vehicula. Nam mattis pretium odio sit amet vulputate.</p>
- 
+    	<h2>О том, что здесь происходит...</h2>
+	<p>Подготовиться к сессии, повторить изученный материал, быть на готове к любому вопросу на экзамене. 
+	Для этого тебе не потребуется терять много драгоценного времени. Необходимый багаж знаний в краткой и понятной форме ждет тебя тут, в мире новых открытий. 
+	<br>Нет, здесь не простые лекции и тесты... Здесь все, что 
+	даст тебе опору для саморазвития. Погрузись в игровой мир знаний, и уровень за уровенем с легкостью переходи все к более сложным темам.</p>
+	
     </article>
   </div>
 </div>

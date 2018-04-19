@@ -19,8 +19,8 @@ function show_topic_selector($mode) {
 				$lection_link = 'http://localhost/wos/material/lections/'.$lection_link;
 			}
 			echo "<article>
-			<img src='http://localhost/wos/material/topic_img/$row[2]' width='250px' height='173px' alt=''>
 			<div class='block4-main-content'>
+			<img src='http://localhost/wos/material/topic_img/$row[2]' width='250px' height='173px' alt=''>
 			<h2>$row[1]</h2>
 			<h4></h4>
 			<p></p>
@@ -52,8 +52,8 @@ function show_tests_selector($mode) {
 				$test_link = 'http://localhost/wos/material/tests/'.$row[1];
 			}
 			echo "<article>
-			<img src='http://localhost/wos/material/topic_img/$topic_row[1]' width='250px' height='173px' alt=''>
 			<div class='block4-main-content'>
+			<img src='http://localhost/wos/material/topic_img/$topic_row[1]' width='250px' height='173px' alt=''>
 			<h2>$topic_row[0]</h2>
 			<h4></h4>
 			<p></p>

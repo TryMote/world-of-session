@@ -173,7 +173,7 @@ article p {
 		font-size:0.875em;
 	}
 .block4-section {
-	margin-bottom:60px;
+	margin-bottom:40px;
 }
 	.block4-section h2{
 		text-align:center; color:#000; font-size:1.375em; margin-bottom:30px;
@@ -254,7 +254,7 @@ article p {
 		}
 		.block4-main-content{
 			overflow: hidden;
-			padding:20px 20px 0 20px; border:1px solid #eee; border-top:0;
+			border:1px solid #eee; border-top:0;
 		}
 		.block4-main-content h2{
 			color:#67686d; font-size:1.125em; text-transform:uppercase; margin-bottom:5px;
@@ -270,7 +270,7 @@ article p {
 		}
 		p.price-basket 	{
 			overflow: hidden;
-			border-top:1px solid #eee; font-size:0.875em; color:#f45a40; padding:15px 0; margin-bottom:0;
+			border-top:1px solid #eee; font-size:0.875em; color:#f45a40; padding:15px 15px; margin-bottom:0;
 		}
 		
 		.basket-btn{
@@ -283,7 +283,7 @@ article p {
 	overflow: hidden;
 }
 	.about article{
-		float:left; width:60%;
+		float:left; width:80%;
 	}
 	.about article h2{
 		font-size:1.325em; font-weight:bold; margin-bottom:30px; color:#67686d;
@@ -364,9 +364,6 @@ footer {
 }
 .practic a img{
 	float:right;
-}
-.practic h1{
-padding-top:20px;
 }
 .block5-section{
 	padding-top:50px; 
