@@ -261,7 +261,7 @@
 					$answer_text = fix_string($conn, $_POST['ans_'.$index]);
 				} elseif($mode == 2 || $mode == 3) {
 					$answer_text = analize_file($_FILES['img_ans_'.$index]['type'], 'answer', $test_id.$question_id, $index);
-					if(!move_uploaded_file($_FILES['img_ans_'.$index]['tmp_name'], $img_location.$answer_text)) die("Не удалось загрузить файл на сервер!");  
+					if(!move_uploaded_file($_FILES['img_ans_'.$index]['tmp_name'], '../../material/img/'.$answer_text)) die("Не удалось загрузить файл на сервер!");  
 				}
 				if((!$_POST['ans_'.$index] && !$_FILES['img_ans_'.$index]['name']) || ($_FILES['img_ans_'.$index]['type'] && isset($_POST['ignore_img_'.$index]) && !$_POST['ans_'.$index])) {
 					continue;

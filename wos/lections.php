@@ -12,7 +12,7 @@
 
 <div class="practic center-block-main ">
 	<article>
-    	<a href="/"><img src="assets/img/practic.png" alt="" class="practic"></a>
+    	<a href="/"><img width='100px' height='100px' src="assets/img/strong-girl.png" alt="" class="practic"></a>
     	<h1>Учи и изучай</h1>
         <h5>Тренируйся перед экзаменами</h5>
         <h5>Закрипляй свои знания</h5>	

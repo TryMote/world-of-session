@@ -13,12 +13,13 @@
 <footer class="ftr">
 	<div class="block4-main center-block-main clearfix">
     	<article>
-        	<h2>Разработчики</h2>
+        	<h2>Социальные сети</h2>
             <div class="ftr-block-content">
-		<p class='support'>
-            	<a>Телеграмм</a>
-		<a>ВКонтакте</a>
-                </p>
+		<div class='social'>
+            	<a href='https://t.me/KirillTry'><img width='34px' height='34px' src='http://localhost/wos/assets/img/telegramm.png'></a>
+		<a href='https://vk.com/gklutej'><img width='32px' height='32px' src='http://localhost/wos/assets/img/vk.png'></a>
+            	<a href='https://trymote@mail.ru'><img width='29px' height='29px' src='http://localhost/wos/assets/img/mail.png'></a>
+                </div>
             </div>
         </article>
         <article>
@@ -43,7 +44,7 @@
             </div>
         </article>
         <article>
-        	<h2>Contact us</h2>
+        	<h2>Связь</h2>
             <div class="ftr-block-content">
             	<form>
                 	<input class="ftrmail" type="email" placeholder="your e-mail...">
