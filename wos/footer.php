@@ -46,11 +46,7 @@
         <article>
         	<h2>Связь</h2>
             <div class="ftr-block-content">
-            	<form>
-                	<input class="ftrmail" type="email" placeholder="your e-mail...">
-                    <textarea class="ftrtext" placeholder="your text..."></textarea>
-                    <input class="ftrsubmit" type="submit" value="Send MESSAGE">
-                </form>
+		<?php include_once 'send_message_button.php' ?>            
             </div>
         </article>
     </div>
