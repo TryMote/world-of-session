@@ -56,10 +56,9 @@
     <div class="form">
         <h2>Оправить сообщение</h2>
  <form action="index.html" name="f1">
-            <input type="text" placeholder="Логин" name="name1" class="input">
-            <input type="text" placeholder="Пароль" name="name2" class="input">
+            <input type="email" placeholder="Почта" name="name1" class="input">
+            <textarea placeholder="Сообщение" name="name2" class="input">
               <input type="submit" value="Потвердить" name="sab" class="input"> 
-
         </form>
     </div>
 </div>
