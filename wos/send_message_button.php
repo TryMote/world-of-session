@@ -8,22 +8,34 @@
             background:grey ;
         }
 
+	
+
         #window {
-            width: 500px;
-            height: 200px;
+            width: 800px;
+            height: 400px;
             margin: 40px auto;
-            background: black;
-            border: 1px solid gold;
+            background: #2a2d34;
+            border: 1px solid white;
             border-radius: 20px;
             z-index: 150; display: none;
              position: fixed; left: 0;right: 0;top:0;bottom: 0;
 
         } 
         .form{
-            width: 275px; margin: -15px auto 20px auto; text-align:center;
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+		margin: auto;
+            width: 275px; text-align:center;
         } 
+
+	.form textarea {
+		
+		height: 200px;
+	}
+
         .input{
-             width: 260px;
+             width: 560px;
              padding: 5px;
              margin-bottom: 10px;
              border-radius: 5px; } 
@@ -33,7 +45,8 @@
              .close{
 
                 cursor: pointer;border: 1px solid white; padding: 3px; background:white;} .close:hover{
-                background: black;} 
+                background: black;
+		} 
         #gray{
             opacity: 0.8; 
             padding: 15px;
@@ -52,12 +65,11 @@
     <div onclick="show('none')" id="gray"></div>
 <div id="window">
     <!-- Картинка крестика -->
-    <img class="close" src="i/close.png" alt=""  onclick="show('none')">
     <div class="form">
-        <h2>Оправить сообщение</h2>
- <form action="index.html" name="f1">
+        <h2>Отправить сообщение</h2>
+ <form action="index.php" name="f1">
             <input type="email" placeholder="Почта" name="name1" class="input">
-            <textarea placeholder="Сообщение" name="name2" class="input">
+            <textarea placeholder="Сообщение" name="name2" class="input"></textarea>
               <input type="submit" value="Потвердить" name="sab" class="input"> 
         </form>
     </div>
