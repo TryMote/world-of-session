@@ -12,6 +12,7 @@
 	</style>
 </head>
 <body>
+	<?php session_start(); ?>
 	<?php include_once '../../menu.php' ?>
 	<h2>Редактор материала сайта вас приветствует!</h2>
 	<ul>
@@ -24,17 +25,24 @@
 	<?php	
 		require_once '../db_data.php';
 		require_once 'data_analizer.php';
+		require_once '../session_starter.php';
 		include_once "subject_selection.php";
 		$conn = get_connection_object('editor');	
-		subject_page_work($conn);
+		start_editor_session();
+
+		if($_SESSION['in'] == 1) {
+			subject_page_work($conn);
+		}
 		
 		
 		if(isset($_POST['select_subject']) && isset($_POST['subject_selection'])) {
-			generate_block($conn, 'topic', 'subject',fix_string($conn, $_POST['subject_selection']), 'предмет');
+			$_SESSION['subject_selection'] = fix_string($conn, $_POST['subject_selection']);
+			generate_block($conn, 'topic', 'subject', $_SESSION['subject_selection'], 'предмет');
 		}
 
 		if(isset($_POST['select_topic']) && $_POST['topic_selection']) {
-			generate_block($conn, 'lection',  'topic', fix_string($conn, $_POST['topic_selection']), 'тема');
+			$_SESSION['topic_selection'] = fix_string($conn, $_POST['topic_selection']);
+			generate_block($conn, 'lection',  'topic', $_SESSION['topic_selection'], 'тема');
 		}
 
 	

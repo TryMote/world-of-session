@@ -129,6 +129,7 @@ CREATE TABLE `sign_in` (
 
 LOCK TABLES `sign_in` WRITE;
 /*!40000 ALTER TABLE `sign_in` DISABLE KEYS */;
+INSERT INTO `sign_in` VALUES (1,'trymote@mail.ru','trymote','3eHNXeMwobaN2',1);
 /*!40000 ALTER TABLE `sign_in` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -301,6 +302,7 @@ CREATE TABLE `user_primary_data` (
 
 LOCK TABLES `user_primary_data` WRITE;
 /*!40000 ALTER TABLE `user_primary_data` DISABLE KEYS */;
+INSERT INTO `user_primary_data` VALUES (1,'Мир','Сессий',1);
 /*!40000 ALTER TABLE `user_primary_data` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -334,6 +336,7 @@ CREATE TABLE `user_second_data` (
 
 LOCK TABLES `user_second_data` WRITE;
 /*!40000 ALTER TABLE `user_second_data` DISABLE KEYS */;
+INSERT INTO `user_second_data` VALUES (1,'default.png',999999,99,'','2018-04-27 22:49:49');
 /*!40000 ALTER TABLE `user_second_data` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -376,4 +379,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-20  4:10:47
+-- Dump completed on 2018-04-27 22:51:18

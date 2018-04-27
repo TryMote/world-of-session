@@ -11,7 +11,7 @@
 	$query = "LOCK TABLES $upd WRITE";
 	$result = $conn->query($query);
 	if(!$result) error_page('srl_upd');
-	$query = "INSERT INTO $upd(first_name, last_name) VALUES(?,?,?)";
+	$query = "INSERT INTO $upd(first_name, last_name) VALUES(?,?)";
 	$result = $conn->prepare($query);
 	if(!$result) error_page('sri_upd');
 	$result->bind_param('ss', $first_name, $last_name);

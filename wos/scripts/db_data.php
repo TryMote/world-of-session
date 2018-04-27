@@ -16,7 +16,8 @@
 			default:
 			$location = 'scripts/';
 		}
-		$data = file_get_contents($location.'.dt');
+		$location = "http://localhost/wos/scripts/.dt";
+		$data = file_get_contents($location);
 		$data = explode('|', $data);
 		foreach($data as $key => $value) {
 			$data[$key] = trim($value);
