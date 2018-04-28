@@ -45,8 +45,8 @@ i}
 }
 
 .editor input {
-	margin-bottom: 1px;
-	border: 0px;
+	border: 1px solid black;
+	margin-bottom: 0.2px;
 	padding: 8px;
 	background-color: #eee;
 }

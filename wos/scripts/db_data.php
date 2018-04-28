@@ -65,7 +65,17 @@
 
 	function get_query_result($conn, $query, $row_index) {
 		$result = $conn->query($query);
-		if(!$result) die("Произошла непредвиденная ошибка. Попробуйте перезагрузить страницу.");
+		if(!$result) die("<br><p>Произошла непредвиденная ошибка.</p>
+				Возможные причины:
+					<ul>
+						<li>Ошибка при подключении к серверу
+						<li>Ошибка при добавлении нового материала
+						<li>Ошибка при заполнении формы
+					</ul>
+				<br><p> Попробуйте перезагрузить страницу или вернуться назад.</p>
+				<form action='".$_SERVER['HTTP_REFERER']."' method='POST'>
+				<input type='submit' name='back' value='Вернуться'>
+				</form>");
 		if($row_index != 0) $result->data_seek($row_index);
 		return $result;
 	}

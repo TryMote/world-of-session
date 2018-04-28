@@ -3,31 +3,27 @@
 <head>
 	<title>Lection editor 1.0</title>
 	<meta charset='utf8'>
-	<link rel='stylesheet' href='../../assets/css/styles.css'>
-	<style>
-		li {
-			font-size:18pt;
-			font-family: 'Times New Roman', sans-serif;
-		}
-	</style>
+	<link rel='stylesheet' href='http://localhost/wos/assets/css/styles.css'>
 </head>
 <body>
 	<?php session_start(); ?>
 	<?php include_once '../../menu.php' ?>
-	<h2>Редактор материала сайта вас приветствует!</h2>
+<div class='center-block-main editor'>
+	<h2>Редактор материала</h2>
 	<ul>
 		<li>Последовательно выберите предмет, тему, а затем лекцию для перехода на страницу ее редактирования
 		<li>При нажатии кнопки "Изменить" вы сможете поменять название материала или загрузить новое изображение для него
 		<li>Для удаления материала, вам нужно будет ввести специальный ключ или отправить по электронной почте соответствующий запрос
 		<li>Для отмены выбора нажмите кнопку "Отменить"
 	</ul>
-<fieldset>
 	<?php	
 		require_once '../db_data.php';
 		require_once 'data_analizer.php';
 		require_once '../session_starter.php';
-		include_once "subject_selection.php";
+		include_once 'subject_selection.php';
 		include_once 'topic_selection.php';
+		include_once 'lection_selection.php';
+		include_once 'formatter.php';
 		$conn = get_connection_object('editor');	
 		start_editor_session();
 
@@ -44,6 +40,10 @@
 
 		if(isset($_POST['lection_selection'])) {
 			$_SESSION['lection_id'] = fix_string($conn, $_POST['lection_selection']);
+		}
+
+		if(isset($_POST['select_lection'])) {
+			open_formatter($conn, $lections_location);	
 		}	
 
 		if(isset($_POST['create_subject'])) {
@@ -71,7 +71,7 @@
 		}
 
 		if(isset($_POST['create_lection'])) {
-			new_topic();
+			new_lection();
 		}
 
 		if(isset($_POST['insert_lection'])) {
@@ -138,7 +138,7 @@
 			generate_block($conn, 'lection',  'topic', $_SESSION['topic_id'], 'тема');
 		}
 
-		echo "<br><input type='submit' value='Отменить'></form>";
+		echo "<br><input class='cancel' type='submit' value='Отменить'></form>";
 		$conn->close();
 
 	function generate_block($conn, $item, $pre_block_name, $pre_select_id, $pre_block_text_type) {
@@ -148,8 +148,7 @@
 		$_SESSION[$pre_block_name] = $pre_select_name; 	
 		echo "<hr>
 		<p>Выбран(-a) $pre_block_text_type</p> <h3><b>'$pre_select_name'</b></h3>
-		<hr>
-		<fieldset>";	
+		<hr>";
 		$result = get_first_query_result($conn, "SELECT * FROM $item"."s WHERE $pre_block_name"."_id='$pre_select_id'");
 		$row = $result->fetch_array(MYSQLI_ASSOC);
 		if(!$row[$item.'_name'] && !$row[$item.'_id']) {
@@ -179,16 +178,14 @@
 				echo ">".$row[$item.'_name']."</option>";
 			}
 			echo "</select>";
-			if($item == 'lection') {
-				echo "<input type='submit' name='select_$item' formaction='formatter.php' value='Выбрать'><br>";
-			} else {
-				echo "<input type='submit' name='select_$item' value='Выбрать'><br>
-				<input type='submit' name='add_test' value='Добавить/изменить тест' formaction='test_creator.php' style='width:200px;'>";
+			echo "<button type='submit' name='select_$item'></button>";
+			if($item == 'topic') {
+				echo "<br><input type='submit' name='add_test' value='Добавить/изменить тест' formaction='test_creator.php' style='width:200px;'>";
 			}
 			echo "<br><input type='submit' name='delete_$item' value='Удалить' style='width:200px'>
 			<br><input type='submit' name='edit_$item' value='Изменить' style='width:200px'><br>";
 		}
-			echo "<input type='submit' name='create_$item' value='Добавить новую' style='width:200px'></fieldset>";
+			echo "<input type='submit' name='create_$item' value='Добавить новую' style='width:200px'>";
 	}	
 
 
@@ -256,11 +253,11 @@
 		}
 		$item_id = fix_string($conn, trim($_POST[$item.'_selection']));
 		$row = get_first_select_array($conn, "SELECT * FROM $item"."s WHERE $item"."_id='$item_id'", MYSQLI_ASSOC);
-		echo "<p>Изменить $item_type <b>'".$row[$item.'_name']."'</b></p><br>
-		<br><label for='e_$item"."_name'>Новое название:  </label>
-		<input type='text' name='e_$item"."_name' value='".$row[$item.'_name']."'><br>";
+		echo "<p>Изменить $item_type <b>'".$row[$item.'_name']."'</b></p>
+		<br><label for='e_$item"."_name'>Новое название:</label><br>
+		<input type='text' name='e_$item"."_name' value='".$row[$item.'_name']."'>";
 		if($item != 'lection') {
-			echo "<br><label for='e_$item"."_image'>Новое изображение:  </label>
+			echo "<br><br><label for='e_$item"."_image'>Новое изображение:</label><br>
 			<input type='file' name='e_$item"."_image' value='default'><br>";
 		}
 		if($item == 'topic') {
@@ -269,12 +266,11 @@
 			<br><label for='e_fail_image'>Новое изображение повреждения босса:  </label>
 			<input type='file' name='e_fail_image' value='default'><br>";
 		}
-		echo "<br><input type='submit' name='force_edit_$item' value='Принять изменения'><br>
-			<input type='text' name='e_$item"."_id' value='$item_id' style='display:none'";
+		echo "<br><input type='submit' name='force_edit_$item' value='Принять изменения'><br>";
 		}
 
 	?>
-</fieldset>
+</div>
 <?php include_once '../../footer.php' ?>
 </body>
 </html>

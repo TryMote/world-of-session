@@ -17,9 +17,8 @@
 				}
 				echo ">".$row['subject_name']."</option>";
 			}
-			echo "</select>
-			<input type='submit' name='select_subject' value='Выбрать'><br>
-			<br><input type='submit' name='delete_subject' value='Удалить' style='width:200px'>
+			echo "</select><button type='submit' name='select_subject'></button><br>
+			<input type='submit' name='delete_subject' value='Удалить' style='width:200px'>
 			<br><input type='submit' name='edit_subject' value='Изменить' style='width:200px'>";
 		}
 		echo "<br><input type='submit' name='create_subject' value='Добавить новый' style='width:200px'>";
