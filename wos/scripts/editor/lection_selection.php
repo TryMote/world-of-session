@@ -1,31 +1,12 @@
 <?php 
-	if(isset($_POST['create_lection'])) {
-		echo "<!DOCTYPE html>
-		<html>
-		<head>
-			<title>Лекции</title>
-			<meta charset='utf8'>
-		</head>
-		<body>";
-		echo "<h3>".$_POST['chosen_topic_name']."</h3><br>
-		<form action='lection_selection.php' method='POST'>
+	function new_lection() {
+		echo "<h3>".$_SESSION['topic']."</h3><br>
 			<label for='n_lection_name'>Название лекции:</label><br>
 			<input type='text' name='n_lection_name' required><br>
-			<input type='text' name='selected_topic_id' value='".$_POST['chosen_topic_id']."' style='display:none'>
-			<input type='submit' name='insert_lection' value='Добавить лекцию'><br>
-		</form>";
-		echo "<form action='lection_selection.php' method='POST'>
-			<input type='submit' name='cancel_creation' value='Отменить'>
-		</form>";
-		echo "</body></html>";
-	} elseif(isset($_POST['cancel_creation'])) {
-		header("Location: editor.php");
+			<input type='submit' name='insert_lection' value='Добавить лекцию'><br>";
+	}
+	
 	} elseif(isset($_POST['insert_lection'])) {
-		require_once '../db_data.php';
-		$data = get_db_data('editor');
-		$conn = new mysqli($data[0], $data[1], $data[2], $data[3]);
-		if($conn->connect_error) die($conn->connect_error);
-		$conn->query("SET NAMES 'utf8'");
 		$lection_name = fix_string($conn, trim($_POST['n_lection_name']));
 		$selected_topic_id = fix_string($conn, trim($_POST['selected_topic_id']));
 		$query = "SELECT topic_name FROM topics WHERE topic_id='$selected_topic_id'";

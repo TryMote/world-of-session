@@ -157,51 +157,36 @@ show_navigator('$lection_name');
 
 
 	function check_admin($conn, $pass) { 
-		$result = $conn->query("SELECT password FROM sign_in WHERE user_id=1"); 
-		if(!$result) die($conn->connect_error); 
-		$row = $result->fetch_array(MYSQLI_NUM); 
-		if(!hash_equals($row[0], crypt($pass, $row[0]))) { 
-			die("Неверный пароль"); 
+		$db_pass = get_first_select_array($conn, "SELECT password FROM sign_in WHERE user_id=1", MYSQLI_NUM)[0];
+		if(!hash_equals($db_pass, crypt($pass, $db_pass))) { 
+			die("<br><p>Неверный пароль</p>"); 
 		} else { 
 			return true; 
 		} 
 	} 	
 
-       function delete_material($conn, $item, $text_item_type) {
+       function delete_material($conn, $item) {
 		if($item != 'test' && $item != 'question') {
-			if(isset($_POST[$item.'_selection'])) $del_item_id = fix_string($conn, $_POST[$item.'_selection']);
-                	$query = "SELECT $item"."_name FROM $item"."s WHERE $item"."_id='$del_item_id'";
-               	
-			$result = $conn->query($query);
-               		if(!$result) die($conn->connect_error);
-               	 	$item_name = $result->fetch_row()[0];
-                	$result->close();
+			$del_item_id = fix_string($conn, $_SESSION[$item.'_id']);
+                	$item_name = get_first_select_array($conn, "SELECT $item"."_name FROM $item"."s WHERE $item"."_id='$del_item_id'", MYSQLI_NUM)[0];
 		} else {
 			$item_name = '';
-			$del_item_id = $_POST[$item.'_id'];
 		} 
-		if($item != 'test' && $item != 'question') {
-			$action = 'editor.php';
-		} else {
-			$action = 'test_creator.php';
+		if($item == 'test' || $item == 'question') {
+                	echo "<br><form action='test_creator.php' method='POST'>";
 		}
-                echo "<br><form action='$action' method='POST'>
-                        <label style='color:#f00' for='force_delete_$item'>$text_item_type <b> $item_name </b> и весь входящий материал будут безвозвратно удалены!</label><br>
-                        <input type='password' name='pass' placeholder='Ключ' required>
-                        <input type='submit' name='force_delete_$item' value='Удалить'>
-                        <input type='hidden' name='del_$item"."_id' value='$del_item_id'>";
-		if($item == 'question') {
-                 	echo "<input type='hidden' name='topic_selection' value='".fix_string($conn, $_POST['topic_selection'])."'>";       
-		}
-		echo "</form>
-			<p>Если не знаете ключa, вы можете отправить запрос на удаление</p><br>
-                        <form action='editor.php' method='POST'>
+                echo "<br><p style='color:red'><b>'$item_name'</b> и все входящие материалы, будут безвозвратное удалены!</p> 
+			<br><input type='password' name='pass' placeholder='Ключ'>
+                        <input type='submit' name='force_delete_$item' value='Удалить'>";
+	//	if($item == 'question') {
+          //       	echo "<input type='hidden' name='topic_selection' value='".fix_string($conn, $_POST['topic_selection'])."'>";       
+	//	}
+		echo "<br><p>Если не знаете ключa, вы можете отправить запрос на удаление</p><br>
                                 <label for='email'> Ваша электронная почта</label><br>
-                                <input type='email' name='email' required><br>
+                                <input type='email' name='email'><br>
                                 <label for='message'>Причина удаления<label><br>
-                                <textarea name='message' cols='50' rows='10' wrap='hard' required></textarea><br>
-                                <input type='submit' name='send_del_message' value='Отправить запрос'>
-                        </form>";
+                                <textarea name='message' cols='50' rows='10' wrap='hard'></textarea><br>
+                                <input type='submit' name='send_del_message' value='Отправить запрос'>";
         }
 
 ?>
