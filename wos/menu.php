@@ -1,6 +1,9 @@
-<?php if(!session_start()) {
+<?php 
+if(!session_start()) {
 	session_start();
-	$_SESSION = array();
+	if(!isset($_SESSION['user_id'])) {
+		$_SESSION = array();
+	}
 	setcookie(session_name(), '', time() - 2592000, '/');
 	session_destroy();
 	session_start();
@@ -8,6 +11,13 @@
 	if(!isset($_SESSION['in'])) {
 		$_SESSION['in'] = 0;
 	}
+	$_SESSION['in'] = 1;
+	$_SESSION['user_id'] = 2;	
+	if(isset($_POST['exit_profile'])) {
+		$_SESSION['in'] = 0;
+	}
+	$adrr = $_SERVER['DOCUMENT_ROOT'];
+	require_once $adrr.'/wos/scripts/db_data.php';
  ?>
 <div class="center-block-main">
     	<div class="header-top">
@@ -23,7 +33,6 @@
          
          <?php include_once 'signin_window.php' ?>
           
-                </p>
             </div>
         </div>
         <div class="header-bottom ">

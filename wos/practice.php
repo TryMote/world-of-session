@@ -24,7 +24,7 @@
     <div class="block4-main ">
     	<?php 
 		require_once 'scripts/selector.php';
-		show_tests_selector('p');
+		show_tests_selector($conn, 'p');
 	?> 
     </div>
 </section>

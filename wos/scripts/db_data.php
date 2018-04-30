@@ -1,30 +1,4 @@
 <?php
-	function get_db_data($location) {
-		switch($location) {
-			case 'editor':
-			$location = '../';
-			break;
-			case 'tests':
-			case 'lections':
-			$location = '../../scripts/';
-			case 'material':
-			$location = '../../scripts/';
-			break;
-			case 'scripts':
-			$location = '';
-			break;
-			default:
-			$location = 'scripts/';
-		}
-		$location = "http://localhost/wos/scripts/.dt";
-		$data = file_get_contents($location);
-		$data = explode('|', $data);
-		foreach($data as $key => $value) {
-			$data[$key] = trim($value);
-		}
-		return $data;
-	}	
-
 
         $upd = 'user_primary_data';
         $usd = 'user_second_data';
@@ -35,15 +9,25 @@
         $sub = 'subjects';
         $stat = 'statuses';
         $lect = 'lections';
+	$hn = 'localhost';
+	$pw = '';
+	$un = 'root';
+	$db = 'wos';
+	$conn = new mysqli($hn, $un, $pw, $db);
+	if($conn->connect_error) die("Произошла ошибка подключения. Попробуйте обновить страницу.");
+	$conn->query("SET NAMES 'utf8'");
 
-	function get_connection_object($place) {
-		$data = get_db_data($place);
-		$conn = new mysqli($data[0], $data[1], $data[2], $data[3]);
+	function get_connection_object() {
+		$hn = 'localhost';
+		$pw = '';
+		$un = 'root';
+		$db = 'wos';
+		$conn = new mysqli($hn, $un, $pw, $db);
 		if($conn->connect_error) die("Произошла ошибка подключения. Попробуйте обновить страницу.");
 		$conn->query("SET NAMES 'utf8'");
 		return $conn;
 	}
-
+	
 
 	function fix_string($conn, $str) {
 		if(get_magic_quotes_gpc()) $str = stripslashes($str);

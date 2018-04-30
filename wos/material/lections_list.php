@@ -1,11 +1,8 @@
 <?php 
 	function show_list($topic_name) {
 		require_once '../../scripts/db_data.php';
-		$data = get_db_data('material');
-		$conn = new mysqli($data[0], $data[1], $data[2], $data[3]);
-		if($conn->connect_error) die($conn->connect_error);
-		$conn->query("SET NAMES 'utf8'");
-		
+		$conn = get_connection_object();	
+	
 		$query = "SELECT topic_id FROM topics WHERE topic_name='$topic_name'";
 		$result = $conn->query($query);
 		if(!$result) die($conn->connect_error);;

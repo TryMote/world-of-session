@@ -3,10 +3,7 @@
 	require_once 'generator.php';
 	include_once 'error_page_func.php';
 
-	$data = get_db_data('');	
-	$conn = new mysqli($data[0], $data[1], $data[2], $data[3]);
-	$conn->query("SET NAMES 'utf8'");
-	if($conn->connect_error) die($conn->connect_error);
+	$conn = get_connection_object();
 	
 	$first_name = fix_string($conn, $_POST['first_name']);
 	$first_name = mb_strtolower(trim(preg_replace('~[^A-Za-zА-ЯёЁ]+~iu', '', $first_name)));
@@ -25,6 +22,30 @@
 	$id = mysqli_fetch_row($result);
 	if($id[0]) error_page('sue_lore');
 
+	$profile_link = $login.'.php';
+	$file_location = '../users/'.$profile_link;	
+	
+	$profile_page = "
+<!DOCTYPE html>
+<html>
+<head>
+<title>$first_name $last_name</title>
+<meta charset='utf8'>
+<link rel='stylesheet' href='../assets/css/styles.css'>
+</head>
+<body>
+<header>
+<?php include_once '../menu.php' ?>
+</header>
+<div class='center-block-main profile'>
+<h1>$first_name $last_name</h1>
+</div>
+<footer>
+<?php include_once '../footer.php' ?>
+</footer>
+</body>
+</html>";
+	file_put_contents($file_location, $profile_page);
 	$pass = fix_string($conn, $_POST['pass']);
 	$r_pass = fix_string($conn, $_POST['pass']);
 	if(strlen($pass) >= 6 && strlen($pass) <= 30 && $pass == $r_pass ) {

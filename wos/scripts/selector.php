@@ -1,9 +1,7 @@
 <?php
 
-function show_topic_selector($mode) {
-	require_once 'db_data.php';
+function show_topic_selector($conn, $mode) {
 	include_once 'scripts/editor/data_analizer.php';
-	$conn = get_connection_object('index');
 	$result = get_first_query_result($conn, "SELECT topic_id FROM topics");
 	$row_number = $result->num_rows;
 	if($row_number > 4 && $mode == 'm') {
@@ -33,9 +31,7 @@ function show_topic_selector($mode) {
 	}	
 }
 
-function show_tests_selector($mode) {
-	require_once 'db_data.php';
-	$conn = get_connection_object('index');
+function show_tests_selector($conn, $mode) {
 	$result = get_first_query_result($conn, "SELECT test_id FROM tests");
 	$row_number = $result->num_rows;
 	if($row_number > 4 && $mode == 'm') {

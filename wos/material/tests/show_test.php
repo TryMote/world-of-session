@@ -5,7 +5,7 @@ function show_test($test_id, $topic_name) {
 		require_once 'test_session.php';
 		start_test($test_id);
 	}
-	$conn = get_connection_object('tests');
+	$conn = get_connection_object();
 	$test_link = get_first_select_array($conn, "SELECT test_link FROM tests WHERE test_id='$test_id'", MYSQLI_NUM)[0];
 	
 	$done_index = $_SESSION['done_index'];
@@ -42,12 +42,28 @@ function show_test($test_id, $topic_name) {
 	$_SESSION['done_index'] = $done_index;
 	$_SESSION['health'] = $health;
 	$_SESSION['coins'] = $coins;
-
 	$result = get_first_query_result($conn, "SELECT question_id FROM questions WHERE test_id='$test_id'");
 	$row_number = $result->num_rows;
 	if($row_number == 0) {
 		die("NO");
 	} elseif($done_index >= $row_number) {
+		if($_SESSION['in'] == 1) {
+			$user_id = $_SESSION['user_id'];
+			$xp_plus = $health*$row_number*5;
+			$health_left = get_first_select_array($conn, "SELECT MAX(health_left) FROM users_results WHERE test_id='$test_id' AND user_id='$user_id'", MYSQLI_NUM)[0];
+			if($health_left) {
+				if($health_left < $health) {
+					get_first_query_result($conn, "UPDATE users_results SET health_left=$health WHERE test_id='$test_id' AND user_id='$user_id'");
+				} else {
+					$xp_plus = 0;
+				}
+			} else {
+				$result = $conn->prepare("INSERT INTO users_results VALUES(?,?,?)");
+				$result->bind_param('iii', $user_id, $health, $test_id);
+				$result->execute();
+			}
+			get_first_query_result($conn, "UPDATE user_second_data SET user_xp=user_xp+$xp_plus WHERE user_id='$user_id'");
+		}
 		show_congrates($test_link);
 	} elseif($health <= 0) {
 		require_once 'test_session.php';

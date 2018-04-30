@@ -113,6 +113,7 @@ CREATE TABLE `sign_in` (
   `user_id` int(10) unsigned NOT NULL,
   `email` varchar(50) NOT NULL,
   `nickname` varchar(30) CHARACTER SET utf8 NOT NULL,
+  `profile_link` VARCHAR(40) NOT NULL,
   `password` varchar(30) CHARACTER SET utf8 NOT NULL,
   `editor` tinyint(4) NOT NULL DEFAULT '0',
   UNIQUE KEY `nickname` (`nickname`),
@@ -129,7 +130,7 @@ CREATE TABLE `sign_in` (
 
 LOCK TABLES `sign_in` WRITE;
 /*!40000 ALTER TABLE `sign_in` DISABLE KEYS */;
-INSERT INTO `sign_in` VALUES (1,'trymote@mail.ru','trymote','3eHNXeMwobaN2',1);
+INSERT INTO `sign_in` VALUES (1,'trymote@mail.ru','trymote','trymote.php','3eHNXeMwobaN2',1);
 /*!40000 ALTER TABLE `sign_in` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -163,32 +164,30 @@ INSERT INTO `statuses` VALUES (1,'ЕГЭ Мастер',0);
 UNLOCK TABLES;
 
 --
--- Table structure for table `subjects`
+-- Table structure for table `users_results`
 --
 
-DROP TABLE IF EXISTS `subjects`;
+DROP TABLE IF EXISTS `users_results`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `subjects` (
-  `subject_id` varchar(5) NOT NULL,
-  `subject_name` varchar(40) CHARACTER SET utf8 NOT NULL,
-  `subject_image` varchar(40) NOT NULL DEFAULT 'default',
-  PRIMARY KEY (`subject_id`),
-  UNIQUE KEY `subject_id` (`subject_id`),
-  UNIQUE KEY `subject_name` (`subject_name`),
-  KEY `subject_name_2` (`subject_name`(5))
+CREATE TABLE `users_results` (
+  `user_id` int(10) unsigned NOT NULL,
+  `health_left` int(10) unsigned NOT NULL,
+  `test_id` int(10) unsigned NOT NULL,
+  CONSTRAINT `users_results_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `sign_in` (`user_id`),
+  CONSTRAINT `users_results_ibfk_2` FOREIGN KEY (`test_id`) REFERENCES `tests` (`test_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `subjects`
+-- Dumping data for table `users_results`
 --
 
-LOCK TABLES `subjects` WRITE;
-/*!40000 ALTER TABLE `subjects` DISABLE KEYS */;
-INSERT INTO `subjects` VALUES ('M','Математика','default');
-/*!40000 ALTER TABLE `subjects` ENABLE KEYS */;
+LOCK TABLES `users_results` WRITE;
+/*!40000 ALTER TABLE `users_results` DISABLE KEYS */;
+/*!40000 ALTER TABLE `users_results` ENABLE KEYS */;
 UNLOCK TABLES;
+
 
 --
 -- Table structure for table `teachers`
@@ -302,7 +301,7 @@ CREATE TABLE `user_primary_data` (
 
 LOCK TABLES `user_primary_data` WRITE;
 /*!40000 ALTER TABLE `user_primary_data` DISABLE KEYS */;
-INSERT INTO `user_primary_data` VALUES (1,'Мир','Сессий',1);
+INSERT INTO `user_primary_data` VALUES (1,'Мир','Сессий', 1);
 /*!40000 ALTER TABLE `user_primary_data` ENABLE KEYS */;
 UNLOCK TABLES;
 

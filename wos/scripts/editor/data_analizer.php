@@ -69,16 +69,7 @@
 <body>
 <header>
 <?php
-if(!session_start()) {
-".'
-session_start();
-$_SESSION = array();
-setcookie(session_name(), \'\', time() - 2592000, \'/\');
-session_destroy();
-session_start(); 
-'."
-}
-include_once '../../menu.php' 
+require_once '../../menu.php' 
 ?>
 </header>
 <div class='lections_list'>

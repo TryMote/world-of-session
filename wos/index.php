@@ -36,7 +36,7 @@
     <div class="block4-main ">
     	<?php 
 		require_once 'scripts/selector.php';
-		show_topic_selector('m');	
+		show_topic_selector($conn, 'm');	
 	?>
     </div>
 </section>

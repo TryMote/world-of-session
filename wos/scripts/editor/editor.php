@@ -16,7 +16,6 @@
 		<li>Для отмены выбора нажмите кнопку "Отменить"
 	</ul>
 	<?php	
-		require_once '../db_data.php';
 		require_once 'data_analizer.php';
 		require_once '../session_starter.php';
 		include_once 'subject_selection.php';

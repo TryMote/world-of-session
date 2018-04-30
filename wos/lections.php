@@ -25,7 +25,7 @@
     <div class="block4-main ">
 	<?php 
 		require_once 'scripts/selector.php';
-		show_topic_selector('l');
+		show_topic_selector($conn, 'l');
 	?>    
 	    </div>
 </section>

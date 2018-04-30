@@ -1,13 +1,11 @@
 <?php
-	require_once 'user_data.php';
 	require_once 'db_data.php';
+	require_once 'user_data.php';
 	include_once 'error_page_func.php';
 
-	$data = get_connection_object('');
-
-	$query = "LOCK TABLES $upd WRITE";
-	$result = $conn->query($query);
-	if(!$result) error_page('srl_upd');
+	$conn = get_connection_object();
+	
+	get_first_query_result($conn, "LOCK TABLES user_primary_data WRITE");
 	$query = "INSERT INTO $upd(first_name, last_name) VALUES(?,?)";
 	$result = $conn->prepare($query);
 	if(!$result) error_page('sri_upd');
@@ -27,17 +25,19 @@
 	$result->execute();
 	if(!$result->affected_rows) error_page('srn_rusd');
 
-	$query = "INSERT INTO $s_i(user_id, email, nickname, password) VALUES(?,?,?,?)";
+	$query = "INSERT INTO $s_i(user_id, email, nickname, profile_link, password) VALUES(?,?,?,?,?)";
 	$result = $conn->prepare($query);
 	if(!$result) error_page('sri_si');
-	$result->bind_param('isss', $insertID, $email, $login, $pass);
+	$result->bind_param('issss', $insertID, $email, $login, $profile_link, $pass);
 	$result->execute();
 	if(!$result->affected_rows) error_page('srn_rsi');
-	
 	$result->close();	
 	$conn->close();
+	$_SESSION['in'] = 1;
+	$_SESSION['user_id'] = $id;
+	header("Location: http://localhost/wos/users/".$profile_link); 
+/*
 	require_once 'sender.php';
 	send_mail($email, 'trymote@mail.ru', '', 1);
-	
-	header("Location: http://localhost/wos/email_ver.php");
+*/
 ?>

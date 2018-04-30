@@ -1,11 +1,7 @@
 <?php
 
 	function show_navigator($lection_name) {
-		$data = get_db_data('lections');
-		$conn = new mysqli($data[0], $data[1], $data[2], $data[3]);
-		if($conn->connect_error) die($conn->connect_error);
-		$conn->query("SET NAMES 'utf8'");
-	
+		$conn = get_connection_object();	
 		$query = "SELECT lection_id, topic_id FROM lections WHERE lection_name='$lection_name'";
 		$result = $conn->query($query);
 		if(!$result) die($conn->connect_error);
