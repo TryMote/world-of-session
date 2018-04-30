@@ -3,9 +3,9 @@
     	<h2><strong>Регистрируйся</strong> чтобы соревноваться с другими участниками</h2>
         
         <div class="subscribe-form">
-        	<form action="" method="get">
-            	<input type="email" class="email-inpt" placeholder=trymote@mail.ru>
-                <input type="submit" class="submit-inpt" value="sign up">
+        	<form action="register.php" method="POST">
+            	<input type="email" name='email' class="email-inpt" placeholder=trymote@mail.ru>
+                <input type="submit" name='signup_footer' class="submit-inpt" value="Начать">
             </form>
         </div>
     </div>

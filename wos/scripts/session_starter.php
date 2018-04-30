@@ -12,6 +12,7 @@
 	function start_editor_session() {
 		if(!isset($_SESSION['in'])) {
 			$_SESSION['in'] = 0;
+			$_SESSION['formatter'] = 0;
 		}
 		$_SESSION['editor'] = 1;
 		if($_SESSION['in'] == 0) {

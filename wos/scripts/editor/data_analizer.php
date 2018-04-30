@@ -1,9 +1,9 @@
 <?php
 	 
 	$location = '../../material/';
-	$http_location = 'http://localhost/wos/material/';
+	$http_location = 'material/';
 	$img_location = $location.'img/';
-	$lections_location = $http_location.'lections/';
+	$lections_location = $location.'lections/';
 	$tests_location = $location.'tests/';
 	$topic_img_location = $location.'topic_img/';
 

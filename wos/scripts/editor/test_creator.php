@@ -1,30 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Создать тест</title>
-	<meta charset='utf8'>
-	<link rel='stylesheet' href='../../assets/css/styles.css'>  
-</head>
-<body>
-<?php include_once '../../menu.php' ?>
-<h2>Редактор тестов</h2>
 <?php 
 
-	function open_editor($conn, $test_id, $topic_name) {
+	function open_creator($conn, $test_id, $topic_name) {
 		$result = get_first_query_result($conn, "SELECT question_id FROM questions WHERE test_id='$test_id'");
 		$row = $result->fetch_row()[0];
 		if(!$row) {
-			echo "<fieldset><p>Ни одного вопроса не добавлено</p></fieldset>";
+			echo "<p>Ни одного вопроса не добавлено</p>";
 		} else {
 			$row_number = $result->num_rows;
-			echo "<fieldset>";
 			echo "<h3>Вопросов в тесте: $row_number</h3>";
 			for($i = 0; $i < $row_number; ++$i) {
 				$result->data_seek($i);
 				$row = $result->fetch_row()[0];
 				$q_text = get_first_select_array($conn,"SELECT question_text FROM questions WHERE question_id='$row'", MYSQLI_NUM)[0];
 				$q_text = fix_content($q_text);
-				echo "<fieldset> $q_text <hr>";
+				echo "<hr> $q_text <hr>";
 				$at_result = get_first_query_result($conn, "SELECT answer_text, is_right_answer FROM answers WHERE question_id='$row'");
 				$a_row = $at_result->fetch_array(MYSQLI_NUM);
 				if(!$a_row[0]) {
@@ -37,7 +26,7 @@
 						$a_text = $at_result->fetch_array(MYSQLI_NUM);
 						if(!$a_text[0]) continue;
 						if(strpos($a_text[0], '_answer_')) {
-							echo "<li><img src='../../material/img/$a_text[0]' width='300px' height='200px' alt='$a_text[0]'>";
+							echo "<li><img src='../../material/img/$a_text[0]' alt='$a_text[0]'>";
 						} else { 
 							echo "<li>".$a_text[0];
 						
@@ -48,27 +37,16 @@
 					}
 					echo "</ul>";
 				}
-				echo "<form action='test_creator.php' method='POST'>
-				<br><input type='submit' name='edit_question' value='Изменить вопрос'>
-				<input type='hidden' name='topic_selection' value='".fix_string($conn, $_POST['topic_selection'])."'>
+				echo "<br><input type='submit' name='edit_question' value='Изменить вопрос'>
 				<input type='hidden' name='question_id' value='$row[0]'>
-				<input type='hidden' name='test_id' value='$test_id'>
-				<input type='submit' name='delete_question' value='Удалить вопрос'>
-				</form> </fieldset>";
+				<input type='submit' name='delete_question' value='Удалить вопрос'>";
 			}
-			echo "</fieldset>";
 		}
 		
 		$test_link = get_first_select_array($conn, "SELECT test_link FROM tests WHERE test_id='$test_id'", MYSQLI_NUM)[0];
-		echo "<fieldset>
-		<a style='margin:3%;text-decoration:none;' href='../../material/tests/$test_link'>Страница теста</a>
-		<form action='test_creator.php' method='POST'>
-		<br><input type='submit' name='add_question' value='Добавить вопрос'>
-		<input type='submit' name='delete_test' value='Удалить тест'>
-		<input type='submit' name='back' formaction='editor.php' value='Вернуться к выбору предмета'>
-		<input type='hidden' value='$test_id' name='test_id'>
-		<input type='hidden' name='topic_selection' value='".$_POST['topic_selection']."'>
-		</form></fieldset>";
+		echo "<a style='margin:3%;text-decoration:none;' href='../../material/tests/$test_link'>Страница теста</a>
+		<br><br><input type='submit' name='add_question' value='Добавить вопрос'>
+		<input type='submit' name='delete_test' value='Удалить тест'>";
 	}
 
 	function show_question_editor($conn, $mode) {	
@@ -77,8 +55,6 @@
 		}	
 		echo "<fieldset>
 		<form action='test_creator.php' method='POST' enctype='multipart/form-data'>
-		<input type='hidden' name='test_id' value='".fix_string($conn, $_POST['test_id'])."'>
-		<input type='hidden' name='topic_selection' value='".fix_string($conn, $_POST['topic_selection'])."'>
 		<br>
 		<label for='question_text' style='font-size:20pt'><strong>Вопрос</strong></label><br>
 		<br><p>Вы можете ввести текст как самостоятельно в поле ниже, так и загрузив в формате <b>txt</b><br>
@@ -207,8 +183,8 @@
 			$question_text = fix_content($_POST['question_text']);
 		}
 
-		$test_id = fix_string($conn, $_POST['test_id']);
-		$topic_id = fix_string($conn, $_POST['topic_selection']);
+		$test_id = fix_string($conn, $_SESSION['test_id']);
+		$topic_id = fix_string($conn, $_SESSION['topic_id']);
 		$subject_id = get_first_select_array($conn, "SELECT subject_id FROM topics WHERE topic_id='$topic_id'", MYSQLI_NUM)[0];
 		$result = get_first_query_result($conn, "SELECT question_id FROM questions WHERE test_id='$test_id'");
 		$row_number = $result->num_rows;
@@ -290,10 +266,7 @@
 		}
 	}	
 
-	require_once '../db_data.php';
-	require_once 'data_analizer.php';
-	$conn = get_connection_object('editor');
-	
+/*	
 	if(isset($_POST['add_question'])) {
 		show_question_editor($conn, 'a');
 	}
@@ -310,8 +283,10 @@
 		edit_question($conn, 'e');
 	}
 
-	if(isset($_POST['topic_selection'])) {
-		$topic_id = fix_string($conn, trim($_POST['topic_selection']));
+*/
+
+	function add_test($conn, $tests_location) {
+		$topic_id = fix_string($conn, trim($_SESSION['topic_id']));
 		$row = get_first_select_array($conn, "SELECT test_id, subject_id, topic_name FROM topics WHERE topic_id='$topic_id'", MYSQLI_ASSOC);
 		$test_id = $row['test_id'];
 		$topic_name = $row['topic_name'];
@@ -327,19 +302,20 @@
 			$query = "UPDATE topics SET test_id='$test_id' WHERE topic_id='$topic_id'";
 			$conn->query($query);	
 			create_test_page($location, $topic_name, $test_id); 
-			open_editor($conn, $test_id, $topic_name);
+			open_creator($conn, $test_id, $topic_name);
 		} else {
 			$query = "SELECT test_link FROM tests WHERE test_id='$test_id'";
 			$result = $conn->query($query);
 			if(!$result) die("Ошибка, попробуйте перезагрузить страницу");
 			$row = $result->fetch_array(MYSQLI_NUM);
 			$test_link = $row[0];
-			open_editor($conn, $test_id, $topic_name);
+			open_creator($conn, $test_id, $topic_name);
 		}
+		$_SESSION['test_id'] = $test_id;
 		
 	}
 
-
+/*
 	if(isset($_POST['delete_test'])) {
 		delete_material($conn, 'test', 'Тест');
 	}
@@ -357,7 +333,7 @@
 
 	if(isset($_POST['force_delete_test'])) {
 		check_admin($conn, fix_string($conn, $_POST['pass']));
-		$test_id = fix_string($conn, $_POST['del_test_id']);
+		$test_id = fix_string($conn, $_SESSION['test_id']);
 		$result = get_first_query_result($conn, "SELECT question_id FROM questions WHERE test_id='$test_id'");
 		$row_number = $result->num_rows;
 		for($i = 0; $i < $row_number; ++$i) {
@@ -370,8 +346,5 @@
 		get_first_query_result($conn, "UPDATE topics SET test_id='0' WHERE test_id='$test_id'");
 		header("Location: http://localhost/wos/scripts/editor/"); 
 	}
-	
-	$conn->close();
+*/	
 ?>
-</body>
-</html>

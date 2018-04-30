@@ -24,10 +24,12 @@
 		include_once 'topic_selection.php';
 		include_once 'lection_selection.php';
 		include_once 'formatter.php';
+		include_once 'test_creator.php';
 		$conn = get_connection_object('editor');	
 		start_editor_session();
 
 		echo "<form action='editor.php' method='POST' enctype='multipart/form-data'>";
+
 
 		
 		if(isset($_POST['subject_selection'])) {
@@ -42,9 +44,67 @@
 			$_SESSION['lection_id'] = fix_string($conn, $_POST['lection_selection']);
 		}
 
+		if(isset($_POST['save']) || isset($_POST['add_image'])) {
+			save_lection($conn, $lections_location, $img_location);
+		}
+		
 		if(isset($_POST['select_lection'])) {
-			open_formatter($conn, $lections_location);	
+			$_SESSION['formatter'] = 1;
 		}	
+
+		if(isset($_POST['add_test'])) {
+			$_SESSION['test_creator'] = 1;
+		}
+
+		if(isset($_POST['cancel'])) {
+			if(isset($_SESSION['formatter'])) {
+				$_SESSION['formatter'] = 0;
+			}
+			if(isset($_SESSION['test_creator'])) {
+				$_SESSION['test_creator'] = 0;
+			}
+		}
+
+		if(isset($_SESSION['test_creator']) && $_SESSION['test_creator'] == 1) {
+			if(isset($_POST['add_question'])) {
+				show_question_editor($conn, 'a');
+			} elseif(isset($_POST['force_add_question'])) {
+				edit_question($conn, 'a');
+			} elseif(isset($_POST['edit_question'])) {
+				edit_question($conn, 'e');
+			} elseif(isset($_POST['force_edit_question'])) {
+				edit_question($conn, 'e');
+			} elseif(isset($_POST['delete_test'])) {
+				delete_material($conn, 'test', 'Тест');
+			} elseif(isset($_POST['delete_question'])) {
+				delete_material($conn, 'question', 'Вопрос');
+			} elseif(isset($_POST['force_delete_question'])) {
+				check_admin($conn, fix_string($conn, $_POST['pass']));
+				$question_id = fix_string($conn, $_POST['del_question_id']);
+				get_first_query_result($conn, "DELETE FROM answers WHERE question_id='$question_id'");
+				get_first_query_result($conn, "DELETE FROM questions WHERE question_id='$question_id'"); 
+			} elseif(isset($_POST['force_delete_test'])) {
+				check_admin($conn, fix_string($conn, $_POST['pass']));
+				$test_id = fix_string($conn, $_SESSION['test_id']);
+				$result = get_first_query_result($conn, "SELECT question_id FROM questions WHERE test_id='$test_id'");
+				$row_number = $result->num_rows;
+				for($i = 0; $i < $row_number; ++$i) {
+					$result->data_seek($i);
+					$question_id = $result->fetch_row()[0];
+					get_first_query_result($conn, "DELETE FROM answers WHERE question_id='$question_id'");
+					get_first_query_result($conn, "DELETE FROM questions WHERE question_id='$question_id'");
+				}
+				get_first_query_result($conn, "DELETE FROM tests WHERE tests_id='$test_id'");
+				get_first_query_result($conn, "UPDATE topics SET test_id='0' WHERE test_id='$test_id'");
+				echo "<p>Удаление прошло удачно!
+				<br>Обновите страницу, если изменения еще не были применены</p>";
+			}
+			add_test($conn, $tests_location);
+		}
+
+		if(isset($_SESSION['formatter']) && $_SESSION['formatter'] == 1) {
+			open_formatter($conn, $lections_location);
+		}
 
 		if(isset($_POST['create_subject'])) {
 			new_subject();
@@ -138,7 +198,8 @@
 			generate_block($conn, 'lection',  'topic', $_SESSION['topic_id'], 'тема');
 		}
 
-		echo "<br><input class='cancel' type='submit' value='Отменить'></form>";
+
+		echo "<br><input name='cancel' class='cancel' type='submit' value='Отменить'></form>";
 		$conn->close();
 
 	function generate_block($conn, $item, $pre_block_name, $pre_select_id, $pre_block_text_type) {
@@ -180,7 +241,7 @@
 			echo "</select>";
 			echo "<button type='submit' name='select_$item'></button>";
 			if($item == 'topic') {
-				echo "<br><input type='submit' name='add_test' value='Добавить/изменить тест' formaction='test_creator.php' style='width:200px;'>";
+				echo "<br><input type='submit' name='add_test' value='Добавить/изменить тест' style='width:200px;'>";
 			}
 			echo "<br><input type='submit' name='delete_$item' value='Удалить' style='width:200px'>
 			<br><input type='submit' name='edit_$item' value='Изменить' style='width:200px'><br>";

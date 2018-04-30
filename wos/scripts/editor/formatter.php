@@ -42,11 +42,8 @@
 			}
 		}
 		$text = get_clear_content($text);
-		echo "<fieldset>
-		<h2>$topic_name</h2>
-		<h3>$lection_name</h3>";
-
-		echo "<form action='formatter.php' method='POST' enctype='multipart/form-data'>
+		echo "<h2>$topic_name</h2>
+		<h3>$lection_name</h3>
 		<br>
 		<p>Заполните самостоятельно поле ниже содержанием лекции, или выберите txt файл с содержанием, 
 		<br>нажав на \"Browse...\" рядом с \"Выбрать txt файл\"
@@ -72,10 +69,7 @@
 		echo "<br><a href='$location$filename'>Страница лекции</a><br>";
 		selection_form();
 		echo "<br><input type='submit' name='save' value='Сохранить'><br>
-		<br><hr><br>
-		<br><input type='submit' name='back' formaction='editor.php' value='К выбору предмета'>
-		</form>
-		</fieldset>";
+		<br><hr><br>";
 	}
 	
 	
@@ -86,7 +80,7 @@
 
 	function save_page($conn, $location) {
 		$content = fix_content($_POST['content']);
-		$filename = fix_string($conn, trim($_POST['filename']));
+		$filename = fix_string($conn, trim($_SESSION['filename']));
 		$row = get_first_select_array($conn, "SELECT topic_id FROM lections WHERE lection_link='$filename'", MYSQLI_NUM)[0];
 		$topic_name = get_first_select_array($conn, "SELECT topic_name FROM topics WHERE topic_id='$row'", MYSQLI_NUM)[0];
 		$lection_name = get_first_select_array($conn, "SELECT lection_name FROM lections WHERE lection_link='$filename'", MYSQLI_NUM)[0];
@@ -103,10 +97,10 @@
 		create_lection_page($location.$filename, $topic_name, $lection_name, trim($content));
 	}
 	
-	if(isset($_POST['save']) || isset($_POST['add_image'])) {
+	function save_lection($conn, $lections_location, $img_location) {
 		save_page($conn, $lections_location);	
 		if(isset($_POST['save'])) {
-			echo "<h2>Файл сохранен.</h2>";
+			echo "<h1>Файл сохранен.</h1>";
 		} elseif(isset($_POST['add_image'])) {
 			if(!$_FILES['image']['name']) die("Ошибка! Выберите файл, нажав 'Browse...'!");
 			$img_filename = get_lection_imgname($_FILES['image']['type'], fix_string($conn, $_FILES['image']['name']), fix_string($conn, $_SESSION['filename']));

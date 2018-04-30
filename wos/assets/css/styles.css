@@ -25,6 +25,8 @@ article p {
 	font-style: italic;
 }
 
+
+.signup button,
 .editor button {
 	background: url(http://localhost/wos/assets/img/select.png) no-repeat;
 	background-size: 35px 34.6px;
@@ -36,26 +38,31 @@ article p {
 	background-color: #eee;
 }
 
+.signup button:hover,
 .editor button:hover {
 	background-color: white;
-i}
+}
 
+.signup,
 .editor {
 	padding: 50px;
 }
 
+.signup input,
 .editor input {
 	margin-bottom: 1px;
 	border: 0px;
 	padding: 8px;
 	background-color: #eee;
 }
+
+.signup input:hover,
 .editor input:hover {
 	background-color: white;
 	color: black;
 }	
 
-
+.signup select,
 .editor select {
 	background: url(http://localhost/wos/assets/img/choose.png) no-repeat 100% 0;
 	background-size: 35px 35px;
@@ -75,9 +82,7 @@ i}
 	background-color: #eee; 
 }
 
-
-
-
+.signup select:hover,
 .editor select:hover {
 	color: black;
 	background-color: white;

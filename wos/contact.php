@@ -31,15 +31,14 @@
 dui tincidunt nibh facilisis pellentesque.  Fusce tortor turpis, facilisis ut condimentum eu, sagittis at est.</p>
 </article>
 	        <form action="scripts/signin.html" method="post">
-			<legend>Задайте свои вопросы</legend>
-			<input type="text" name="тфьу" placeholder="Введите свое имя" required><br/>
-       <input type="email" name="Email" placeholder="Введите свое  почту" required><br/>
-         <textarea name="mesage" rows="4" cols="55" wrap="virtual"> Текст по умолчанию </textarea> <br>
-		  <label for='uploaded_file'>Выберите файл для загрузки :</label>
-  <input type="file" name="uploaded_file" id="uploaded_file" ><br>
-  
-  <input type="submit" value="Отправить" name='submit'>
-		</form>
+			<br><legend>Задайте свои вопросы</legend>
+			<br><input type="text" name="user_name" placeholder="Введите свое имя" required><br/>
+       			<input type="email" name="email" placeholder="Введите свое  почту" required><br/>
+        		<br><textarea name="message" rows="4" cols="55" wrap="virtual"> Текст по умолчанию </textarea> <br>
+			<br><label for='uploaded_file'>Выберите файл для загрузки :</label>
+			<input type="file" name="uploaded_file" id="uploaded_file" ><br> 
+  			<br><input type="submit" value="Отправить" name='submit'>
+		</form><br>
 
 	</div>		
     </div>
