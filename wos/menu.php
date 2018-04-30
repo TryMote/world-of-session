@@ -1,3 +1,14 @@
+<?php if(!session_start()) {
+	session_start();
+	$_SESSION = array();
+	setcookie(session_name(), '', time() - 2592000, '/');
+	session_destroy();
+	session_start();
+}
+	if(!isset($_SESSION['in'])) {
+		$_SESSION['in'] = 0;
+	}
+ ?>
 <div class="center-block-main">
     	<div class="header-top">
     		<div class="logo"> <a href="http://localhost/wos/"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
@@ -10,11 +21,8 @@
            
             <div class="vxod">
          
-          <p class="header-basket">
-                	<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-     width="15" height="15"
-     viewBox="0 0 24 24"
-     style="fill:#ffffff;">    <path d="M 12 0 C 5.4 0 0 5.4 0 12 C 0 18.6 5.4 24 12 24 C 18.6 24 24 18.6 24 12 C 24 5.4 18.6 0 12 0 z M 12 2 C 17.5 2 22 6.5 22 12 C 22 17.5 17.5 22 12 22 C 6.5 22 2 17.5 2 12 C 2 6.5 6.5 2 12 2 z M 8 4 L 12.408203 12 L 8 20 L 11.591797 20 L 16 12 L 11.591797 4 L 8 4 z"></path></svg><a href="#">Вход</a>
+         <?php include_once 'signin_window.php' ?>
+          
                 </p>
             </div>
         </div>

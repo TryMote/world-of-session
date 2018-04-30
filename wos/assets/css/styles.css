@@ -25,7 +25,9 @@ article p {
 	font-style: italic;
 }
 
-
+#window button,
+#window_signin button,
+.sent button,
 .signup button,
 .editor button {
 	background: url(http://localhost/wos/assets/img/select.png) no-repeat;
@@ -38,16 +40,49 @@ article p {
 	background-color: #eee;
 }
 
+#window button:hover,
+#window_signin button:hover,
+.sent button:hover,
 .signup button:hover,
 .editor button:hover {
 	background-color: white;
 }
 
+#window_signin button {
+	width: 416px;
+	background: none;
+	background-color: #eee;
+	align-text: center;
+}
+
+#window,
+#window_signin,
+.sent,
 .signup,
 .editor {
 	padding: 50px;
 }
 
+.signin_button {
+	display: flex;
+	align-item: center;
+	text-align: center;
+	border: 0px;
+	background: none;
+	font-size: 10pt;
+	color: #eee;
+	vertical-align: middle;
+}
+
+.signin_button svg {
+	margin-bottom: 1px;
+	margin-right: 5px;
+}
+
+#window input,
+#window_signin input,
+.sent input,
+.sent textarea,
 .signup input,
 .editor input {
 	margin-bottom: 1px;
@@ -56,12 +91,41 @@ article p {
 	background-color: #eee;
 }
 
+#window input {
+	width: 560px;
+	padding: 5px;
+	margin-bottom: 10px;
+}
+
+#window_signin input {
+	width: 400px;
+}
+
+
+
+#window_signin input:hover,
+#window input:hover {
+	background-color: white;
+	color: black;
+}
+
+#window_signin textarea:hover,
+#window textarea:hover,
+.sent textarea:hover,
+.sent input:hover,
 .signup input:hover,
 .editor input:hover {
 	background-color: white;
 	color: black;
-}	
+}
 
+.sent textarea {
+	width: 500px;
+	height: 200px;
+}
+
+#window select,
+.sent select,
 .signup select,
 .editor select {
 	background: url(http://localhost/wos/assets/img/choose.png) no-repeat 100% 0;
@@ -82,6 +146,8 @@ article p {
 	background-color: #eee; 
 }
 
+#window select:hover,
+.sent select:hover,
 .signup select:hover,
 .editor select:hover {
 	color: black;
@@ -204,7 +270,6 @@ article p {
 	overflow: hidden;
 }
 
-}
 	.menu{
 		float:left;
 		  

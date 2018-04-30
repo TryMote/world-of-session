@@ -1,15 +1,18 @@
-<div class="subscribe">
-	<div class="center-block-main ">
-    	<h2><strong>Регистрируйся</strong> чтобы соревноваться с другими участниками</h2>
-        
-        <div class="subscribe-form">
-        	<form action="register.php" method="POST">
-            	<input type="email" name='email' class="email-inpt" placeholder=trymote@mail.ru>
-                <input type="submit" name='signup_footer' class="submit-inpt" value="Начать">
-            </form>
-        </div>
-    </div>
-</div>
+<?php 
+	if(isset($_SESSION['in']) && $_SESSION['in'] != 1) {
+		echo "<div class='subscribe'>
+		<div class='center-block-main'>
+    		<h2><strong>Регистрируйся</strong> чтобы соревноваться с другими участниками</h2>
+		'<div class='subscribe-form'>
+		<form action='register.php' method='POST'>
+		<input type='email' name='email_footer' class='email-inpt' placeholder=trymote@mail.ru>
+		<input type='submit' name='signup_footer' class='submit-inpt' value='Начать'>
+		</form>
+		</div>
+		</div>
+		</div>";
+	}
+?>
 <footer class="ftr">
 	<div class="block4-main center-block-main clearfix">
     	<article>

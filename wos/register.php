@@ -16,8 +16,14 @@
 				<input type="text" name="first_name" placeholder="Имя" required><br/>
 				<input type="text" name="last_name" placeholder="Фамилия" required><br/>
 				<input type="text" name="login" placeholder="Логин" required><br/>
-				<input type="email" name="email" placeholder="Электронная почта"required><br/>
-				<input type="password" maxlength='30' name="pass" placeholder="Пароль" required><br/>
+				<?php 
+					echo "<input type='email' name='email' placeholder='Электронная почта' required ";
+					if(isset($_POST['signup_footer'])) {
+						echo "value='".$_POST['email_footer']."'";
+					} 
+					echo ">";
+				?>
+				<br><input type="password" maxlength='30' name="pass" placeholder="Пароль" required><br/>
 				<input type="password" maxlength='30' name="r_pass" placeholder="Пароль еще раз" required><br/>
 				<br><label for="gender">Пол:</label>
 				<p>Мужчина:</p>

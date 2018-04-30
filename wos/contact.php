@@ -27,8 +27,7 @@
 <div class="recovery center-block-main">
 	<article>
     	<h2>Контакты</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dictum lectus sit amet varius pulvinar. Proin vitae 
-dui tincidunt nibh facilisis pellentesque.  Fusce tortor turpis, facilisis ut condimentum eu, sagittis at est.</p>
+        <p></p>
 </article>
 	        <form action="scripts/signin.html" method="post">
 			<br><legend>Задайте свои вопросы</legend>
@@ -36,7 +35,7 @@ dui tincidunt nibh facilisis pellentesque.  Fusce tortor turpis, facilisis ut co
        			<input type="email" name="email" placeholder="Введите свое  почту" required><br/>
         		<br><textarea name="message" rows="4" cols="55" wrap="virtual"> Текст по умолчанию </textarea> <br>
 			<br><label for='uploaded_file'>Выберите файл для загрузки :</label>
-			<input type="file" name="uploaded_file" id="uploaded_file" ><br> 
+			<br><input type="file" name="uploaded_file" id="uploaded_file" ><br> 
   			<br><input type="submit" value="Отправить" name='submit'>
 		</form><br>
 

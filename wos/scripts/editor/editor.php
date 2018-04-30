@@ -6,7 +6,6 @@
 	<link rel='stylesheet' href='http://localhost/wos/assets/css/styles.css'>
 </head>
 <body>
-	<?php session_start(); ?>
 	<?php include_once '../../menu.php' ?>
 <div class='center-block-main editor'>
 	<h2>Редактор материала</h2>

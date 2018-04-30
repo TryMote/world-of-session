@@ -1,9 +1,8 @@
 <style>
         .regButton {
           text-transform:uppercase; font-size:0.875em; border:none; background:#f45a40; padding:7px 20px; color:#fff; cursor:pointer;margin-right: 140px;
-          margin-top:5px; border-radius: 10px;
+          margin-top:5px;
         }
-
         .regButton:hover {
             background:grey ;
         }
@@ -14,11 +13,10 @@
             width: 800px;
             height: 400px;
             margin: 40px auto;
-            background: #2a2d34;
+            background: #fff;
             border: 1px solid white;
-            border-radius: 20px;
             z-index: 150; display: none;
-             position: fixed; left: 0;right: 0;top:0;bottom: 0;
+            position: fixed; left: 0;right: 0;top:0;bottom: 0;
 
         } 
         .form{
@@ -30,16 +28,18 @@
         } 
 
 	.form textarea {
-		
+		background-color: #eee;
+		border: 0px;		
 		height: 200px;
 	}
-
         .input{
              width: 560px;
              padding: 5px;
              margin-bottom: 10px;
-             border-radius: 5px; } 
-        .radio{
+	}
+	
+ 
+      .radio{
             margin: ;}
 
              .close{
