@@ -25,6 +25,63 @@ article p {
 	font-style: italic;
 }
 
+.subject_name {
+	font-size: 20pt;
+	text-align: center;
+	font-weight: bold;
+}
+
+.signed {
+	display: flex;
+	vertical-align: middle;
+	align-items: center;
+	margin-top: 20px;
+	flex-direction: row;
+	height: 30px;
+	width: auto;
+}
+
+.signed p {
+	color: #fff;
+	font-size: 3em; 
+}
+
+.signed a {
+	border-right: 1px solid white;
+	border-radius: 20px 0px 0px 20px;
+	padding-right: 17px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-left: 20px;
+	text-decoration: none;
+	margin-right: 10px;
+	color: #fff;
+	text-shadow: 0px 0px 0.1px white;
+	font-family: sans-serif;
+}
+
+.signed a:hover {
+	padding-top: 6px;
+	padding-bottom: 5.5px;
+	background-color: white;
+	color: black;
+	text-shadow: 0px 0px 50px white;
+}
+
+.signed input {
+	font-size: 1.175em;
+	background: none;
+	border: 0px;
+	padding-left: 5px;
+	color: white;
+	cursor: pointer;
+	margin-right: 6px;	
+}
+
+.signed input:hover {
+	text-shadow: 0px 0px 0.3px white;
+}
+
 #window button,
 #window_signin button,
 .sent button,
@@ -37,6 +94,7 @@ article p {
 	border: 0px;
 	width: 35px;
 	height: 34.6px;
+	cursor: pointer;
 	background-color: #eee;
 }
 
@@ -57,14 +115,15 @@ article p {
 
 #window_signin a {
 	background-color: #eee;
-	border: 159px solid #eee;
-	border-left-width: 160px;
+	border: 168px solid #eee;
+	border-left-width: 161px;
 	border-top-width: 10px;
 	border-bottom-width: 10px;	
 	margin-top: 2px;
 	font-size: 10pt;
 	text-decoration: none;
 	color: #444;
+	font-family: sans-serif;
 }
 
 #window_signin a:hover {
@@ -256,23 +315,35 @@ article p {
 		  font-family: 'Roboto Condensed', sans-serif;
 	}
 	.vxod{
+		display: flex;
+		flex-direction: row;
+		align-item: center;
 		float:right;
 		margin-right:20px;
 		margin-top: 7px;
 	}
 
+
 	.header-basket svg {
 		vertical-align: middle;
 		}
-		.vxod p{
+		.vxod p {
+			display: flex;
 			border-radius: 30px;
 			font-family: 'Comfortaa', cursive;
-			font-size:0.8em;
-			 font-weight:600;
-			 margin-right: 5px;
+			font-size:1.175em;
+			font-weight:600;
+			margin-right: 5px;
+			height: 15px;
+			width: auto;
+			overflow: hidden;
 		}
 		
-		
+		.vxod button:hover {
+		text-shadow: 0px 0px 0.3px white;
+	}
+
+	
 		.header-basket{
 			border:1px solid #eee; padding:7px 25px; margin-left:20px;
 		}
@@ -309,11 +380,17 @@ article p {
 				color:#f45a40;
 			}
 	.search-block{
-		float:right; margin-top:-3px;
+		float:right; margin-top:10px;
 	}
 
 	.search-block input {
 		font-family: 'Comfortaa', cursive;margin-left: 5px;
+		background-color: #2a2d34;
+	}
+
+	.search-block input:hover {
+		background-color: white;
+		border-radius: 10px;
 	}
 	.search{
 			float:right; font-size:0.875em; color:#7e7f84; border:none; line-height:1.4;

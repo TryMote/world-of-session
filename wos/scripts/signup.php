@@ -17,6 +17,36 @@
 	$result = $conn->query($query);
 	if(!$result) error_page('srul_upd');
 	
+	$profile_link = $login.'.php';
+	$file_location = '../users/'.$profile_link;
+	
+	$profile_page = "
+<!DOCTYPE html>
+<html>
+<head>
+<title>$first_name $last_name</title>
+<meta charset='utf8'>
+<link rel='stylesheet' href='../assets/css/styles.css'>
+</head>
+<body>
+<header>
+<?php require_once '../menu.php' ?>
+</header>
+<div class='center-block-main profile'>
+<h1>$first_name $last_name</h1>
+<h2>($login)</h2>
+<p>$email</p>
+<?php include_once 'profile_generator.php';
+show_profile('$insertID');
+?>
+</div>
+<footer>
+<?php include_once '../footer.php' ?>
+</footer>
+</body>
+</html>";
+	file_put_contents($file_location, $profile_page);	
+	
 	$query = "INSERT INTO $usd(user_id, image, gender) VALUES(?,?,?)";
 	$result = $conn->prepare($query);
 	if(!$result) error_page('sri_usd');

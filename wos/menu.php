@@ -1,6 +1,7 @@
 <?php 
 if(!session_start()) {
 	session_start();
+	die("".$_SESSION['user_id']);
 	if(!isset($_SESSION['user_id'])) {
 		$_SESSION = array();
 	}
@@ -11,10 +12,9 @@ if(!session_start()) {
 	if(!isset($_SESSION['in'])) {
 		$_SESSION['in'] = 0;
 	}
-	$_SESSION['in'] = 1;
-	$_SESSION['user_id'] = 2;	
 	if(isset($_POST['exit_profile'])) {
 		$_SESSION['in'] = 0;
+		unset($_SESSION['user_id']);
 	}
 	$adrr = $_SERVER['DOCUMENT_ROOT'];
 	require_once $adrr.'/wos/scripts/db_data.php';
@@ -28,12 +28,12 @@ if(!session_start()) {
 
 
 
-           
             <div class="vxod">
          
          <?php include_once 'signin_window.php' ?>
           
             </div>
+	</div>
         </div>
         <div class="header-bottom ">
         	<nav>

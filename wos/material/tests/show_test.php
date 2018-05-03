@@ -58,7 +58,7 @@ function show_test($test_id, $topic_name) {
 					$xp_plus = 0;
 				}
 			} else {
-				$result = $conn->prepare("INSERT INTO users_results VALUES(?,?,?)");
+				$result = $conn->prepare("INSERT INTO users_results(user_id, health_left, test_id) VALUES(?,?,?)");
 				$result->bind_param('iii', $user_id, $health, $test_id);
 				$result->execute();
 			}
