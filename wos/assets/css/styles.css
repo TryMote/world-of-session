@@ -82,6 +82,19 @@ article p {
 	text-shadow: 0px 0px 0.3px white;
 }
 
+.lection_page div {
+	margin-left: 50px;
+}
+
+.lections_list a {
+	margin-right: 20px;
+}
+
+.selector {
+	display: flex;
+	flex-direction: column;
+}
+
 #window button,
 #window_signin button,
 .sent button,

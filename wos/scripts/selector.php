@@ -7,6 +7,7 @@ function show_topic_selector($conn, $mode) {
 	if($row_number > 4 && $mode == 'm') {
 		$row_number = 4;
 	}
+	echo "<br><div class='selector'>";
 	for($i = 0; $i < $row_number; ++$i) {
 		$result->data_seek($i);
 		$subject = $result->fetch_array(MYSQLI_NUM);
@@ -42,6 +43,7 @@ function show_topic_selector($conn, $mode) {
 			}
 		}
 	}	
+	echo "</div>";
 }
 
 function show_tests_selector($conn, $mode) {
@@ -50,6 +52,7 @@ function show_tests_selector($conn, $mode) {
 	if($row_number > 4 && $mode == 'm') {
 		$row_number = 4;
 	}
+	echo "<br><div class='selector'>";
 	for($i = 0; $i < $row_number; ++$i) {
 		$result->data_seek($i);
 		$subject = $result->fetch_array(MYSQLI_NUM);
@@ -84,9 +87,8 @@ function show_tests_selector($conn, $mode) {
 				</article>";
 			}
 		}
-	}	
-
-
+	}
+	echo "</div>";	
 }
 
 ?>
