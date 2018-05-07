@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>$topic_name</title>
+<meta charset='utf8'>
+<link rel='stylesheet' href='../../assets/css/styles.css'>
+</head>
+<body>
+<header>
+<?php include_once '../../menu.php' ?>
+</header>
+<div id='test_page'>
+<div id='lections_list'>
+<?php include_once '../lections_list.php'; 
+show_list('$topic_name');
+?>
+</div>
+<div id='main_headers'>
+<h1>$topic_name</h1>
+<h2>Тест</h2>
+</div>
+<div id='test_content'>
+$content
+</div>
+<div class='navigator'>
+<?php include_once 'test_navigator.php';
+show_navigator('$topic_name');
+?>
+</div>
+</div>
+<footer>
+<?php include_once '../../footer.php' ?>
+</footer>
+</body>
+</html>";
+
