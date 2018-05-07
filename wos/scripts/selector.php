@@ -45,36 +45,6 @@ function show_topic_selector($conn, $mode) {
 }
 
 function show_tests_selector($conn, $mode) {
-	// $result = get_first_query_result($conn, "SELECT test_id FROM tests");
-	// $row_number = $result->num_rows;
-	// if($row_number > 4 && $mode == 'm') {
-	// 	$row_number = 4;
-	// }
-	// for($i = 0; $i < $row_number; ++$i) {
-	// 	$row = get_select_array($conn, "SELECT test_id, test_link FROM tests", $i, MYSQLI_NUM);
-	// 	$topic_row = get_first_select_array($conn, "SELECT topic_name, topic_image FROM topics WHERE test_id='$row[0]'", MYSQLI_NUM);
-	// 	if($row[0]) {
-	// 		$test_link = '#';
-	// 		if(!$row[1]) {
-	// 			$test_link = 'practice.php';
-	// 		} else {
-	// 			$test_link = 'http://localhost/wos/material/tests/'.$row[1];
-	// 		}
-	// 		echo "<article>
-	// 		<div class='block4-main-content'>
-	// 		<img src='http://localhost/wos/material/topic_img/$topic_row[1]' width='250px' height='173px' alt=''>
-	// 		<h2>$topic_row[0]</h2>
-	// 		<h4></h4>
-	// 		<p></p>
-	// 		<p class='price-basket '>
-	// 		<span class='basket-btn'><a href='$test_link'><img src='assets/img/ico-plus.jpg' alt=''></a></span>
-	// 		</p>
-	// 		</div>
-	// 		</article>";
-
-	// 	}
-	// }
-
 	$result = get_first_query_result($conn, "SELECT subject_id, subject_name FROM subjects");
 	$row_number = $result->num_rows;
 	if($row_number > 4 && $mode == 'm') {

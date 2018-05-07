@@ -546,6 +546,15 @@ article p {
 		 margin-bottom:10px;
 		  font-style:italic;
 		}
+
+		.block4-main-content h4 {
+			text-align: center;
+		}
+
+		.block4-main-content p {
+			text-align: center;
+		}
+
 		.block4-main-content p{
 			font-size:0.625em; margin-bottom:15px;
 		}
