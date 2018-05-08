@@ -14,7 +14,6 @@
 			$_SESSION['in'] = 0;
 			$_SESSION['formatter'] = 0;
 		}
-		$_SESSION['editor'] = 1;
 		if($_SESSION['in'] == 0) {
 			echo "<form action='../signin.php' method='POST'>
 			<input type='text' name='login' placeholder='Электронная почта или логин'><br>

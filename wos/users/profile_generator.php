@@ -35,5 +35,8 @@ function show_profile($id) {
 				</div>
 				</section>";
 	}
+	if(isset($_SESSION['in']) && $_SESSION['in'] == 1 && $_SESSION['user_id'] == $id) {
+		echo "<a href='http://localhost/wos/scripts/editor/'>Редактор лекций</a>";
+	}
 }
 ?>

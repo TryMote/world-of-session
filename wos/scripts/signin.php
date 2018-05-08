@@ -4,7 +4,9 @@
 	include_once 'error_page_func.php';
 	
 	$conn = get_connection_object();
-
+	if(strpos($_SERVER['HTTP_REFERER'], 'editor')) {
+		$_SESSION['editor'] == 1;
+	}
 	$login = trim(fix_string($conn, $_POST['login']));
         if((!preg_match('~[a-zA-Z0-9_-]+~', $login) || !preg_match('~.+@.+\..+~i', $login))
 			&& strlen($login) >= 30) error_page('siw_l');
