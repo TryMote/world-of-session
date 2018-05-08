@@ -1,4 +1,4 @@
--- MySQL dump 10.16  Distrib 10.1.30-MariaDB, for Linux (x86_64)
+-- MySQL dump 10.16  Distrib 10.1.30-MariaDB, for Win32 (AMD64)
 --
 -- Host: localhost    Database: wos
 -- ------------------------------------------------------
@@ -113,7 +113,7 @@ CREATE TABLE `sign_in` (
   `user_id` int(10) unsigned NOT NULL,
   `email` varchar(50) NOT NULL,
   `nickname` varchar(30) CHARACTER SET utf8 NOT NULL,
-  `profile_link` VARCHAR(40) NOT NULL,
+  `profile_link` varchar(40) NOT NULL,
   `password` varchar(30) CHARACTER SET utf8 NOT NULL,
   `editor` tinyint(4) NOT NULL DEFAULT '0',
   UNIQUE KEY `nickname` (`nickname`),
@@ -130,7 +130,7 @@ CREATE TABLE `sign_in` (
 
 LOCK TABLES `sign_in` WRITE;
 /*!40000 ALTER TABLE `sign_in` DISABLE KEYS */;
-INSERT INTO `sign_in` VALUES (1,'trymote@mail.ru','trymote','trymote.php','3eHNXeMwobaN2',1);
+INSERT INTO `sign_in` VALUES (3,'ivanushka@mail.ru','ivanushka','ivanushka.php','5bkhKbPlcpTfE',0),(2,'zapayat-vseh@mail.ru','korya9090','korya9090.php','98jg1OWDSY8YA',0),(1,'trymote@mail.ru','trymote','trymote.php','3eHNXeMwobaN2',1);
 /*!40000 ALTER TABLE `sign_in` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -150,7 +150,7 @@ CREATE TABLE `statuses` (
   UNIQUE KEY `status_xp` (`status_xp`),
   KEY `status_name_2` (`status_name`(5)),
   KEY `status_xp_2` (`status_xp`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -159,35 +159,37 @@ CREATE TABLE `statuses` (
 
 LOCK TABLES `statuses` WRITE;
 /*!40000 ALTER TABLE `statuses` DISABLE KEYS */;
-INSERT INTO `statuses` VALUES (1,'ЕГЭ Мастер',0);
+INSERT INTO `statuses` VALUES (1,'ЕГЭ Мастер',0),(2,'Посвященный',100);
 /*!40000 ALTER TABLE `statuses` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `users_results`
+-- Table structure for table `subjects`
 --
 
-DROP TABLE IF EXISTS `users_results`;
+DROP TABLE IF EXISTS `subjects`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `users_results` (
-  `user_id` int(10) unsigned NOT NULL,
-  `health_left` int(10) unsigned NOT NULL,
-  `test_id` int(10) unsigned NOT NULL,
-  CONSTRAINT `users_results_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `sign_in` (`user_id`),
-  CONSTRAINT `users_results_ibfk_2` FOREIGN KEY (`test_id`) REFERENCES `tests` (`test_id`)
+CREATE TABLE `subjects` (
+  `subject_id` varchar(5) NOT NULL,
+  `subject_name` varchar(40) CHARACTER SET utf8 NOT NULL,
+  `subject_image` varchar(40) NOT NULL DEFAULT 'default',
+  PRIMARY KEY (`subject_id`),
+  UNIQUE KEY `subject_id` (`subject_id`),
+  UNIQUE KEY `subject_name` (`subject_name`),
+  KEY `subject_name_2` (`subject_name`(5))
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `users_results`
+-- Dumping data for table `subjects`
 --
 
-LOCK TABLES `users_results` WRITE;
-/*!40000 ALTER TABLE `users_results` DISABLE KEYS */;
-/*!40000 ALTER TABLE `users_results` ENABLE KEYS */;
+LOCK TABLES `subjects` WRITE;
+/*!40000 ALTER TABLE `subjects` DISABLE KEYS */;
+INSERT INTO `subjects` VALUES ('M','Математика','default');
+/*!40000 ALTER TABLE `subjects` ENABLE KEYS */;
 UNLOCK TABLES;
-
 
 --
 -- Table structure for table `teachers`
@@ -292,7 +294,7 @@ CREATE TABLE `user_primary_data` (
   PRIMARY KEY (`user_id`),
   KEY `first_name` (`first_name`(5)),
   KEY `last_name` (`last_name`(5))
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -301,7 +303,7 @@ CREATE TABLE `user_primary_data` (
 
 LOCK TABLES `user_primary_data` WRITE;
 /*!40000 ALTER TABLE `user_primary_data` DISABLE KEYS */;
-INSERT INTO `user_primary_data` VALUES (1,'Мир','Сессий', 1);
+INSERT INTO `user_primary_data` VALUES (1,'Мир','Сессий',1),(2,'Сашенька','Запайщиков',0),(3,'Иван','Иванов',0);
 /*!40000 ALTER TABLE `user_primary_data` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -335,7 +337,7 @@ CREATE TABLE `user_second_data` (
 
 LOCK TABLES `user_second_data` WRITE;
 /*!40000 ALTER TABLE `user_second_data` DISABLE KEYS */;
-INSERT INTO `user_second_data` VALUES (1,'default.png',999999,99,'','2018-04-27 22:49:49');
+INSERT INTO `user_second_data` VALUES (1,'default.png',999999,99,'','2018-04-27 22:49:49'),(2,'default.png',0,1,'male','2018-05-07 16:26:56'),(3,'default.png',80,1,'male','2018-05-07 16:51:27');
 /*!40000 ALTER TABLE `user_second_data` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -368,6 +370,35 @@ LOCK TABLES `user_subjects` WRITE;
 /*!40000 ALTER TABLE `user_subjects` DISABLE KEYS */;
 /*!40000 ALTER TABLE `user_subjects` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `users_results`
+--
+
+DROP TABLE IF EXISTS `users_results`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users_results` (
+  `user_id` int(10) unsigned NOT NULL,
+  `health_left` int(10) unsigned NOT NULL,
+  `test_id` int(10) unsigned NOT NULL,
+  `date_record` datetime DEFAULT CURRENT_TIMESTAMP,
+  KEY `users_results_ibfk_1` (`user_id`),
+  KEY `users_results_ibfk_2` (`test_id`),
+  CONSTRAINT `users_results_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `sign_in` (`user_id`),
+  CONSTRAINT `users_results_ibfk_2` FOREIGN KEY (`test_id`) REFERENCES `tests` (`test_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users_results`
+--
+
+LOCK TABLES `users_results` WRITE;
+/*!40000 ALTER TABLE `users_results` DISABLE KEYS */;
+INSERT INTO `users_results` VALUES (3,4,2,'2018-05-07 16:52:02');
+/*!40000 ALTER TABLE `users_results` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -378,4 +409,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-27 22:51:18
+-- Dump completed on 2018-05-07 18:07:16
