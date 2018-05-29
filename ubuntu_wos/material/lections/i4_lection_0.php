@@ -1,6 +1,7 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
+<link rel='SHORTCUT ICON' href='http://isit.spbsut.ru/Learning/assets/img/logo.ico' type='image/x-icon'>
 <title>Начало</title>
 <meta charset='utf8'>
 <link rel='stylesheet' href='../../assets/css/styles.css'>
