@@ -26,6 +26,15 @@
 		$conn = get_connection_object('editor');	
 		start_editor_session();
 
+		if(isset($_SESSION['editor']) && $_SESSION['editor'] == 1 && isset($_SESSION['user_id']) && isset($_SESSION['in'])) {
+			$id = $_SESSION['user_id'];
+			$editor = get_first_select_array($conn, "SELECT editor FROM sign_in WHERE user_id='$id'", MYSQLI_NUM)[0];
+			if($editor != 1) {
+				die("Простите, но вы не имеете прав на редактирование материала");
+			}
+		}
+			
+
 		echo "<form action='editor.php' method='POST' enctype='multipart/form-data'>";
 
 

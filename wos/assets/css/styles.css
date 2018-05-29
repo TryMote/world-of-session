@@ -447,6 +447,10 @@ article p {
 	height: 50px;
 }
 
+.test_content {
+	display: block;
+}
+
 .block3-main{
 	overflow: hidden;
 	margin-bottom:50px;
